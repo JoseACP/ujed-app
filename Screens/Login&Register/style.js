@@ -47,7 +47,7 @@ const styles=StyleSheet.create({
       },
       loginContainer: {
        marginTop: 14,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 50,

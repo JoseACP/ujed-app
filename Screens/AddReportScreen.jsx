@@ -13,8 +13,8 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
-import {SvgXml} from 'react-native-svg';
-import mapa from '../assets/mapa'
+// import {SvgXml} from 'react-native-svg';
+// import mapa from '../assets/mapa'
 
 
 function AddReportScreen() {
@@ -41,18 +41,24 @@ function AddReportScreen() {
                 }}>
                     <Text style={styles.text_header}>Agregar reporte </Text>
                 </View>
+                <View style={styles.logoContainer}>
+                    <Image
+                    style={styles.logo}
+                    source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
+                    />
+                </View>
                 <View style={styles.loginContainer}>
                     <View style={styles.action}>
 
                         <TextInput
-                            placeholder="Descripción"
+                            placeholder="Nombre"
                             style={styles.textInput}
                         // onChange={e => setEmail(e.nativeEvent.text)}
                         />
                     </View>
                     <View style={styles.action}>
                         <TextInput
-                            placeholder="Password"
+                            placeholder="Descripción"
                             style={styles.textInput}
                         // onChange={e => setPassword(e.nativeEvent.text)}
                         />
@@ -77,7 +83,7 @@ function AddReportScreen() {
              
             </View>
           </View>
-          <SvgXml xml={mapa}/>          
+          {/* <SvgXml xml={mapa}/>           */}
               
             </View>
         </ScrollView>
@@ -91,6 +97,16 @@ const styles = StyleSheet.create({
         right: 2,
         margin: 15,
     },
+    logoContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      logo: {
+        height: 260,
+        width: 260,
+        marginTop: 50,
+        marginBottom:40,
+      },
     backIcon: {
         zIndex: 1,
         color: 'white',

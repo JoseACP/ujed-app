@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DrawerList = [
-  {icon: 'home-outline', label: 'Home', navigateTo: 'Home'},
+  {icon: 'home-outline', label: 'Home', navigateTo: 'HomeScreen'},
   {icon: 'account-multiple', label: 'Profile', navigateTo: 'Profile'},
   {icon: 'account-group', label: 'User', navigateTo: 'User'},
   {icon: 'bookshelf', label: 'Library', navigateTo: ''},

@@ -2,16 +2,13 @@ import 'react-native-gesture-handler';
 import {
   NavigationContainer,
   useNavigation,
-  DrawerActions,
 } from '@react-navigation/native';
 import HomeScreen from './Screens/HomeScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import UserScreen from './Screens/UserScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/Entypo';
 import DrawerContent from './DrawerContent';
-import SplashScreen from 'react-native-splash-screen';
 import {useEffect, useState} from 'react';
 import LoginPage from './Screens/Login&Register/Login';
 import RegisterPage from './Screens/Login&Register/Register';
@@ -34,22 +31,8 @@ const StackNav = () => {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen
-        name="Home"
+        name="HomeScreen"
         component={HomeScreen}
-        options={
-          {
-            // headerLeft: () => {
-            //   return (
-            //     <Icon
-            //       name="menu"
-            //       onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            //       size={30}
-            //       color="#fff"
-            //     />
-            //   );
-            // },
-          }
-        }
       />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       {/* // Agrega esto a tu Stack.Navigator en StackNav */}
@@ -102,14 +85,6 @@ function App() {
     console.log(data, 'at app.jsx');
     setIsLoggedIn(data);
   }
-
-  // useEffect(() => {
-  //   getData();
-  //   setTimeout(() => {
-  //     SplashScreen.hide();
-  //   }, 900);
-  // }, [isLoggedIn]);
-
   return (
     <NavigationContainer>
       {isLoggedIn ? <DrawerNav /> : <LoginNav />}
