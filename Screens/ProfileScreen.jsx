@@ -9,11 +9,11 @@ import {
   } from 'react-native';
   import {Avatar} from 'react-native-paper';
   import Icon from 'react-native-vector-icons/FontAwesome5';
-  import Check from 'react-native-vector-icons/Feather';
-  import Back from 'react-native-vector-icons/Ionicons';
+//   import Check from 'react-native-vector-icons/Feather';
+//   import Back from 'react-native-vector-icons/Ionicons';
   import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
-  import Error from 'react-native-vector-icons/MaterialIcons';
+//   import Error from 'react-native-vector-icons/MaterialIcons';
   import Email from 'react-native-vector-icons/MaterialCommunityIcons';
   import Profession from 'react-native-vector-icons/AntDesign';
   import {DrawerActions, useNavigation} from '@react-navigation/native';
@@ -49,7 +49,7 @@ import {
               onPress={() => {
                 navigation.dispatch(DrawerActions.openDrawer());
               }}>
-              <Mobile name="menu" size={30} color="#610000" />
+              <Mobile name="menu" size={30} color="#ce112d" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.editIcon}>
               <Icon name="user-edit" size={24} color={'white'} />
@@ -81,7 +81,7 @@ import {
           <View style={{marginTop: 20, marginHorizontal: 25}}>
             <View style={styles.infoMain}>
               <View style={styles.infoCont}>
-                <View style={[styles.infoIconCont, {backgroundColor: '#610000'}]}>
+                <View style={[styles.infoIconCont, {backgroundColor: '#ce112d'}]}>
                   <Email name="email" size={24} style={{color: 'white'}} />
                 </View>
                 <View style={styles.infoText}>
@@ -95,7 +95,7 @@ import {
   
             <View style={styles.infoMain}>
               <View style={styles.infoCont}>
-                <View style={[styles.infoIconCont, {backgroundColor: '#610000'}]}>
+                <View style={[styles.infoIconCont, {backgroundColor: '#ce112d'}]}>
                   <Gender
                     name="torsos-male-female"
                     size={28}
@@ -112,7 +112,7 @@ import {
   
             <View style={styles.infoMain}>
               <View style={styles.infoCont}>
-                <View style={[styles.infoIconCont, {backgroundColor: '#610000'}]}>
+                <View style={[styles.infoIconCont, {backgroundColor: '#ce112d'}]}>
                   <Profession name="profile" size={24} style={{color: 'white'}} />
                 </View>
                 <View style={styles.infoText}>
@@ -124,7 +124,7 @@ import {
   
             <View style={styles.infoMain}>
               <View style={styles.infoCont}>
-                <View style={[styles.infoIconCont, {backgroundColor: '#610000'}]}>
+                <View style={[styles.infoIconCont, {backgroundColor: '#ce112d'}]}>
                   <Mobile name="mobile" size={24} style={{color: 'white'}} />
                 </View>
                 <View style={styles.infoText}>

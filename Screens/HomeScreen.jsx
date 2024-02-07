@@ -54,7 +54,7 @@ import ImageContainer from '../Components/ImageContainer';
               onPress={() => {
                 navigation.dispatch(DrawerActions.openDrawer());
               }}>
-              <Mobile name="menu" size={30} color="#610000" />
+              <Mobile name="menu" size={30} color="#ce112d" />
             </TouchableOpacity>
     
           </View>
@@ -94,7 +94,7 @@ import ImageContainer from '../Components/ImageContainer';
             }}>
               <Text style={{
                 fontSize: 12,
-                color: "#680000"
+                color: "#ce112d"
               }}>
                 Ver mas
               </Text>
@@ -300,7 +300,7 @@ import ImageContainer from '../Components/ImageContainer';
     cardEditBtn: {
       height: 44,
       width: 44,
-      backgroundColor: '#774BBC',
+      backgroundColor: '#ce112d',
       borderRadius: 22,
       justifyContent: 'center',
       alignItems: 'center',
@@ -313,7 +313,7 @@ import ImageContainer from '../Components/ImageContainer';
     },
     loadMoreBtn: {
       padding: 10,
-      backgroundColor: '#f5a002',
+      backgroundColor: '#ce112d',
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'center',
@@ -342,7 +342,7 @@ import ImageContainer from '../Components/ImageContainer';
       },
       inBut: {
         width: '70%',
-        backgroundColor: '#750404',
+        backgroundColor: '#ce112d',
         alignItems: 'center',
         paddingHorizontal: 15,
         paddingVertical: 15,

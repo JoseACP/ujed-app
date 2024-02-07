@@ -66,17 +66,17 @@ const {
             <View style={styles.action}>
               <FontAwesome
                 name="user-o"
-                color="#750804"
+                color="#ce112d"
                 style={styles.smallIcon}
               />
               <TextInput
-                placeholder="Mobile or Email"
+                placeholder="Email"
                 style={styles.textInput}
                 onChange={e => setEmail(e.nativeEvent.text)}
               />
             </View>
             <View style={styles.action}>
-              <FontAwesome name="lock" color="#690D01" style={styles.smallIcon} />
+              <FontAwesome name="lock" color="#ce112d" style={styles.smallIcon} />
               <TextInput
                 placeholder="Password"
                 style={styles.textInput}
@@ -87,7 +87,7 @@ const {
           <View style={styles.button}>
             <TouchableOpacity style={styles.inBut} onPress={() => handleSubmit()}>
               <View>
-                <Text style={styles.textSign}>Log in</Text>
+                <Text style={styles.textSign}>Ingresar</Text>
               </View>
             </TouchableOpacity>
   

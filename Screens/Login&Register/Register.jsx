@@ -8,7 +8,7 @@ const {
     Alert,
   } = require('react-native');
   import {useNavigation} from '@react-navigation/native';
-  import styles from './style';
+  import styles from './style_register';
   import Feather from 'react-native-vector-icons/Feather';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
   import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -32,10 +32,10 @@ const {
       const userData = {
         name: name,
         email,
-        mobile,
+        // mobile,
         password,
       };
-      if (nameVerify && emailVerify && passwordVerify && mobileVerify) {
+      if (nameVerify && emailVerify && passwordVerify) {
         axios
           .post('http://192.168.56.1:5001/register', userData)
           .then(res => {
@@ -71,15 +71,15 @@ const {
         setEmailVerify(true);
       }
     }
-    function handleMobile(e) {
-      const mobileVar = e.nativeEvent.text;
-      setMobile(mobileVar);
-      setMobileVerify(false);
-      if (/[6-9]{1}[0-9]{9}/.test(mobileVar)) {
-        setMobile(mobileVar);
-        setMobileVerify(true);
-      }
-    }
+    // function handleMobile(e) {
+    //   const mobileVar = e.nativeEvent.text;
+    //   setMobile(mobileVar);
+    //   setMobileVerify(false);
+    //   if (/[6-9]{1}[0-9]{9}/.test(mobileVar)) {
+    //     setMobile(mobileVar);
+    //     setMobileVerify(true);
+    //   }
+    // }
     function handlePassword(e) {
       const passwordVar = e.nativeEvent.text;
       setPassword(passwordVar);
@@ -98,7 +98,8 @@ const {
         <View>
           <View style={styles.logoContainer}>
             <Image
-              style={styles.logo}
+              style={
+                styles.logo}
               source={require('../../assets/mainLogo.png')}
             />
           </View>
@@ -107,7 +108,7 @@ const {
             <View style={styles.action}>
               <FontAwesome
                 name="user-o"
-                color="#750404"
+                color="#ce112d"
                 style={styles.smallIcon}
               />
               <TextInput
@@ -133,7 +134,7 @@ const {
             <View style={styles.action}>
               <Fontisto
                 name="email"
-                color="#750404"
+                color="#ce112d"
                 size={24}
                 style={{marginLeft: 0, paddingRight: 5}}
               />
@@ -157,10 +158,10 @@ const {
                 Enter Proper Email Address
               </Text>
             )}
-            <View style={styles.action}>
+            {/* <View style={styles.action}>
               <FontAwesome
                 name="mobile"
-                color="#420475"
+                color="#ce112d"
                 size={35}
                 style={{paddingRight: 10, marginTop: -7, marginLeft: 5}}
               />
@@ -169,6 +170,7 @@ const {
                 style={styles.textInput}
                 onChange={e => handleMobile(e)}
                 maxLength={10}
+                type="number"
               />
               {mobile.length < 1 ? null : mobileVerify ? (
                 <Feather name="check-circle" color="green" size={20} />
@@ -184,9 +186,9 @@ const {
                 }}>
                 Phone number with 6-9 and remaing 9 digit with 0-9
               </Text>
-            )}
+            )} */}
             <View style={styles.action}>
-              <FontAwesome name="lock" color="#420475" style={styles.smallIcon} />
+              <FontAwesome name="lock" color="#ce112d" style={styles.smallIcon} />
               <TextInput
                 placeholder="Password"
                 style={styles.textInput}
@@ -224,7 +226,7 @@ const {
           <View style={styles.button}>
             <TouchableOpacity style={styles.inBut} onPress={() => handelSubmit()}>
               <View>
-                <Text style={styles.textSign}>Register</Text>
+                <Text style={styles.textSign}>Registrarse</Text>
               </View>
             </TouchableOpacity>
           </View>

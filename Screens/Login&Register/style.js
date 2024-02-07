@@ -20,7 +20,8 @@ const styles=StyleSheet.create({
       logo: {
         height: 260,
         width: 260,
-        marginTop: 80,
+        marginTop: 50,
+        marginBottom:40,
       },
       text_footer: {
         color: '#05375a',
@@ -35,17 +36,17 @@ const styles=StyleSheet.create({
         paddingHorizontal: 15,
     
         borderWidth: 1,
-        borderColor: '#751104',
+        borderColor: '#ce112d',
         borderRadius: 50,
       },
       textInput: {
         flex: 4,
-        marginTop: -14,
-        color: '#5A0505',
+        marginTop: -12,
+        color: '#000000',
         
       },
       loginContainer: {
-       
+       marginTop: 14,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -72,14 +73,14 @@ const styles=StyleSheet.create({
       },
       inBut: {
         width: '70%',
-        backgroundColor: '#750404',
+        backgroundColor: '#ce112d',
         alignItems: 'center',
         paddingHorizontal: 15,
         paddingVertical: 15,
         borderRadius: 50,
       },
       inBut2: {
-        backgroundColor: '#420475',
+        backgroundColor: '#ce112d',
         height: 65,
         width: 65,
         borderRadius: 15,
@@ -97,7 +98,7 @@ const styles=StyleSheet.create({
         // marginRight: 10,
       },
       bottomText: {
-        color: '#6D0000',
+        color: '#ce112d',
         fontSize: 12,
         fontWeight: '600',
         marginTop: 5,
