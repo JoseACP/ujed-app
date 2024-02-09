@@ -14,6 +14,7 @@ import LoginPage from './Screens/Login&Register/Login';
 import RegisterPage from './Screens/Login&Register/Register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddReportScreen from './Screens/AddReportScreen';
+import SeeMoreScreen from './Screens/SeeMoreScreen';
 
 const StackNav = () => {
   const Stack = createNativeStackNavigator();
@@ -37,6 +38,7 @@ const StackNav = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       {/* // Agrega esto a tu Stack.Navigator en StackNav */}
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
+      <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} />
 
       <Stack.Screen
         name="User"

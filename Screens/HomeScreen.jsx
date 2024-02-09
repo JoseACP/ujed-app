@@ -13,9 +13,7 @@ import {
   import Back from 'react-native-vector-icons/Ionicons';
   import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
-  import Error from 'react-native-vector-icons/MaterialIcons';
-  import Email from 'react-native-vector-icons/MaterialCommunityIcons';
-  import Profession from 'react-native-vector-icons/AntDesign';
+
   import {DrawerActions, useNavigation} from '@react-navigation/native';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
@@ -33,7 +31,7 @@ import ImageContainer from '../Components/ImageContainer';
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       axios
-        .post('http://192.168.1.72:5001/userdata', {token: token})
+        .post('http://192.168.56.1:5001/userdata', {token: token})
         .then(res => {
           console.log(res.data);
           setUserData(res.data.data);
@@ -84,22 +82,20 @@ import ImageContainer from '../Components/ImageContainer';
               Mis reportes
               </Text>
           </View>
-          <TouchableOpacity onPress={() => {
-                    navigation.navigate('AddReportScreen');
-                  }}
-                  >
-            <View style={{
-              marginStart: 330,
-              marginBottom: -19
-            }}>
-              <Text style={{
-                fontSize: 12,
-                color: "#ce112d"
-              }}>
-                Ver mas
-              </Text>
+          <View style={{
+            marginStart: 330,
+            marginBottom: -11
+          }}>
+          <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('SeeMoreScreen');
+                  }}>
+                    <Text style={styles.bottomText}>Ver mas</Text>
+                  
+                </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+           
+         
           <View>
             <ImageContainer/>
           </View>
