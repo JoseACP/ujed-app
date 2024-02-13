@@ -7,131 +7,40 @@ import {
     TouchableOpacity,
     Image,
   } from 'react-native';
-  import {Avatar} from 'react-native-paper';
-  import Icon from 'react-native-vector-icons/FontAwesome5';
-  import Check from 'react-native-vector-icons/Feather';
-  import Back from 'react-native-vector-icons/Ionicons';
-  import Gender from 'react-native-vector-icons/Foundation';
-  import Mobile from 'react-native-vector-icons/Entypo';
-  import Error from 'react-native-vector-icons/MaterialIcons';
-  import Email from 'react-native-vector-icons/MaterialCommunityIcons';
-  import Profession from 'react-native-vector-icons/AntDesign';
-  import {DrawerActions, useNavigation} from '@react-navigation/native';
-  import {useEffect, useState} from 'react';
-  import axios from 'axios';
-  import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageSlider from '../Components/imageSlider';
+import React from 'react'
+import { AntDesign } from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 import ImageContainer from '../Components/ImageContainer';
 
-// import styles from './Login&Register/style';
-  function HomeScreen(props) {
+function SeeMoreScreen() {
     const navigation = useNavigation();
-    console.log(props);
-    const [userData, setUserData] = useState('');
-  
-    async function getData() {
-      const token = await AsyncStorage.getItem('token');
-      console.log(token);
-      axios
-        .post('http://172.16.101.16/userdata', {token: token})
-        .then(res => {
-          console.log(res.data);
-          setUserData(res.data.data);
-        });
-    }
-  
-
-    useEffect(() => {
-      getData();
-    }, []);
-  
-    return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          <View style={{position: 'relative'}}>
-            <TouchableOpacity
-              style={styles.backIcon}
-              onPress={() => {
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}>
-              <Mobile name="menu" size={30} color="#ce112d" />
-            </TouchableOpacity>
     
-          </View>
-          <View style={{
-            alignItems: 'center',
-            marginTop: 50
-            }}>
-          <Text style={styles.text_header}>Bienvenido {userData.name} </Text>
-          </View>
-  
-          <View style={{
-            marginTop: 2
-          }}> 
-            <ImageSlider></ImageSlider>
-          </View>
-          <View style={{
-            marginTop: 8,
-            marginLeft: 15,
-          }}>
-            <Text style={{
-              fontSize: 17,
-              fontWeight: "700"
-            }}> 
-              Mis reportes
-              </Text>
-          </View>
-          <View style={{
-            marginStart: 330,
-            marginBottom: -10
-          }}>
-              <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Seemore');
-                  }}>
-                    <Text style={{
-                       fontSize: 12,
-                       color: "#ce112d"
-                    }}>Ver mas</Text>
-                  
-                </TouchableOpacity>
+  return (
+    <ScrollView showsVerticalScrollIndicator={false}>
+        <View>
+                <View style={{ position: 'relative' }}>
+                    <TouchableOpacity
+                        style={styles.backIcon}
+                        onPress={()=> navigation.goBack()}
+                    >
+                        <AntDesign name="arrowleft" size={30} color="#ce112d" />
+                    </TouchableOpacity>
+
+                </View>
+                <View style={{
+                    alignItems: 'center',
+                    marginTop: 50
+                }}>
+                    <Text style={styles.text_header}>Mis reportes </Text>
+                </View>
+                <ImageContainer/>
             </View>
-          {/* <TouchableOpacity onPress={() => {
-                    navigation.navigate('AddReportScreen');
-                  }}
-                  >
-            <View style={{
-              marginStart: 330,
-              marginBottom: -19
-            }}>
-              <Text style={{
-                fontSize: 12,
-                color: "#ce112d"
-              }}>
-                Ver mas
-              </Text>
-            </View>
-          </TouchableOpacity> */}
-          <View>
-            <ImageContainer/>
-          </View>
-          <View style={styles.button}>
-            <TouchableOpacity 
-            style={styles.inBut} 
-            onPress={() => {
-              navigation.navigate('AddReportScreen')
-            }}
-            >
-              <View>
-                <Text style={styles.textSign}>Agregar reporte</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    );
-  }
-  const styles = StyleSheet.create({
+    </ScrollView>
+  )
+}
+
+const styles = StyleSheet.create({
     editIcon: {
       zIndex: 1,
       color: 'white',
@@ -381,4 +290,5 @@ import ImageContainer from '../Components/ImageContainer';
         marginLeft: 10, // Añade un espacio entre los textos
       },
   });
-  export default HomeScreen;
+
+export default SeeMoreScreen
