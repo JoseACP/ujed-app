@@ -28,7 +28,11 @@ const {
         password,
       };
   
+<<<<<<< HEAD
       axios.post('http://172.16.101.16:5001/login-user', userData).then(res => {
+=======
+      axios.post('http://192.168.56.1:5001/login-user', userData).then(res => {
+>>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
         console.log(res.data);
         if (res.data.status == 'ok') {
           Alert.alert('Logged In Successfull');

@@ -13,9 +13,7 @@ import {
   import Back from 'react-native-vector-icons/Ionicons';
   import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
-  import Error from 'react-native-vector-icons/MaterialIcons';
-  import Email from 'react-native-vector-icons/MaterialCommunityIcons';
-  import Profession from 'react-native-vector-icons/AntDesign';
+
   import {DrawerActions, useNavigation} from '@react-navigation/native';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
@@ -33,7 +31,11 @@ import ImageContainer from '../Components/ImageContainer';
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       axios
+<<<<<<< HEAD
         .post('http://172.16.101.16/userdata', {token: token})
+=======
+        .post('http://192.168.56.1:5001/userdata', {token: token})
+>>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
         .then(res => {
           console.log(res.data);
           setUserData(res.data.data);
@@ -83,6 +85,7 @@ import ImageContainer from '../Components/ImageContainer';
           </View>
           <View style={{
             marginStart: 330,
+<<<<<<< HEAD
             marginBottom: -10
           }}>
               <TouchableOpacity
@@ -112,6 +115,20 @@ import ImageContainer from '../Components/ImageContainer';
               </Text>
             </View>
           </TouchableOpacity> */}
+=======
+            marginBottom: -11
+          }}>
+          <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('SeeMoreScreen');
+                  }}>
+                    <Text style={styles.bottomText}>Ver mas</Text>
+                  
+                </TouchableOpacity>
+            </View>
+           
+         
+>>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
           <View>
             <ImageContainer/>
           </View>

@@ -39,6 +39,7 @@ const StackNav = () => {
       <Stack.Screen name="Seemore" component={SeeMoreScreen} />
       {/* // Agrega esto a tu Stack.Navigator en StackNav */}
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
+      <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} />
 
       <Stack.Screen
         name="User"
