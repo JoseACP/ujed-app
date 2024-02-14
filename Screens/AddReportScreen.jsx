@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
         margin: 15,
     },
     logoContainer: {
+        marginBottom: -12,
         justifyContent: 'center',
         alignItems: 'center',
       },
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
         marginLeft: 10, // Añade un espacio entre los textos
     },
     loginContainer: {
-        marginTop: 14,
+        marginTop: 2,
         // backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,

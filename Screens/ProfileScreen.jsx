@@ -29,11 +29,7 @@ import {
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       axios
-<<<<<<< HEAD
         .post('http://172.16.101.16:5001/userdata', {token: token})
-=======
-        .post('http://192.168.56.1:5001/userdata', {token: token})
->>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
         .then(res => {
           console.log(res.data);
           setUserData(res.data.data);

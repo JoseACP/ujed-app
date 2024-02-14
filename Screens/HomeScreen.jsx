@@ -31,11 +31,7 @@ import ImageContainer from '../Components/ImageContainer';
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       axios
-<<<<<<< HEAD
-        .post('http://172.16.101.16/userdata', {token: token})
-=======
         .post('http://192.168.56.1:5001/userdata', {token: token})
->>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
         .then(res => {
           console.log(res.data);
           setUserData(res.data.data);
@@ -85,7 +81,7 @@ import ImageContainer from '../Components/ImageContainer';
           </View>
           <View style={{
             marginStart: 330,
-<<<<<<< HEAD
+
             marginBottom: -10
           }}>
               <TouchableOpacity
@@ -99,36 +95,18 @@ import ImageContainer from '../Components/ImageContainer';
                   
                 </TouchableOpacity>
             </View>
-          {/* <TouchableOpacity onPress={() => {
-                    navigation.navigate('AddReportScreen');
-                  }}
-                  >
-            <View style={{
-              marginStart: 330,
-              marginBottom: -19
-            }}>
-              <Text style={{
-                fontSize: 12,
-                color: "#ce112d"
-              }}>
-                Ver mas
-              </Text>
-            </View>
-          </TouchableOpacity> */}
-=======
-            marginBottom: -11
-          }}>
-          <TouchableOpacity
+          
+          {/* <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('SeeMoreScreen');
                   }}>
                     <Text style={styles.bottomText}>Ver mas</Text>
                   
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
            
          
->>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
+
           <View>
             <ImageContainer/>
           </View>
@@ -144,7 +122,7 @@ import ImageContainer from '../Components/ImageContainer';
               </View>
             </TouchableOpacity>
           </View>
-        </View>
+        
       </ScrollView>
     );
   }

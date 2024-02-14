@@ -37,11 +37,7 @@ const {
       };
       if (nameVerify && emailVerify && passwordVerify) {
         axios
-<<<<<<< HEAD
-          .post('http://172.16.101.16:5001/register', userData)
-=======
-          .post('http://192.168.56.1:5001/register', userData)
->>>>>>> f726f3f848d48942549811f04a8cfd3e9f3d9e50
+          .post('http://192.168.1.72:5001/register', userData)
           .then(res => {
             console.log(res.data);
             if (res.data.status == 'ok') {
