@@ -31,7 +31,7 @@ import ImageContainer from '../Components/ImageContainer';
       const token = await AsyncStorage.getItem('token');
       console.log(token);
       axios
-        .post('http://192.168.56.1:5001/userdata', {token: token})
+        .post('http://192.168.1.72:5001/userdata', {token: token})
         .then(res => {
           console.log(res.data);
           setUserData(res.data.data);
@@ -87,7 +87,8 @@ import ImageContainer from '../Components/ImageContainer';
               <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('Seemore');
-                  }}>
+                  }}
+                  >
                     <Text style={{
                        fontSize: 12,
                        color: "#ce112d"
@@ -95,18 +96,7 @@ import ImageContainer from '../Components/ImageContainer';
                   
                 </TouchableOpacity>
             </View>
-          
-          {/* <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('SeeMoreScreen');
-                  }}>
-                    <Text style={styles.bottomText}>Ver mas</Text>
-                  
-                </TouchableOpacity> */}
             </View>
-           
-         
-
           <View>
             <ImageContainer/>
           </View>

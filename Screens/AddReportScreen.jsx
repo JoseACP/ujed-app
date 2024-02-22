@@ -13,16 +13,16 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
-// import {SvgXml} from 'react-native-svg';
-// import mapa from '../assets/mapa'
+// Importaciones de la camara 
+import { Camera, CameraType, Constants } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
+import { useState, useRef, useEffect } from 'react';
 
 
 function AddReportScreen() {
-    const handleRegionSelect = (region) => {
-        // Aquí puedes realizar acciones adicionales o enviar la región al backend
-        Alert.alert('Región Seleccionada', `Has seleccionado la región: ${region}`);
-      };
     const navigation = useNavigation();
+    
+
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
@@ -53,20 +53,21 @@ function AddReportScreen() {
                         <TextInput
                             placeholder="Nombre"
                             style={styles.textInput}
-                        // onChange={e => setEmail(e.nativeEvent.text)}
                         />
                     </View>
                     <View style={styles.action}>
                         <TextInput
                             placeholder="Descripción"
                             style={styles.textInput}
-                        // onChange={e => setPassword(e.nativeEvent.text)}
                         />
                     </View>
                 </View>
                 <View style={styles.button}>
-            <TouchableOpacity style={styles.inBut} 
-            // onPress={() => handleSubmit()}
+            <TouchableOpacity 
+            style={styles.inBut}
+            onPress={() => {
+                navigation.navigate('CameraScreen');
+              }}
             >
               <View>
               <Feather name="camera" size={50} color="white" />
@@ -83,7 +84,6 @@ function AddReportScreen() {
              
             </View>
           </View>
-          {/* <SvgXml xml={mapa}/>           */}
               
             </View>
         </ScrollView>
