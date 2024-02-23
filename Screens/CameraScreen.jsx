@@ -15,9 +15,11 @@ import * as MediaLibrary from 'expo-media-library';
 import { useState, useRef, useEffect } from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Button from '../Components/Button';
+import Buttonb from '../Components/Buttonb';
 
 
 function CameraScreen() {
+    const navigation = useNavigation();
     const [hasCameraPermission, setHasCameraPermission] = useState(null);
     const [image, setImage] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back)
@@ -72,7 +74,26 @@ function CameraScreen() {
         flashMode={flash}
         ref={cameraRef}
         >
-            <Text>Hello</Text>
+            <View
+            style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: 30, 
+            }}>
+                <Buttonb icon={'arrowleft'} onPress={()=> navigation.goBack()}/>
+                <Button icon={'retweet'} onPress={() => {
+                    setType(type === CameraType.back ? CameraType.front : CameraType.back)
+                }}/>
+                <Button icon={'flash'}
+                color={flash === Camera.Constants.FlashMode.off ? 'gray' : '#f1f1f1'}
+                onPress={() =>{
+                    setFlash(flash === Camera.Constants.FlashMode.off
+                        ? Camera.Constants.FlashMode.on
+                        : Camera.Constants.FlashMode.off
+                        )
+                }}
+                />
+            </View>
         </Camera>
         :
         <Image source={{uri: image}} style={styles.camera}/>
