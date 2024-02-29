@@ -16,6 +16,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddReportScreen from './Screens/AddReportScreen';
 import SeeMoreScreen from './Screens/SeeMoreScreen';
 import CameraScreen from './Screens/CameraScreen';
+import MantenimientoScreen from './Screens/MantenimientoScreen';
+import ObrasScreen from './Screens/ObrasScreen';
+import ObrasPendientes from './Screens/ObrasPendientes';
+import ObrasTerminadas from './Screens/ObrasTerminadas';
+import Mapa from './Screens/MapSelection';
+import MapSelection from './Screens/MapSelection';
+
 
 const StackNav = () => {
   const Stack = createNativeStackNavigator();
@@ -36,11 +43,22 @@ const StackNav = () => {
         name="HomeScreen"
         component={HomeScreen}
       />
+      <Stack.Screen 
+        name='MantenimientoScreen'
+        component={MantenimientoScreen} 
+      />
+      <Stack.Screen 
+        name='ObrasScreen' 
+        component={ObrasScreen}
+      />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Seemore" component={SeeMoreScreen} />
       {/* // Agrega esto a tu Stack.Navigator en StackNav */}
+      <Stack.Screen name='ObrasTerminadasScreen' component={ObrasTerminadas}/>
+      <Stack.Screen name='ObrasPendientesScreen' component={ObrasPendientes}/>
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
       <Stack.Screen name="CameraScreen" component={CameraScreen}/>
+      <Stack.Screen name='Mapa' component={MapSelection}/>
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen

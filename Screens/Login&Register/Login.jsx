@@ -36,7 +36,14 @@ const {
           Alert.alert('Logged In Successfull');
           AsyncStorage.setItem('token', res.data.data);
           AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
-          navigation.navigate('Home');
+          if (email.includes('mantenimiento')){
+            navigation.navigate('MantenimientoScreen')
+          } else if (email.includes('obras')) {
+            navigation.navigate('ObrasScreen')
+          } else{
+            navigation.navigate('Home');
+          }
+          // navigation.navigate('Home');
         }
       });
     }

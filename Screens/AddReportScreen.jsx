@@ -42,19 +42,23 @@ function AddReportScreen() {
                     <Text style={styles.text_header}>Agregar reporte </Text>
                 </View>
                 <View style={styles.logoContainer}>
-                    <Image
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('Mapa')
+                        }}
+                    >
+                        <Image
+                        style={styles.logo}
+                        source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
+                        />
+                    </TouchableOpacity>
+                    {/* <Image
                     style={styles.logo}
                     source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
-                    />
+                    /> */}
                 </View>
                 <View style={styles.loginContainer}>
-                    <View style={styles.action}>
-
-                        <TextInput
-                            placeholder="Nombre"
-                            style={styles.textInput}
-                        />
-                    </View>
+                    
                     <View style={styles.action}>
                         <TextInput
                             placeholder="Descripción"
