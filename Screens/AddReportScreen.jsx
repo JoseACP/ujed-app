@@ -11,7 +11,7 @@ import {
     Alert,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 // Importaciones de la camara 
 import { Camera, CameraType, Constants } from 'expo-camera';
@@ -21,10 +21,19 @@ import { useState, useRef, useEffect } from 'react';
 
 function AddReportScreen() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const selectedDescription = route.params && route.params.selectedDescription ? route.params.selectedDescription : '';
+
+    useEffect(()=> {
+        console.log("Texto recibido en AddReportScreen:", selectedDescription);
+    }, [selectedDescription]);
     
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView 
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: 'white'}}
+        >
             <View>
                 <View style={{ position: 'relative' }}>
                     <TouchableOpacity
@@ -52,6 +61,7 @@ function AddReportScreen() {
                         source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
                         />
                     </TouchableOpacity>
+                    <Text>{selectedDescription}</Text>
                     {/* <Image
                     style={styles.logo}
                     source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
