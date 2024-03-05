@@ -44,7 +44,10 @@ import ImageContainer from '../Components/ImageContainer';
     }, []);
   
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      style={{backgroundColor: 'white'}}
+      >
         <View>
           <View style={{position: 'relative'}}>
             <TouchableOpacity

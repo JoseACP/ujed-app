@@ -1,8 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
 const MapSelection = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
+  const [puntos, setPuntos] = useState([]);
+
+  useEffect(() => {
+    // Coordenadas proporcionales a la imagen, ajusta según tus necesidades
+    const initialPuntos = [
+      //Edificio E
+      { x: 0.15, y: 0.432 },
+      { x: 0.15, y: 0.472 },
+      { x: 0.15, y: 0.51 },
+      { x: 0.15, y: 0.55 },
+      { x: 0.15, y: 0.59 },
+      { x: 0.15, y: 0.627 },
+      //Edificio D
+      { x: 0.37, y: 0.41 },
+      { x: 0.37, y: 0.442 },
+      { x: 0.37, y: 0.523 },
+      { x: 0.37, y: 0.556 },
+      { x: 0.37, y: 0.59 },
+      { x: 0.37, y: 0.627 },
+      //Edifio C
+      { x: 0.46, y: 0.3 },
+      { x: 0.587, y: 0.3 },
+      { x: 0.632, y: 0.3 },
+      //Edificio G
+      { x: 0.83, y: 0.305},
+      // { x: 0.801, y: 0.37999},
+      { x: 0.83, y: 0.416},
+      { x: 0.83, y: 0.464},
+      { x: 0.83, y: 0.507},
+      //Edificio A
+      { x: 0.78, y: 0.62},
+    ];
+
+    const calculatedPuntos = initialPuntos.map(punto => ({
+      x: punto.x * Dimensions.get('window').width,
+      y: punto.y * Dimensions.get('window').height,
+    }));
+
+    setPuntos(calculatedPuntos);
+  }, []);
 
   const handlePress = (event) => {
     const x = event.nativeEvent.locationX;
@@ -24,30 +64,6 @@ const MapSelection = () => {
   };
 
   const findSelectedPoint = (x, y) => {
-    // Coordenadas de ejemplo, reemplázalas con tus propias coordenadas
-    const puntos = [
-      { x: 60.35, y: 345.06 },
-      { x: 60.35, y: 374.14 },
-      { x: 60.35, y: 405.43 },
-      { x: 60.35, y: 434.16 },
-      { x: 60.35, y: 465.42 },
-      { x: 60.35, y: 492.51 },
-      { x: 147.26, y: 493.51 },
-      { x: 147.26, y: 467.61 },
-      { x: 147.26, y: 442.16 },
-      { x: 147.26, y: 417.43 },
-      { x: 147.26, y: 349.80 },
-      { x: 147.26, y: 323.98 },
-      { x: 179.26, y: 238.80 },
-      { x: 230.71, y: 238.80 },
-      { x: 249, y: 238.80 },
-      { x: 327.80, y: 242.88 },
-      { x: 327.80, y: 330.88 },
-      { x: 327.80, y: 363.97 },
-      { x: 327.80, y: 399.62 },
-      { x: 306.89, y: 490.15 },
-    ];
-
     const touchRadius = 30;
 
     // Encuentra el punto dentro de un rango cercano al toque
@@ -63,30 +79,6 @@ const MapSelection = () => {
   };
 
   const renderPoints = () => {
-    // Coordenadas de ejemplo, reemplázalas con tus propias coordenadas
-    const puntos = [
-      { x: 60.35, y: 345.06 },
-      { x: 60.35, y: 374.14 },
-      { x: 60.35, y: 405.43 },
-      { x: 60.35, y: 434.16 },
-      { x: 60.35, y: 465.42 },
-      { x: 60.35, y: 492.51 },
-      { x: 147.26, y: 493.51 },
-      { x: 147.26, y: 467.61 },
-      { x: 147.26, y: 442.16 },
-      { x: 147.26, y: 417.43 },
-      { x: 147.26, y: 349.80 },
-      { x: 147.26, y: 323.98 },
-      { x: 179.26, y: 238.80 },
-      { x: 230.71, y: 238.80 },
-      { x: 249, y: 238.80 },
-      { x: 327.80, y: 242.88 },
-      { x: 327.80, y: 330.88 },
-      { x: 327.80, y: 363.97 },
-      { x: 327.80, y: 399.62 },
-      { x: 306.89, y: 490.15 },
-    ];
-
     return puntos.map((punto, index) => (
       <View
         key={index}
@@ -124,8 +116,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    maxWidth: Dimensions.get('window').width,
-    maxHeight: Dimensions.get('window').height,
+    width: '100%',
+    height: '100%',
   },
   punto: {
     width: 12,

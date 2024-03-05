@@ -61,8 +61,9 @@ const {
     return (
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
+        style={{backgroundColor: 'white'}}
         keyboardShouldPersistTaps={'always'}>
-        <View style={{backgroundColor: 'white'}}>
+        <View>
           <View style={styles.logoContainer}>
             <Image
               style={styles.logo}
