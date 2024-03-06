@@ -22,6 +22,7 @@ import ObrasPendientes from './Screens/ObrasPendientes';
 import ObrasTerminadas from './Screens/ObrasTerminadas';
 import Mapa from './Screens/MapSelection';
 import MapSelection from './Screens/MapSelection';
+import StatusScreen from './Screens/StatusScreen';
 
 
 const StackNav = () => {
@@ -59,6 +60,7 @@ const StackNav = () => {
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
       <Stack.Screen name="CameraScreen" component={CameraScreen}/>
       <Stack.Screen name='Mapa' component={MapSelection}/>
+      <Stack.Screen name='Status' component={StatusScreen}/>
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen
