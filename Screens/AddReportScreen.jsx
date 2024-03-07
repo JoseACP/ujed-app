@@ -87,18 +87,7 @@ function AddReportScreen() {
               <Feather name="camera" size={50} color="white" />
               </View>
             </TouchableOpacity>
-            {/* este botton es solo para testear */}
-            <TouchableOpacity 
-            style={styles.inBut}
-            onPress={() => {
-                navigation.navigate('Status');
-              }}
-            >
-              <View>
-              <Feather name="camera" size={50} color="white" />
-              </View>
-            </TouchableOpacity>
-            {/* Termina aqui */}
+            
 
             <View style={styles.bottomButton}>
               <View

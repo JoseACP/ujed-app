@@ -9,13 +9,32 @@ import {
     TextInput,
     SafeAreaView,
     Alert,
+    Dimensions
 } from 'react-native';
-import React from 'react'
+import React, { useEffect } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import TrackingScreen from '../Components/TrackingScreen';
+import ImageSlider from '../Components/imageSlider';
 
 function StatusScreen() {
+    
+    const route = useRoute();
     const navigation = useNavigation();
+
+    useEffect(() => {
+        console.log('Información recibida en Status:', route.params);
+    
+        // Puedes acceder a los datos específicos de esta manera
+        const { itemId, imageUrl, estado,  description, ubicacion, fecha} = route.params;
+    
+        console.log('ID:', itemId);
+        console.log('URL de la imagen:', imageUrl);
+        console.log('Estado:', estado);
+        console.log('Descripcion:', description);
+        console.log('Ubicación', ubicacion);
+        console.log('Fecha', fecha);
+      }, []); 
   return (
         <ScrollView showsVerticalScrollIndicator={false}>
           
@@ -26,46 +45,56 @@ function StatusScreen() {
                     >
                         <AntDesign name="arrowleft" size={30} color="#ce112d" />
                     </TouchableOpacity>
-              <Image
-                width={100}
-                height={40}
-                resizeMode="contain"
-                style={{
-                  marginTop: -1,
-                }}
-                source={require('../assets/images/fondo perfil.png')}
-              />
+             
             </View>
+            
+            <View style={{
+                    alignItems: 'center',
+                    marginTop: 50
+                }}>
+                    <Text style={styles.text_header}>Informació del reporte </Text>
+                </View>
             <View
             style={{
-                marginTop:12,
+                marginTop:13,
                 padding: 12
                 
             }}
             >
                 <Text style={styles.text1}>Ubicación</Text>
-                <Text style={{marginTop: 3}}>Aula 1 Enfermeria planta alta</Text>
+                <Text style={{marginTop: 3}}>{route.params.ubicacion}</Text>
 
             </View>
             <View
             style={{
-                marginTop:12,
+                marginTop:1,
                 padding: 12
             }}
             >
                 <Text style={styles.text1}>Descripción: </Text>
-                <Text style={{marginTop: 3}}> God of War es una franquicia de videojuegos hack and slash creada por SCE Santa Monica Studio y distribuida por Sony Computer Entertainment. Se basa en las aventuras de un semidiós espartano, Kratos, quien se enfrenta a diversos personajes de la mitología griega y nórdica, tanto héroes como (Heracles, Teseo, Perseo, etc.); especies mitológicas (gorgonas, arpías, o minotauros)</Text>
+                <Text style={{marginTop: 3}}>{route.params.description}</Text>
             </View>
             <View
              style={{
-                marginTop:12,
+                marginTop:1,
                 padding: 12
             }}
             >
                 <Text style={styles.text1}>Fecha: </Text>
-                <Text style={{marginTop: 3}}>12/04/2024</Text>
+                <Text style={{marginTop: 3}}>{route.params.fecha}</Text>
             </View>
             
+            <View>
+                <TrackingScreen estado={route.params.estado}/>
+            </View>
+            <View 
+            style={{
+                marginTop: 20,
+                alignItems: 'center'
+            }}
+            >
+                <Image source={{ uri: route.params.imageUrl}} style={styles.image} />
+            </View>
     
         {/* //      */}
         </ScrollView>
@@ -359,6 +388,12 @@ function StatusScreen() {
             borderColor: '#ce112d',
             borderRadius: 50,
         },
+        image: {
+            width: 220,
+            height: 150,
+            borderRadius: 8,
+            marginBottom: 8, // Espaciado entre la imagen y el título
+          },
     });
   
 

@@ -37,7 +37,7 @@ const {
       };
       if (nameVerify && emailVerify && passwordVerify) {
         axios
-          .post('http://192.168.1.72:5001/register', userData)
+          .post('https://back-ujed-app-test.onrender.com/register', userData)
           .then(res => {
             console.log(res.data);
             if (res.data.status == 'ok') {
