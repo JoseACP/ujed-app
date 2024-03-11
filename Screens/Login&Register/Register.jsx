@@ -71,15 +71,7 @@ const {
         setEmailVerify(true);
       }
     }
-    // function handleMobile(e) {
-    //   const mobileVar = e.nativeEvent.text;
-    //   setMobile(mobileVar);
-    //   setMobileVerify(false);
-    //   if (/[6-9]{1}[0-9]{9}/.test(mobileVar)) {
-    //     setMobile(mobileVar);
-    //     setMobileVerify(true);
-    //   }
-    // }
+   
     function handlePassword(e) {
       const passwordVar = e.nativeEvent.text;
       setPassword(passwordVar);
@@ -136,7 +128,7 @@ const {
                 name="email"
                 color="#ce112d"
                 size={24}
-                style={{marginLeft: 0, paddingRight: 5}}
+                style={styles.smallIcon}
               />
               <TextInput
                 placeholder="Email"

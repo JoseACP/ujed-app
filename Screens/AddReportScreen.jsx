@@ -19,10 +19,26 @@ import * as MediaLibrary from 'expo-media-library';
 import { useState, useRef, useEffect } from 'react';
 
 
+import Buttona from '../Components/Buttona';
+
 function AddReportScreen() {
     const navigation = useNavigation();
     const route = useRoute();
+    const capturedImageUri = route.params?.capturedImage;
     const selectedDescription = route.params && route.params.selectedDescription ? route.params.selectedDescription : '';
+
+    const handleSaveImage = () => {
+        // Guarda la imagen utilizando MediaLibrary.createAssetAsync(capturedImageUri)
+        // o realiza cualquier otra acción que desees.
+        console.log('Imagen guardada:', capturedImageUri);
+        navigation.goBack();
+    }
+
+    const handleDiscardImage = () => {
+        // Descarta la imagen y vuelve a la pantalla anterior
+        console.log('Imagen descartada');
+        navigation.navigate('CameraScreen')
+    }
 
     useEffect(()=> {
         console.log("Texto recibido en AddReportScreen:", selectedDescription);
@@ -99,6 +115,42 @@ function AddReportScreen() {
               </View>
              
             </View>
+            <View style={{
+                marginTop: 30
+            }}>
+                        
+                
+                        {capturedImageUri && <Image 
+                        source={{ uri: capturedImageUri }} 
+                        style={styles.image} />}
+
+                        {/* Mostrar los botones solo si hay una imagen capturada */}
+                        {capturedImageUri && (
+                            <View>
+                                <Buttona  icon={'retweet'}  onPress={handleDiscardImage} />
+                                {/* <Button
+                                 style={styles.button}
+                                 title="Guardar reporte" 
+                                 onPress={handleSaveImage} /> */}
+
+                                 
+                            </View>
+                        )}
+                    </View>
+                    <TouchableOpacity 
+                            style={styles.inButT}
+                            onPress={() => {
+                                navigation.navigate('CameraScreen');
+                            }}
+                        >
+                            <View>
+                                <Text style={styles.textSign}>Registrar reporte</Text>
+                            </View>
+                        </TouchableOpacity>
+
+          </View>
+          <View>
+            
           </View>
               
             </View>
@@ -106,6 +158,20 @@ function AddReportScreen() {
     )
 };
 const styles = StyleSheet.create({
+    inButT: {
+        width: '70%',
+        backgroundColor: '#ce112d',
+        alignItems: 'center',
+        marginTop: 14,
+        paddingHorizontal: 15,
+        paddingVertical: 15,
+        borderRadius: 50,
+    },
+    textSign: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'white',
+      },
     editIcon: {
         zIndex: 1,
         color: 'white',
@@ -383,15 +449,21 @@ const styles = StyleSheet.create({
     action: {
         flexDirection: 'row',
         paddingTop: 14,
-        paddingBottom: 3,
+        paddingBottom: 60,
         marginTop: 30,
 
         paddingHorizontal: 10,
 
         borderWidth: 1,
         borderColor: '#ce112d',
-        borderRadius: 50,
+        borderRadius: 8,
     },
+    image: {
+        width: 220,
+        height: 150,
+        borderRadius: 8,
+        marginBottom: 8, // Espaciado entre la imagen y el título
+      },
 });
 
 export default AddReportScreen

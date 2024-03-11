@@ -10,6 +10,7 @@ const styles=StyleSheet.create({
         color: 'white',
       },
       smallIcon: {
+        paddingBottom: 12,
         marginRight: 10,
         fontSize: 24,
       },
@@ -28,8 +29,8 @@ const styles=StyleSheet.create({
       },
       action: {
         flexDirection: 'row',
-        paddingTop: 14,
-        paddingBottom: 3,
+        paddingTop: 7,
+        
         marginTop: 15,
     
         paddingHorizontal: 15,
@@ -41,7 +42,7 @@ const styles=StyleSheet.create({
       textInput: {
         flex: 4,
         marginTop: -14,
-        color: '#ce112d',
+        color: '#000000',
         
       },
       loginContainer: {

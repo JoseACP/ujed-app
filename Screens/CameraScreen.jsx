@@ -40,6 +40,7 @@ function CameraScreen() {
                 const data = await cameraRef.current.takePictureAsync();
                 console.log(data);
                 setImage(data.uri);
+                navigation.navigate('AddReportScreen', { capturedImage: data.uri });
             } catch (e) {
                 console.log(e);
             }
@@ -47,17 +48,17 @@ function CameraScreen() {
         }
     }
 
-    const saveImage = async () => {
-        if (image) {
-            try {
-                await MediaLibrary.createAssetAsync(image);
-                alert('Imagen guardada')
-                setImage(null);
-            } catch (e) {
-                console.log(e)
-            }
-        }
-    }
+    // const saveImage = async () => {
+    //     if (image) {
+    //         try {
+    //             await MediaLibrary.createAssetAsync(image);
+    //             alert('Imagen guardada')
+    //             setImage(null);
+    //         } catch (e) {
+    //             console.log(e)
+    //         }
+    //     }
+    // }
 
 
     if (hasCameraPermission === false) {
@@ -108,7 +109,7 @@ function CameraScreen() {
             }}
             >
                 <Button title={"Tomar otra vez"} icon="retweet" onPress={() =>setImage(null)}/>
-                <Button title={"Guardar"} icon="check" onPress={saveImage}/>
+                {/* <Button title={"Guardar"} icon="check" onPress={saveImage}/> */}
             </View>
             :
             <Button title={'Tomar foto'} icon="camera" onPress={takePicture}/>
