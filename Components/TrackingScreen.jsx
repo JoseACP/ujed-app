@@ -7,11 +7,11 @@ const ProgressBar = ({ progress, status }) => {
       case 'Entregado':
         return '#ce112d'; // Verde
       case 'Revision':
-        return '#FFC107'; // Amarillo
+        return '#ce112d'; // Amarillo
       case 'Progreso':
-        return '#2196F3'; // Azul
+        return '#ce112d'; // Azul
       case 'Finalizado':
-        return '#4CAF50'; // Rojo (tu color original)
+        return '#ce112d'; // Rojo (tu color original)
       default:
         return '#e0e0e0'; // Gris predeterminado
     }
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     width: '100%',
-    height: 20,
+    height: 26,
     backgroundColor: '#e0e0e0',
     borderRadius: 10,
     overflow: 'hidden',
@@ -91,13 +91,13 @@ const styles = StyleSheet.create({
   },
   progressText: {
     position: 'absolute',
-    top: 0,
-    left: 0,
+    top: 2,
+    left: 4,
     right: 0,
     bottom: 0,
+    color: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'black',
     fontWeight: 'bold',
   },
 });

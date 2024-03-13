@@ -16,6 +16,7 @@ import { Feather } from '@expo/vector-icons';
 // Importaciones de la camara 
 import { Camera, CameraType, Constants } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
 
 
@@ -24,15 +25,23 @@ import Buttona from '../Components/Buttona';
 function AddReportScreen() {
     const navigation = useNavigation();
     const route = useRoute();
+    const userToken = route.params?.token || '';
     const capturedImageUri = route.params?.capturedImage;
-    const selectedDescription = route.params && route.params.selectedDescription ? route.params.selectedDescription : '';
+    const [userDescription, setUserDescription] = useState('');
+    // const selectedDescription = route.params && route.params.selectedDescription ? route.params.selectedDescription : '';
+    // const [selectedDescription, setSelectedDescription] = useState(
+    //     route.params && route.params.selectedDescription ? route.params.selectedDescription : ''
+    //   );
+    const [selectedDescription, setSelectedDescription] = useState('');
 
-    const handleSaveImage = () => {
-        // Guarda la imagen utilizando MediaLibrary.createAssetAsync(capturedImageUri)
-        // o realiza cualquier otra acción que desees.
-        console.log('Imagen guardada:', capturedImageUri);
-        navigation.goBack();
-    }
+    // const handleSaveImage = () => {
+    //     // Guarda la imagen utilizando MediaLibrary.createAssetAsync(capturedImageUri)
+    //     // o realiza cualquier otra acción que desees.
+    //     console.log('Imagen guardada:', capturedImageUri);
+    //     navigation.goBack();
+    // }
+
+    console.log(userToken)
 
     const handleDiscardImage = () => {
         // Descarta la imagen y vuelve a la pantalla anterior
@@ -40,10 +49,51 @@ function AddReportScreen() {
         navigation.navigate('CameraScreen')
     }
 
-    useEffect(()=> {
-        console.log("Texto recibido en AddReportScreen:", selectedDescription);
-    }, [selectedDescription]);
+    const handleSaveImage = async () => {
+        try {
+          // Verificar si hay una descripción del usuario antes de enviarla al servidor
+          if (!userDescription.trim()) {
+            console.warn('La descripción es obligatoria.');
+            return;
+          }
     
+          // Construir el objeto de datos que enviarás al servidor
+          const formData = new FormData();
+          formData.append('title', userDescription);
+          formData.append('description', userDescription);
+    
+          // Agregar la imagen al formulario
+          const uriParts = capturedImageUri.split('.');
+          const fileType = uriParts[uriParts.length - 1];
+          const fileName = `photo.${fileType}`;
+          formData.append('files', {
+            uri: capturedImageUri,
+            name: fileName,
+            type: `image/${fileType}`,
+          });
+    
+          // Enviar la solicitud al servidor
+          const response = await axios.post('localhost:3000/api/reports', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              // Puedes necesitar agregar más encabezados según las necesidades de tu servidor
+            },
+          });
+    
+          console.log('Respuesta del servidor:', response.data);
+          
+          // Puedes realizar más acciones según la respuesta del servidor
+        } catch (error) {
+          console.error('Error al enviar la imagen:', error);
+        }
+      };
+    
+
+    useEffect(() => {
+        if (route.params?.selectedDescription) {
+          setSelectedDescription(route.params.selectedDescription);
+        }
+      }, [route.params?.selectedDescription]);
 
     return (
         <ScrollView 
@@ -69,8 +119,13 @@ function AddReportScreen() {
                 <View style={styles.logoContainer}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Mapa')
-                        }}
+                            navigation.navigate('Mapa', {
+                                // Pasar la descripción seleccionada al mapa para que pueda ser actualizada allí
+                                selectedDescription,
+                                // Pasar la función para actualizar la descripción seleccionada
+                                updateSelectedDescription: setSelectedDescription,
+                              });
+                            }}
                     >
                         <Image
                         style={styles.logo}
@@ -78,10 +133,7 @@ function AddReportScreen() {
                         />
                     </TouchableOpacity>
                     <Text>{selectedDescription}</Text>
-                    {/* <Image
-                    style={styles.logo}
-                    source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
-                    /> */}
+                    
                 </View>
                 <View style={styles.loginContainer}>
                     
@@ -140,7 +192,7 @@ function AddReportScreen() {
                     <TouchableOpacity 
                             style={styles.inButT}
                             onPress={() => {
-                                navigation.navigate('CameraScreen');
+                                handleSaveImage
                             }}
                         >
                             <View>
