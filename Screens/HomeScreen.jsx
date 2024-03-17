@@ -14,7 +14,7 @@ import {
   import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
 
-  import {DrawerActions, useNavigation} from '@react-navigation/native';
+  import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,8 +24,12 @@ import ImageContainer from '../Components/ImageContainer';
 // import styles from './Login&Register/style';
   function HomeScreen(props) {
     const navigation = useNavigation();
+    const route = useRoute();
+    const userToken = route.params?.token || ''
     console.log(props);
     const [userData, setUserData] = useState('');
+
+    console.log(userToken)
   
     async function getData() {
       const token = await AsyncStorage.getItem('token');
@@ -63,7 +67,9 @@ import ImageContainer from '../Components/ImageContainer';
             alignItems: 'center',
             marginTop: 50
             }}>
-          <Text style={styles.text_header}>Bienvenido {userData.name} </Text>
+          <Text style={styles.text_header}>Bienvenido
+           {/* {userData.name}  */}
+           </Text>
           </View>
   
           <View style={{
@@ -107,7 +113,7 @@ import ImageContainer from '../Components/ImageContainer';
             <TouchableOpacity 
             style={styles.inBut} 
             onPress={() => {
-              navigation.navigate('AddReportScreen')
+              navigation.navigate('AddReportScreen', { token: userToken });
             }}
             >
               <View>

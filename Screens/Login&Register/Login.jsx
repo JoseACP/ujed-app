@@ -21,41 +21,59 @@ function LoginPage({props}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function handleSubmit() {
+  async function getToken() {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      return token;
+    } catch (error) {
+      console.error('Error al obtener el token:', error);
+      return null;
+    }
+  }
+
+  // Función para navegar a la pantalla deseada con el token
+  async function navigateWithToken(screenName) {
+    const token = await getToken();
+    if (token) {
+      navigation.navigate(screenName, { token: token });
+    } else {
+      console.error('No se pudo obtener el token.');
+    }
+  }
+
+  async function handleSubmit() {
     console.log(email, password);
     const userData = {
       email: email,
-      password,
+      password: password,
     };
 
+    try {
+      const response = await axios.post('http://192.168.1.72:3000/api/users/login', userData);
+      console.log(response.data);
+      const { token } = response.data;
+      if (token) {
+        Alert.alert('Logged In Successfully');
+        await AsyncStorage.setItem('token', token);
 
-
-    axios.post('http://192.168.1.72:3000/api/users/login', userData).then(res => {
-      console.log(res.data);
-      if (res.data.token) {
-        Alert.alert('Logged In Successfull');
-        AsyncStorage.setItem('token', res.data.token);
-        AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
-
-        AsyncStorage.setItem('token', res.data.token);
-
-        if (email.includes('mantenimiento')){
-          navigation.navigate('MantenimientoScreen', { token: res.data.token })
+        if (email.includes('mantenimiento')) {
+          navigateWithToken('MantenimientoScreen');
         } else if (email.includes('obras')) {
-          navigation.navigate('ObrasScreen', { token: res.data.token })
-        } else{
-          navigation.navigate('Home', { token: res.data.token });
+          navigateWithToken('ObrasScreen');
+        } else {
+          navigateWithToken('Home');
         }
-        // navigation.navigate('Home');
       } else {
         Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas. Inténtalo de nuevo.');
       }
-    }).catch(error => {
+    } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.');
-    });
-    
+    }
   }
+
+ 
+  
   async function getData() {
     const data = await AsyncStorage.getItem('isLoggedIn');
     

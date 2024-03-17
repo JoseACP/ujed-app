@@ -1,220 +1,293 @@
+import React, { useState, useEffect } from 'react';
 import {
-    StyleSheet,
-    Text,
-    View,
-    Button,
-    ScrollView,
-    TouchableOpacity,
-    Image,
-    TextInput,
-    SafeAreaView,
-    Alert,
+  Button,
+  Image,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  SafeAreaView,
+  Text,
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  Alert,
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
-// Importaciones de la camara 
-import { Camera, CameraType, Constants } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import { useState, useRef, useEffect } from 'react';
+
+const imgDir = FileSystem.documentDirectory + 'images/';
+
+const ensureDirExists = async () => {
+  const dirInfo = await FileSystem.getInfoAsync(imgDir);
+  if (!dirInfo.exists) {
+    await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
+  }
+};
 
 
-import Buttona from '../Components/Buttona';
+export default function AddReportScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  // const userToken = route.params?.token || '';
+  const [token, setToken] = useState(null);
 
-function AddReportScreen() {
-    const navigation = useNavigation();
-    const route = useRoute();
-    const userToken = route.params?.token || '';
-    const capturedImageUri = route.params?.capturedImage;
-    const [userDescription, setUserDescription] = useState('');
-    // const selectedDescription = route.params && route.params.selectedDescription ? route.params.selectedDescription : '';
-    // const [selectedDescription, setSelectedDescription] = useState(
-    //     route.params && route.params.selectedDescription ? route.params.selectedDescription : ''
-    //   );
-    const [selectedDescription, setSelectedDescription] = useState('');
+  const [selectedDescription, setSelectedDescription] = useState('');
+  const [description, setDescription] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [images, setImages] = useState([]);
+  
+  // console.log(userToken)
+  console.log(selectedDescription)
 
-    // const handleSaveImage = () => {
-    //     // Guarda la imagen utilizando MediaLibrary.createAssetAsync(capturedImageUri)
-    //     // o realiza cualquier otra acción que desees.
-    //     console.log('Imagen guardada:', capturedImageUri);
-    //     navigation.goBack();
-    // }
-
-    console.log(userToken)
-
-    const handleDiscardImage = () => {
-        // Descarta la imagen y vuelve a la pantalla anterior
-        console.log('Imagen descartada');
-        navigation.navigate('CameraScreen')
+  useEffect(() => {
+    // Función para obtener el token almacenado en AsyncStorage
+    async function getTokenFromStorage() {
+      try {
+        const storedToken = await AsyncStorage.getItem('token');
+        if (storedToken !== null) {
+          setToken(storedToken);
+          console.log('Token almacenado en AsyncStorage:', storedToken);
+        }else{
+          console.log('No se encontró ningún token en AsyncStorage.');
+        }
+      } catch (error) {
+        console.error('Error al obtener el token:', error);
+      }
     }
 
-    const handleSaveImage = async () => {
-        try {
-          // Verificar si hay una descripción del usuario antes de enviarla al servidor
-          if (!userDescription.trim()) {
-            console.warn('La descripción es obligatoria.');
-            return;
-          }
-    
-          // Construir el objeto de datos que enviarás al servidor
-          const formData = new FormData();
-          formData.append('title', userDescription);
-          formData.append('description', userDescription);
-    
-          // Agregar la imagen al formulario
-          const uriParts = capturedImageUri.split('.');
-          const fileType = uriParts[uriParts.length - 1];
-          const fileName = `photo.${fileType}`;
-          formData.append('files', {
-            uri: capturedImageUri,
-            name: fileName,
-            type: `image/${fileType}`,
-          });
-    
-          // Enviar la solicitud al servidor
-          const response = await axios.post('localhost:3000/api/reports', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              // Puedes necesitar agregar más encabezados según las necesidades de tu servidor
-            },
-          });
-    
-          console.log('Respuesta del servidor:', response.data);
-          
-          // Puedes realizar más acciones según la respuesta del servidor
-        } catch (error) {
-          console.error('Error al enviar la imagen:', error);
-        }
-      };
-    
+    // Llama a la función para obtener el token al montar la pantalla
+    getTokenFromStorage();
+  }, []);
 
-    useEffect(() => {
-        if (route.params?.selectedDescription) {
-          setSelectedDescription(route.params.selectedDescription);
-        }
-      }, [route.params?.selectedDescription]);
+  
+  useEffect(() => {
+    loadImages();
+  }, []);
 
-    return (
-        <ScrollView 
+  useEffect(() => {
+    if (route.params?.selectedDescription) {
+      setSelectedDescription(route.params.selectedDescription);
+    }
+  }, [route.params?.selectedDescription]);
+
+  const loadImages = async () => {
+    await ensureDirExists();
+    const files = await FileSystem.readDirectoryAsync(imgDir);
+    if (files.length > 0) {
+      setImages(files.map((f) => imgDir + f));
+    }
+  };
+
+  const selectImage = async (useLibrary) => {
+    let result;
+    const options = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.75,
+      ...(useLibrary ? {} : { cameraType: 'back' })
+    };
+
+    if (useLibrary) {
+      result = await ImagePicker.launchImageLibraryAsync(options);
+    } else {
+      await ImagePicker.requestCameraPermissionsAsync();
+      result = await ImagePicker.launchCameraAsync(options);
+    }
+
+    if (!result.cancelled) {
+      saveImage(result.assets[0].uri);
+    }
+  };
+
+  const saveImage = async (uri) => {
+    await ensureDirExists();
+    const filename = new Date().getTime() + '.jpeg';
+    const dest = imgDir + filename;
+    await FileSystem.copyAsync({ from: uri, to: dest });
+    setImages([...images, dest]);
+  };
+
+  const uploadReport = async () => {
+    // Construir el objeto de datos a enviar
+    const data = new FormData();
+    data.append('title', selectedDescription); // Usamos el valor de selectedDescription para el campo title
+    data.append('description', description); // Usamos el valor del campo de descripción (description)
+    images.forEach(image => {
+      // Agregamos cada imagen al campo 'files' utilizando su URL local
+      data.append('files', {
+        uri: image,
+        type: 'image/jpeg', // Suponiendo que las imágenes son JPEG
+        name: image.split('/').pop() // Nombre de archivo basado en la URL local
+      });
+    });
+  
+    // Realizar la solicitud a la API
+    try {
+      const response = await axios.post('http://192.168.1.72:3000/api/reports', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Incluir el token de autenticación en el encabezado
+        }
+      });
+      // Manejar la respuesta de la API según sea necesario
+      console.log('Respuesta de la API:', response.data);
+      // Limpiar el estado después de enviar el reporte
+      setSelectedDescription('');
+      setDescription('');
+      setImages([]);
+      // Mostrar una alerta o realizar otras acciones después de subir el reporte
+      Alert.alert('Reporte subido exitosamente');
+    } catch (error) {
+      // Manejar errores en la solicitud a la API
+      console.error('Error al subir el reporte:', error);
+      // Mostrar una alerta u otras acciones en caso de error
+      Alert.alert('Error al subir el reporte. Por favor, inténtalo de nuevo más tarde.');
+    }
+  };
+  const deleteImage = async (uri) => {
+    await FileSystem.deleteAsync(uri);
+    setImages(images.filter((i) => i !== uri));
+  };
+
+  const renderItem = ({ item }) => {
+    const filename = item.split('/').pop();
+  return (
+    <View style={{ position: 'relative' }}>
+      <Image style={{ width: 80, height: 80 }} source={{ uri: item }} />
+      <TouchableOpacity
+        style={{ position: 'absolute', bottom: 5, right: 5 }}
+        onPress={() => deleteImage(item)}
+      >
+        <Ionicons name="trash" size={24} color="red" />
+      </TouchableOpacity>
+    </View>
+
+// {/* <Ionicons.Button name="cloud-upload" onPress={() => uploadImage(item)} /> */}
+    );
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, gap: 20 }}>
+      <ScrollView 
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: 'white'}}
-        >
-            <View>
-                <View style={{ position: 'relative' }}>
-                    <TouchableOpacity
-                        style={styles.backIcon}
-                        onPress={()=> navigation.goBack()}
-                    >
-                        <AntDesign name="arrowleft" size={30} color="#ce112d" />
-                    </TouchableOpacity>
-
-                </View>
-                <View style={{
-                    alignItems: 'center',
-                    marginTop: 50
-                }}>
-                    <Text style={styles.text_header}>Agregar reporte </Text>
-                </View>
-                <View style={styles.logoContainer}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('Mapa', {
-                                // Pasar la descripción seleccionada al mapa para que pueda ser actualizada allí
-                                selectedDescription,
-                                // Pasar la función para actualizar la descripción seleccionada
-                                updateSelectedDescription: setSelectedDescription,
-                              });
-                            }}
-                    >
-                        <Image
-                        style={styles.logo}
-                        source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
-                        />
-                    </TouchableOpacity>
-                    <Text>{selectedDescription}</Text>
-                    
-                </View>
-                <View style={styles.loginContainer}>
-                    
-                    <View style={styles.action}>
-                        <TextInput
-                            placeholder="Descripción"
-                            style={styles.textInput}
-                        />
-                    </View>
-                </View>
-                <View style={styles.button}>
-            <TouchableOpacity 
-            style={styles.inBut}
-            onPress={() => {
-                navigation.navigate('CameraScreen');
+      >
+        <View>
+          <View style={{ position: 'relative' }}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => navigation.goBack()}
+            >
+              <AntDesign name="arrowleft" size={30} color="#ce112d" />
+            </TouchableOpacity>
+          </View>
+          <View style={{
+            alignItems: 'center',
+            marginTop: 50
+          }}>
+            <Text style={styles.text_header}>Agregar reporte </Text>
+          </View>
+          <View style={styles.logoContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Mapa', {
+                  selectedDescription,
+                  updateSelectedDescription: setSelectedDescription,
+                });
               }}
             >
+              <Image
+                style={styles.logo}
+                source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
+              />
+            </TouchableOpacity>
+            <Text>{selectedDescription}</Text>
+          </View>
+          <View style={styles.loginContainer}>
+            <View style={styles.action}>
+              <TextInput
+                placeholder="Descripción"
+                style={styles.textInput}
+                value={description} // Valor del TextInput se obtiene del estado
+                onChangeText={setDescription} // Función para actualizar el estado cuando cambia el texto
+              />
+            </View>
+          </View>
+          <View style={{ marginBottom: 40}}>
+            {/* <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: '500' }}>My Images</Text> */}
+            <FlatList data={images} renderItem={renderItem} />
+            {uploading && (
+              <View
+                style={[
+                  StyleSheet.absoluteFill,
+                  {
+                    backgroundColor: 'rgba(0,0,0,0.4)',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }
+                ]}
+              >
+                <ActivityIndicator color="#fff" animating size="large" />
+              </View>
+            )}
+          </View>
+          <View style={styles.button}>
+            <View style={{ 
+                flexDirection: 'row',
+                 }}
+                 >
+            <TouchableOpacity 
+              style={[styles.inBut, { marginRight: 40 }]} 
+              onPress={() => selectImage(true)}
+            >
               <View>
-              <Feather name="camera" size={50} color="white" />
+                <Feather name="folder" size={50} color="white" />
               </View>
             </TouchableOpacity>
-            
-
+            <TouchableOpacity 
+              style={styles.inBut}
+              onPress={() => selectImage(false)}
+            >
+              <View>
+                <Feather name="camera" size={50} color="white" />
+              </View>
+            </TouchableOpacity>
+            </View>
             <View style={styles.bottomButton}>
               <View
                 style={{
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                
               </View>
-             
             </View>
-            <View style={{
-                marginTop: 30
-            }}>
-                        
-                
-                        {capturedImageUri && <Image 
-                        source={{ uri: capturedImageUri }} 
-                        style={styles.image} />}
-
-                        {/* Mostrar los botones solo si hay una imagen capturada */}
-                        {capturedImageUri && (
-                            <View>
-                                <Buttona  icon={'retweet'}  onPress={handleDiscardImage} />
-                                {/* <Button
-                                 style={styles.button}
-                                 title="Guardar reporte" 
-                                 onPress={handleSaveImage} /> */}
-
-                                 
-                            </View>
-                        )}
-                    </View>
-                    <TouchableOpacity 
-                            style={styles.inButT}
-                            onPress={() => {
-                                handleSaveImage
-                            }}
-                        >
-                            <View>
-                                <Text style={styles.textSign}>Registrar reporte</Text>
-                            </View>
-                        </TouchableOpacity>
-
+            <TouchableOpacity 
+              style={styles.inButT}
+              onPress={uploadReport}
+            >
+              <View>
+                <Text style={styles.textSign}>Registrar reporte</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <View>
-            
-          </View>
-              
-            </View>
-        </ScrollView>
-    )
-};
+          
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 const styles = StyleSheet.create({
     inButT: {
         width: '70%',
         backgroundColor: '#ce112d',
         alignItems: 'center',
-        marginTop: 14,
+        marginTop: 40,
         paddingHorizontal: 15,
         paddingVertical: 15,
         borderRadius: 50,
@@ -518,4 +591,3 @@ const styles = StyleSheet.create({
       },
 });
 
-export default AddReportScreen
