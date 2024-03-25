@@ -34,12 +34,7 @@ import ImageContainer from '../Components/ImageContainer';
     async function getData() {
       const token = await AsyncStorage.getItem('token');
       console.log(token);
-      axios
-        .post('https://back-ujed-app-test.onrender.com/userdata', {token: token})
-        .then(res => {
-          console.log(res.data);
-          setUserData(res.data.data);
-        });
+     
     }
   
 
@@ -107,7 +102,13 @@ import ImageContainer from '../Components/ImageContainer';
             </View>
             </View>
           <View>
+
+
+
+{/* Contenedor de imagenes */}
             <ImageContainer/>
+
+
           </View>
           <View style={styles.button}>
             <TouchableOpacity 

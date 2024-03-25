@@ -23,6 +23,7 @@ import ObrasTerminadas from './Screens/ObrasTerminadas';
 import Mapa from './Screens/MapSelection';
 import MapSelection from './Screens/MapSelection';
 import StatusScreen from './Screens/StatusScreen';
+import PdfScreen from './Screens/PdfScreen';
 
 
 const StackNav = () => {
@@ -54,6 +55,7 @@ const StackNav = () => {
       />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Seemore" component={SeeMoreScreen} />
+      <Stack.Screen name="PdfScreen" component={PdfScreen} />
       {/* // Agrega esto a tu Stack.Navigator en StackNav */}
       <Stack.Screen name='ObrasTerminadasScreen' component={ObrasTerminadas}/>
       <Stack.Screen name='ObrasPendientesScreen' component={ObrasPendientes}/>
@@ -61,6 +63,7 @@ const StackNav = () => {
       <Stack.Screen name="CameraScreen" component={CameraScreen}/>
       <Stack.Screen name='Mapa' component={MapSelection}/>
       <Stack.Screen name='Status' component={StatusScreen}/>
+      <Stack.Screen name='Pdf' component={PdfScreen}/>
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen

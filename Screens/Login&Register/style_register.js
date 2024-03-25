@@ -29,15 +29,15 @@ const styles=StyleSheet.create({
       },
       action: {
         flexDirection: 'row',
-        paddingTop: 7,
-        
+        paddingTop: 11,
+        // paddingBottom: 3,
         marginTop: 15,
     
         paddingHorizontal: 15,
-    
+        backgroundColor:'#EEEDED',
         borderWidth: 1,
         borderColor: '#ce112d',
-        borderRadius: 50,
+        borderRadius: 15,
       },
       textInput: {
         flex: 4,
@@ -62,6 +62,7 @@ const styles=StyleSheet.create({
         color: '#000000',
         fontWeight: 'bold',
         fontSize: 30,
+        marginTop: -25,
         margin: 15
       },
       button: {

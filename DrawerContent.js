@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: 'row',
     alignItems: 'center',
-    // marginRight: 15,
+    marginRight: 15,
   },
   paragraph: {
     fontWeight: 'bold',

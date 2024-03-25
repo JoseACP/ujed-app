@@ -37,7 +37,7 @@ function RegisterPage({props}) {
     };
     if (nameVerify && last_nameVerify && emailVerify && passwordVerify) {
       axios
-        .post('http://192.168.1.72:3000/api/users/register', userData)
+        .post('https://ujed-api.onrender.com/api/users/register', userData)
         .then(res => {
           console.log(res.data);
           if (res.data.token) {
@@ -166,7 +166,7 @@ function RegisterPage({props}) {
               name="email"
               color="#ce112d"
               size={24}
-              style={{marginLeft: 0, paddingRight: 5}}
+              style={styles.smallIcon}
             />
             <TextInput
               placeholder="Email"

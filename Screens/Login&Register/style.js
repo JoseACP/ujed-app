@@ -10,6 +10,8 @@ const styles=StyleSheet.create({
         color: 'white',
       },
       smallIcon: {
+        marginTop:-2,
+        paddingBottom: 12,
         marginRight: 10,
         fontSize: 24,
       },
@@ -29,15 +31,15 @@ const styles=StyleSheet.create({
       },
       action: {
         flexDirection: 'row',
-        paddingTop: 14,
-        paddingBottom: 3,
+        paddingTop: 11,
+        // paddingBottom: 3,
         marginTop: 15,
     
         paddingHorizontal: 15,
-    
+        backgroundColor:'#EEEDED',
         borderWidth: 1,
         borderColor: '#ce112d',
-        borderRadius: 50,
+        borderRadius: 15,
       },
       textInput: {
         flex: 4,
@@ -94,7 +96,9 @@ const styles=StyleSheet.create({
         justifyContent: 'space-between',
       },
       smallIcon2: {
-        fontSize: 40,
+        paddingBottom: 12,
+        marginRight: 10,
+        fontSize: 24,
         // marginRight: 10,
       },
       bottomText: {

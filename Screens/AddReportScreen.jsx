@@ -18,6 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as Location from 'expo-location';
 import axios from 'axios';
 
 const imgDir = FileSystem.documentDirectory + 'images/';
@@ -27,6 +28,33 @@ const ensureDirExists = async () => {
   if (!dirInfo.exists) {
     await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
   }
+};
+
+const WelcomeScreen = () => {
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  if (location) {
+    console.log(`Latitud: ${location.coords.latitude}, Longitud: ${location.coords.longitude}`);
+  } else {
+    console.log('Obteniendo ubicación...');
+  }
+
+  // Resto de tu lógica aquí
+
+  return null; // No renderiza nada en la vista
 };
 
 
@@ -43,6 +71,17 @@ export default function AddReportScreen() {
   
   // console.log(userToken)
   console.log(selectedDescription)
+  const navigateToOtherScreen = () => {
+    // Obtener la fecha actual
+    const currentDate = new Date().toISOString();
+  
+    // Navegar a OtherScreen con los parámetros necesarios
+    navigation.navigate('Pdf', {
+      selectedDescription,
+      currentDate,
+      description: description // Si también quieres enviar la descripción actual
+    });
+  };
 
   useEffect(() => {
     // Función para obtener el token almacenado en AsyncStorage
@@ -117,6 +156,7 @@ export default function AddReportScreen() {
     // Construir el objeto de datos a enviar
     const data = new FormData();
     data.append('title', selectedDescription); // Usamos el valor de selectedDescription para el campo title
+    data.append('location', 'faculty/building/classroom')
     data.append('description', description); // Usamos el valor del campo de descripción (description)
     images.forEach(image => {
       // Agregamos cada imagen al campo 'files' utilizando su URL local
@@ -129,7 +169,7 @@ export default function AddReportScreen() {
   
     // Realizar la solicitud a la API
     try {
-      const response = await axios.post('http://192.168.1.72:3000/api/reports', data, {
+      const response = await axios.post('https://ujed-api.onrender.com/api/reports', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}` // Incluir el token de autenticación en el encabezado
@@ -207,7 +247,7 @@ export default function AddReportScreen() {
                 source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
               />
             </TouchableOpacity>
-            <Text>{selectedDescription}</Text>
+            <Text style ={styles.text1}>{selectedDescription}</Text>
           </View>
           <View style={styles.loginContainer}>
             <View style={styles.action}>
@@ -259,6 +299,16 @@ export default function AddReportScreen() {
               </View>
             </TouchableOpacity>
             </View>
+            {/* <View style={[styles.bottomButton, {marginTop: 20}]}>
+            <TouchableOpacity 
+              style={styles.inBut}
+            onPress={navigateToOtherScreen}
+            >
+              <View>
+                <Feather name="file" size={50} color="white" />
+              </View>
+            </TouchableOpacity>
+            </View> */}
             <View style={styles.bottomButton}>
               <View
                 style={{
@@ -314,6 +364,9 @@ const styles = StyleSheet.create({
         width: 260,
         marginTop: 50,
         marginBottom:40,
+        borderWidth: 1,
+        borderColor: '#ce112d',
+        borderRadius: 8,
       },
     backIcon: {
         zIndex: 1,
@@ -550,6 +603,7 @@ const styles = StyleSheet.create({
     text1: {
         fontSize: 17,
         fontWeight: '700',
+        color:'#ce112d'
     },
     text2: {
         fontSize: 14, // Ajusta el tamaño del segundo texto
@@ -590,4 +644,3 @@ const styles = StyleSheet.create({
         marginBottom: 8, // Espaciado entre la imagen y el título
       },
 });
-

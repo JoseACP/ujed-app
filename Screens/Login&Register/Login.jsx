@@ -21,6 +21,11 @@ function LoginPage({props}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    getUserId();
+  }, []);
+
+
   async function getToken() {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -31,11 +36,19 @@ function LoginPage({props}) {
     }
   }
 
+  async function getUserId() {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      console.log('User ID:', userId);
+    } catch (error) {
+      console.error('Error al obtener el ID de usuario:', error);
+    }
+  }
+
   // Función para navegar a la pantalla deseada con el token
-  async function navigateWithToken(screenName) {
-    const token = await getToken();
+  async function navigateWithToken(screenName, token, id) {
     if (token) {
-      navigation.navigate(screenName, { token: token });
+      navigation.navigate(screenName, { token: token, userId: id });
     } else {
       console.error('No se pudo obtener el token.');
     }
@@ -49,19 +62,19 @@ function LoginPage({props}) {
     };
 
     try {
-      const response = await axios.post('http://192.168.1.72:3000/api/users/login', userData);
+      const response = await axios.post('https://ujed-api.onrender.com/api/users/login', userData);
       console.log(response.data);
-      const { token } = response.data;
-      if (token) {
+      const { token, id } = response.data;
+      if (token && id) {
         Alert.alert('Logged In Successfully');
         await AsyncStorage.setItem('token', token);
-
+        await AsyncStorage.setItem('userId', id);
         if (email.includes('mantenimiento')) {
-          navigateWithToken('MantenimientoScreen');
+          navigateWithToken('MantenimientoScreen', token, id);
         } else if (email.includes('obras')) {
-          navigateWithToken('ObrasScreen');
+          navigateWithToken('ObrasScreen', token, id);
         } else {
-          navigateWithToken('Home');
+          navigateWithToken('Home', token, id);
         }
       } else {
         Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas. Inténtalo de nuevo.');

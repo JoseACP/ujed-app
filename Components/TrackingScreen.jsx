@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 const ProgressBar = ({ progress, status }) => {
   const getStatusColor = () => {
     switch (status) {
-      case 'Entregado':
+      case 'en espera':
         return '#ce112d'; // Verde
       case 'Revision':
         return '#ce112d'; // Amarillo
@@ -19,7 +19,7 @@ const ProgressBar = ({ progress, status }) => {
 
   const getSectionWidth = () => {
     switch (status) {
-      case 'Entregado':
+      case 'en espera':
         return '25%'; // 1/4
       case 'Revision':
         return '50%'; // 1/2

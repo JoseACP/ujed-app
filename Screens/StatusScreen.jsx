@@ -11,16 +11,67 @@ import {
     Alert,
     Dimensions
 } from 'react-native';
-import React, { useEffect } from 'react';
-import { AntDesign } from '@expo/vector-icons';
+import React, { useState, useEffect }  from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import TrackingScreen from '../Components/TrackingScreen';
+import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageSlider from '../Components/imageSlider';
+import axios from 'axios';
 
 function StatusScreen() {
     
     const route = useRoute();
     const navigation = useNavigation();
+    // const userToken = route.params?.token || '';
+    const [token, setToken] = useState(null);
+
+    const handleDelete = async () => {
+        try {
+            const { itemId } = route.params;
+            if (!token) {
+                console.error('No se ha obtenido ningún token.');
+                return;
+            }
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            await axios.delete(`https://ujed-api.onrender.com/api/reports/${itemId}`, config);
+            // Manejar el éxito de la eliminación, por ejemplo, mostrar una alerta
+            Alert.alert('Éxito', 'El elemento ha sido eliminado correctamente.');
+            navigation.navigate('HomeScreen')
+            // Puedes navegar a otra pantalla o realizar otras acciones después de la eliminación
+        } catch (error) {
+            // Manejar errores en la solicitud de eliminación
+            console.error('Error al eliminar el elemento:', error);
+            // Mostrar una alerta u otras acciones en caso de error
+            Alert.alert('Error', 'Ocurrió un error al intentar eliminar el elemento.');
+        }
+    };
+
+
+    useEffect(() => {
+        // Función para obtener el token almacenado en AsyncStorage
+        async function getTokenFromStorage() {
+          try {
+            const storedToken = await AsyncStorage.getItem('token');
+            if (storedToken !== null) {
+              setToken(storedToken);
+              console.log('Token almacenado en AsyncStorage:', storedToken);
+            }else{
+              console.log('No se encontró ningún token en AsyncStorage.');
+            }
+          } catch (error) {
+            console.error('Error al obtener el token:', error);
+          }
+        }
+    
+        // Llama a la función para obtener el token al montar la pantalla
+        getTokenFromStorage();
+      }, []);
+    
 
     useEffect(() => {
         console.log('Información recibida en Status:', route.params);
@@ -95,6 +146,16 @@ function StatusScreen() {
             >
                 <Image source={{ uri: route.params.imageUrl}} style={styles.image} />
             </View>
+            <View style={[styles.button, {marginTop: 20}]}>
+            <TouchableOpacity 
+              style={[styles.inBut, { marginRight: 40 }]} 
+              onPress={handleDelete}
+            >
+              <View>
+                <Feather name="trash" size={50} color="white" />
+              </View>
+            </TouchableOpacity>
+            </View>
     
         {/* //      */}
         </ScrollView>
@@ -108,6 +169,13 @@ function StatusScreen() {
             position: 'absolute',
             right: 2,
             margin: 15,
+        },
+        button: {
+            alignItems: 'center',
+            marginTop: -20,
+            alignItems: 'center',
+            textAlign: 'center',
+            margin: 20,
         },
         logoContainer: {
             marginBottom: -12,
