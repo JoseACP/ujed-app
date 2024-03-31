@@ -30,7 +30,7 @@ function SeeMoreScreen() {
      style={{backgroundColor: 'white'}}
     >
         <View>
-                <View style={{ position: 'relative' }}>
+                <View style={{ position: 'relative', marginTop:50 }}>
                     <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
