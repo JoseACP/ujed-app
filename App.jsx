@@ -15,7 +15,7 @@ import RegisterPage from './Screens/Login&Register/Register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddReportScreen from './Screens/AddReportScreen';
 import SeeMoreScreen from './Screens/SeeMoreScreen';
-import CameraScreen from './Screens/CameraScreen';
+
 import MantenimientoScreen from './Screens/MantenimientoScreen';
 import ObrasScreen from './Screens/ObrasScreen';
 import ObrasPendientes from './Screens/ObrasPendientes';
@@ -23,7 +23,7 @@ import ObrasTerminadas from './Screens/ObrasTerminadas';
 import Mapa from './Screens/MapSelection';
 import MapSelection from './Screens/MapSelection';
 import StatusScreen from './Screens/StatusScreen';
-import PdfScreen from './Screens/PdfScreen';
+
 
 
 const StackNav = () => {
@@ -60,10 +60,10 @@ const StackNav = () => {
       <Stack.Screen name='ObrasTerminadasScreen' component={ObrasTerminadas}/>
       <Stack.Screen name='ObrasPendientesScreen' component={ObrasPendientes}/>
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
-      <Stack.Screen name="CameraScreen" component={CameraScreen}/>
+     
       <Stack.Screen name='Mapa' component={MapSelection}/>
       <Stack.Screen name='Status' component={StatusScreen}/>
-      <Stack.Screen name='Pdf' component={PdfScreen}/>
+     
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen
