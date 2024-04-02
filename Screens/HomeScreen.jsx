@@ -27,13 +27,19 @@ import ImageContainer from '../Components/ImageContainer';
     const route = useRoute();
     const userToken = route.params?.token || ''
     console.log(props);
-    const [userData, setUserData] = useState('');
+    const [userId, setUserId] = useState('');
+
 
     console.log(userToken)
   
     async function getData() {
       const token = await AsyncStorage.getItem('token');
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (token && storedUserId) {
+        setUserId(storedUserId);
+      }
       console.log(token);
+      // console.log(userId)
      
     }
   
@@ -106,7 +112,7 @@ import ImageContainer from '../Components/ImageContainer';
 
 
 {/* Contenedor de imagenes */}
-            <ImageContainer/>
+            <ImageContainer userId={userId}/>
 
 
           </View>

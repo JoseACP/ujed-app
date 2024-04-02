@@ -18,33 +18,30 @@ import {Avatar} from 'react-native-paper';
   import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
 
-  import {DrawerActions, useNavigation} from '@react-navigation/native';
+  import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageSlider from '../Components/imageSlider';
 import ImageContainer from '../Components/ImageContainer';
 
-function ObrasScreen(props) {
-    const navigation = useNavigation();
-    console.log(props);
-    const [userData, setUserData] = useState('');
-  
-    async function getData() {
-      const token = await AsyncStorage.getItem('token');
-      console.log(token);
-      axios
-        .post('https://back-ujed-app-test.onrender.com/userdata', {token: token})
-        .then(res => {
-          console.log(res.data);
-          setUserData(res.data.data);
-        });
-    }
-  
+function ObrasScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const userToken = route.params?.token || '';
 
-    useEffect(() => {
-      getData();
-    }, []);
+  const [userId, setUserId] = useState('');
+ 
+  async function getData() {
+    const storedUserId = await AsyncStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
         <View>
@@ -62,14 +59,11 @@ function ObrasScreen(props) {
             alignItems: 'center',
             marginTop: 50
             }}>
-          <Text style={styles.text_header}>Bienvenido {userData.name} </Text>
+          <Text style={styles.text_header}>Bienvenido
+           {/* {userData.name}  */}
+           </Text>
           </View>
-{/*   
-          <View style={{
-            marginTop: 2
-          }}> 
-            <ImageSlider></ImageSlider>
-          </View> */}
+
           <View style={{
             marginTop: 8,
             marginLeft: 15,
@@ -100,7 +94,7 @@ function ObrasScreen(props) {
             </View>
             </View>
           <View>
-            <ImageContainer/>
+            <ImageContainer userId={userId}/>
           </View>
 
           <View style={{
@@ -132,7 +126,7 @@ function ObrasScreen(props) {
                 </TouchableOpacity>
             </View>
             <View>
-            <ImageContainer/>
+            <ImageContainer userId={userId}/>
           </View>
           
       </ScrollView>

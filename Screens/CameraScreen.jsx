@@ -48,17 +48,6 @@ function CameraScreen() {
         }
     }
 
-    // const saveImage = async () => {
-    //     if (image) {
-    //         try {
-    //             await MediaLibrary.createAssetAsync(image);
-    //             alert('Imagen guardada')
-    //             setImage(null);
-    //         } catch (e) {
-    //             console.log(e)
-    //         }
-    //     }
-    // }
 
 
     if (hasCameraPermission === false) {

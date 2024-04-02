@@ -15,49 +15,16 @@ import {useEffect, useState} from 'react';
 import {log} from 'react-native-reanimated';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-function LoginPage({props}) {
+function LoginPage() {
   const navigation = useNavigation();
+  const [userEmail, setUserEmail] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordVerify, setPasswordVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    getUserId();
-  }, []);
-
-
-  async function getToken() {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      return token;
-    } catch (error) {
-      console.error('Error al obtener el token:', error);
-      return null;
-    }
-  }
-
-  async function getUserId() {
-    try {
-      const userId = await AsyncStorage.getItem('userId');
-      console.log('User ID:', userId);
-    } catch (error) {
-      console.error('Error al obtener el ID de usuario:', error);
-    }
-  }
-
-  // Función para navegar a la pantalla deseada con el token
-  async function navigateWithToken(screenName, token, id) {
-    if (token) {
-      navigation.navigate(screenName, { token: token, userId: id });
-    } else {
-      console.error('No se pudo obtener el token.');
-    }
-  }
+  
 
   async function handleSubmit() {
-    console.log(email, password);
     const userData = {
       email: email,
       password: password,
@@ -65,18 +32,17 @@ function LoginPage({props}) {
 
     try {
       const response = await axios.post('https://ujed-api.onrender.com/api/users/login', userData);
-      console.log(response.data);
       const { token, id } = response.data;
       if (token && id) {
         Alert.alert('Logged In Successfully');
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('userId', id);
         if (email.includes('mantenimiento')) {
-          navigateWithToken('MantenimientoScreen', token, id);
+          navigation.navigate('MantenimientoScreen', { token: token, userId: id });
         } else if (email.includes('obras')) {
-          navigateWithToken('ObrasScreen', token, id);
+          navigation.navigate('ObrasScreen', { token: token, userId: id });
         } else {
-          navigateWithToken('Home', token, id);
+          navigation.navigate('HomeScreen', { token: token, userId: id });
         }
       } else {
         Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas. Inténtalo de nuevo.');
@@ -86,19 +52,6 @@ function LoginPage({props}) {
       Alert.alert('Error', 'Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.');
     }
   }
-
- 
-  
-  async function getData() {
-    const data = await AsyncStorage.getItem('isLoggedIn');
-    
-    console.log(data, 'at app.jsx');
-  
-  }
-  useEffect(()=>{
-    getData();
-    console.log("Hii");
-  },[])
 
   return (
     <ScrollView
@@ -128,9 +81,6 @@ function LoginPage({props}) {
             />
           </View>
 
-
-
-
           {/* Password */}
           <View style={styles.action}>
             <FontAwesome name="lock" color="#ce112d" style={styles.smallIcon} />
@@ -141,27 +91,14 @@ function LoginPage({props}) {
               secureTextEntry={showPassword}
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              {password.length < 1 ? null : !showPassword ? (
-                <Feather
-                  name="eye-off"
-                  style={{marginRight: -10}}
-                  color={passwordVerify ? 'green' : 'red'}
-                  size={23}
-                />
-              ) : (
-                <Feather
-                  name="eye"
-                  style={{marginRight: -10}}
-                  color={passwordVerify ? 'green' : 'red'}
-                  size={23}
-                />
-              )}
+              <Feather
+                name={showPassword ? "eye" : "eye-off"}
+                style={{marginRight: -10}}
+                color="#ce112d"
+                size={23}
+              />
             </TouchableOpacity>
           </View>
-
-
-
-
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={styles.inBut} onPress={() => handleSubmit()}>
@@ -169,7 +106,6 @@ function LoginPage({props}) {
               <Text style={styles.textSign}>Ingresar</Text>
             </View>
           </TouchableOpacity>
-
           <View style={{padding: 15}}>
             <Text style={{fontSize: 14, fontWeight: 'bold', color: '#919191'}}>
               ¿Todavia no tienes una cuenta? <TouchableOpacity
@@ -177,7 +113,6 @@ function LoginPage({props}) {
                   navigation.navigate('Register');
                 }}>
                   <Text style={styles.bottomText}>Registrarte</Text>
-                
               </TouchableOpacity>
             </Text>
           </View>
@@ -187,10 +122,7 @@ function LoginPage({props}) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              
-              
             </View>
-           
           </View>
         </View>
       </View>

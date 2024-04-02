@@ -3,23 +3,19 @@ import { View, ActivityIndicator, Image, Text } from 'react-native';
 import GridComponent from './GridComponent';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const ImageContainer = () => {
+const ImageContainer = ({ userId }) => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState('');
-  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
         const storedToken = await AsyncStorage.getItem('token');
-        const storedUserId = await AsyncStorage.getItem('userId');
-        if (storedToken && storedUserId) {
+        if (storedToken && userId) {
           setToken(storedToken);
-          setUserId(storedUserId);
-          const response = await fetch(`https://ujed-api.onrender.com/api/reports/${storedUserId}/user?limit=10&offset=0&order=asc`, {
+          const response = await fetch(`https://ujed-api.onrender.com/api/reports/${userId}/user?limit=10&offset=0&order=asc`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -50,8 +46,7 @@ const ImageContainer = () => {
     }
 
     fetchData();
-  }, []);
-
+  }, [userId]);
   const handleItemClick = (item) => {
     navigation.navigate('Status', {
       itemId: item.id,
