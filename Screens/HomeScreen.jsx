@@ -12,30 +12,53 @@ import {
   import Check from 'react-native-vector-icons/Feather';
   import Back from 'react-native-vector-icons/Ionicons';
   import Gender from 'react-native-vector-icons/Foundation';
+  import { AntDesign } from '@expo/vector-icons';
   import Mobile from 'react-native-vector-icons/Entypo';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
 
+  import Modal from "react-native-modal";
   import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
+  import { FontAwesome6 } from '@expo/vector-icons';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
-  import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageSlider from '../Components/imageSlider';
 import ImageContainer from '../Components/ImageContainer';
 
-// import styles from './Login&Register/style';
+// import styles from './Login&Register/style'
   function HomeScreen(props) {
     const navigation = useNavigation();
     const route = useRoute();
     const userToken = route.params?.token || ''
     console.log(props);
     const [userData, setUserData] = useState('');
+    function signOut(){
+      AsyncStorage.setItem('isLoggedIn','');
+      AsyncStorage.setItem('token','');
+      navigation.navigate("LoginUser")
+    
+    }
 
     console.log(userToken)
-  
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+
+    
+  };
+
     async function getData() {
       const token = await AsyncStorage.getItem('token');
       console.log(token);
      
     }
+
+    const handlePress = () => {
+      // Llamando a ambas funciones
+      toggleModal();
+      signOut();
+    };
   
 
     useEffect(() => {
@@ -48,16 +71,78 @@ import ImageContainer from '../Components/ImageContainer';
       style={{backgroundColor: 'white'}}
       >
         <View>
-          <View style={{position: 'relative', marginTop:50}}>
-            <TouchableOpacity
-              style={styles.backIcon}
-              onPress={() => {
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}>
-              <Mobile name="menu" size={30} color="#ce112d" />
+
+          {/* BUTTON MODAL  */}
+        <View style={{marginTop:50, marginRightRight:-80 }}>
+          <TouchableOpacity
+              style={[styles.backIcon, {marginTop:20}]}
+              onPress={toggleModal}
+              >
+               <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
             </TouchableOpacity>
     
           </View>
+
+
+          {/* MODAL */}
+          <View style={{ flex: 1}}>
+
+      <Modal isVisible={isModalVisible}>
+        <View style={{ 
+          backgroundColor: '#FFFFFF',
+          width:350,
+          height:230,
+          borderRadius: 20,
+          alignItems:'center'
+        }}>
+           <TouchableOpacity
+              style={styles.backIcon}
+              onPress={toggleModal}
+              >
+              <AntDesign name="close" size={24} color="#B30000" />
+            </TouchableOpacity>
+          <View 
+          style={{
+            backgroundColor:'#C6C6C6',
+            width:270,
+            height:80,
+            marginTop:30,
+            borderRadius:20,
+            padding:15,
+            paddingTop:7,
+            
+            alignContent: 'space-between'
+          }}
+          >
+            <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
+            <Text style={{marginTop:10, fontSize:15, fontWeight:'600', color:'black'}}>jose@ujed.mx</Text>
+            
+          </View>
+         
+          <View 
+          style={{
+            backgroundColor:'#058C19',
+            width:270,
+            height:50,
+            marginTop:10,
+            borderRadius:20,
+            alignItems:'center',
+
+          }}
+          >
+            <Text style={{fontSize:15, color:'#ffffff', marginTop:16, fontWeight:'700'}}>Agregar cita</Text>
+          </View>
+
+          
+
+          <Button title="Cerrar sesión" color='red' marginTop='10' onPress={handlePress} />
+        </View>
+      </Modal>
+    </View>
+    {/* END MODAL */}
+
+
+
           <View style={{
             alignItems: 'center',
             marginTop: 50
@@ -336,6 +421,12 @@ import ImageContainer from '../Components/ImageContainer';
     },
     text_header: {
       color: '#000000',
+      fontWeight: 'bold',
+      fontSize: 30,
+      margin: 15
+    },
+    text_header2: {
+      color: '#FFFFFF',
       fontWeight: 'bold',
       fontSize: 30,
       margin: 15

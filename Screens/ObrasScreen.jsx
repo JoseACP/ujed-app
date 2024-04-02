@@ -17,7 +17,9 @@ import {Avatar} from 'react-native-paper';
   import Back from 'react-native-vector-icons/Ionicons';
   import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
-
+  import { AntDesign } from '@expo/vector-icons';
+  import { FontAwesome6 } from '@expo/vector-icons';
+  import Modal from "react-native-modal";
   import {DrawerActions, useNavigation} from '@react-navigation/native';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
@@ -29,16 +31,32 @@ function ObrasScreen(props) {
     const navigation = useNavigation();
     console.log(props);
     const [userData, setUserData] = useState('');
+    function signOut(){
+      AsyncStorage.setItem('isLoggedIn','');
+      AsyncStorage.setItem('token','');
+      navigation.navigate("LoginUser")
+    
+    }
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
   
+      
+    };
+
+    const handlePress = () => {
+      // Llamando a ambas funciones
+      toggleModal();
+      signOut();
+    };
+  
+
     async function getData() {
       const token = await AsyncStorage.getItem('token');
       console.log(token);
-      axios
-        .post('https://back-ujed-app-test.onrender.com/userdata', {token: token})
-        .then(res => {
-          console.log(res.data);
-          setUserData(res.data.data);
-        });
+      
     }
   
 
@@ -48,28 +66,81 @@ function ObrasScreen(props) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-          <View style={{position: 'relative'}}>
-            <TouchableOpacity
-              style={styles.backIcon}
-              onPress={() => {
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}>
-              <Mobile name="menu" size={30} color="#ce112d" />
+        <View style={{marginTop:50, marginRightRight:-80 }}>
+          <TouchableOpacity
+              style={[styles.backIcon, {marginTop:20}]}
+              onPress={toggleModal}
+              >
+               <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
             </TouchableOpacity>
     
           </View>
+
+          <View style={{ flex: 1}}>
+
+          <Modal isVisible={isModalVisible}>
+            <View style={{ 
+              backgroundColor: '#FFFFFF',
+              width:350,
+              height:230,
+              borderRadius: 20,
+              alignItems:'center'
+            }}>
+              <TouchableOpacity
+                  style={styles.backIcon}
+                  onPress={toggleModal}
+                  >
+                  <AntDesign name="close" size={24} color="#B30000" />
+                </TouchableOpacity>
+              <View 
+              style={{
+                backgroundColor:'#C6C6C6',
+                width:270,
+                height:80,
+                marginTop:30,
+                borderRadius:20,
+                padding:15,
+                paddingTop:7,
+                
+                alignContent: 'space-between'
+              }}
+              >
+                <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
+                <Text style={{marginTop:10, fontSize:15, fontWeight:'600', color:'black'}}>jose@ujed.mx</Text>
+                
+              </View>
+            
+              <View 
+              style={{
+                backgroundColor:'#058C19',
+                width:270,
+                height:50,
+                marginTop:10,
+                borderRadius:20,
+                alignItems:'center',
+
+              }}
+              >
+                <Text style={{fontSize:15, color:'#ffffff', marginTop:16, fontWeight:'700'}}>Agregar cita</Text>
+              </View>
+
+              
+
+              <Button title="Cerrar sesión" color='red' marginTop='10' onPress={handlePress} />
+            </View>
+          </Modal>
+          </View>
+
+          {/* END MODAL */}
           <View style={{
             alignItems: 'center',
             marginTop: 50
             }}>
-          <Text style={styles.text_header}>Bienvenido {userData.name} </Text>
+          <Text style={styles.text_header}>Bienvenido 
+         {/* ` {userData.name} ` */}
+          </Text>
           </View>
-{/*   
-          <View style={{
-            marginTop: 2
-          }}> 
-            <ImageSlider></ImageSlider>
-          </View> */}
+
           <View style={{
             marginTop: 8,
             marginLeft: 15,

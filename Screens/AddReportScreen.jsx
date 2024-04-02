@@ -233,6 +233,15 @@ export default function AddReportScreen() {
           }}>
             <Text style={styles.text_header}>Agregar reporte </Text>
           </View>
+
+
+          <View style={[styles.logoContainer, {marginTop: 20}]}>
+            <Text style ={styles.text1}>
+              ¿En qué plantel te encuentras?
+            </Text>
+          </View>
+
+
           <View style={styles.logoContainer}>
             <TouchableOpacity
               onPress={() => {

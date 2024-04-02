@@ -20,6 +20,8 @@ function LoginPage({props}) {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVerify, setPasswordVerify] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     getUserId();
@@ -125,14 +127,41 @@ function LoginPage({props}) {
               onChange={e => setEmail(e.nativeEvent.text)}
             />
           </View>
+
+
+
+
+          {/* Password */}
           <View style={styles.action}>
             <FontAwesome name="lock" color="#ce112d" style={styles.smallIcon} />
             <TextInput
               placeholder="Password"
               style={styles.textInput}
               onChange={e => setPassword(e.nativeEvent.text)}
+              secureTextEntry={showPassword}
             />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              {password.length < 1 ? null : !showPassword ? (
+                <Feather
+                  name="eye-off"
+                  style={{marginRight: -10}}
+                  color={passwordVerify ? 'green' : 'red'}
+                  size={23}
+                />
+              ) : (
+                <Feather
+                  name="eye"
+                  style={{marginRight: -10}}
+                  color={passwordVerify ? 'green' : 'red'}
+                  size={23}
+                />
+              )}
+            </TouchableOpacity>
           </View>
+
+
+
+
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={styles.inBut} onPress={() => handleSubmit()}>
