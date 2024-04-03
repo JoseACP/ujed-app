@@ -16,14 +16,20 @@ import {useNavigation} from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import ImageContainer from '../Components/ImageContainer';
 import CartItems from '../Components/CartItems';
-import Resueltas from '../Components/obras/Resueltas';
-
-function ObrasTerminadas() {
+import Completas from '../Components/obras/Completas';
+function SeeMoreoc() {
     const navigation = useNavigation();
+    
+
+
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+     showsVerticalScrollIndicator={false}
+     style={{backgroundColor: 'white'}}
+    >
         <View>
-                <View style={{ position: 'relative', marginTop: 40}}>
+                <View style={{ position: 'relative', marginTop:40 }}>
                     <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
@@ -36,13 +42,14 @@ function ObrasTerminadas() {
                     alignItems: 'center',
                     marginTop: 50
                 }}>
-                    <Text style={styles.text_header}>Obras terminadas</Text>
+                    <Text style={styles.text_header}>Mis reportes </Text>
                 </View>
-                <Resueltas/>
+                <Completas/>
             </View>
     </ScrollView>
   )
 }
+
 const styles = StyleSheet.create({
     editIcon: {
       zIndex: 1,
@@ -542,4 +549,8 @@ const styles = StyleSheet.create({
         },
   });
 
-export default ObrasTerminadas
+
+
+
+
+export default SeeMoreoc

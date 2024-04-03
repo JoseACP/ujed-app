@@ -25,6 +25,8 @@ function StatusScreen() {
     const navigation = useNavigation();
     // const userToken = route.params?.token || '';
     const [token, setToken] = useState(null);
+    const [formattedDate, setFormattedDate] = useState('');
+
 
     const handleDelete = async () => {
         try {
@@ -50,7 +52,13 @@ function StatusScreen() {
             Alert.alert('Error', 'Ocurrió un error al intentar eliminar el elemento.');
         }
     };
-
+    
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', options);
+      }
+    
 
     useEffect(() => {
         // Función para obtener el token almacenado en AsyncStorage
@@ -73,11 +81,11 @@ function StatusScreen() {
       }, []);
     
 
-    useEffect(() => {
-        console.log('Información recibida en Status:', route.params);
-    
-        // Puedes acceder a los datos específicos de esta manera
-        const { itemId, imageUrl, estado,  description, ubicacion, fecha} = route.params;
+      useEffect(() => {
+        const { itemId, imageUrl, estado, description, ubicacion, fecha } = route.params;
+        console.log('Fecha sin formato:', fecha);
+        setFormattedDate(formatDate(fecha));
+        console.log('Fecha formateada:', formattedDate);
     
         console.log('ID:', itemId);
         console.log('URL de la imagen:', imageUrl);
@@ -85,7 +93,7 @@ function StatusScreen() {
         console.log('Descripcion:', description);
         console.log('Ubicación', ubicacion);
         console.log('Fecha', fecha);
-      }, []); 
+      }, []);
   return (
         <ScrollView showsVerticalScrollIndicator={false}>
           
@@ -132,7 +140,7 @@ function StatusScreen() {
             }}
             >
                 <Text style={styles.text1}>Fecha: </Text>
-                <Text style={{marginTop: 3}}>{route.params.fecha}</Text>
+                <Text style={{marginTop: 3}}>{formattedDate}</Text>
             </View>
             
             <View>

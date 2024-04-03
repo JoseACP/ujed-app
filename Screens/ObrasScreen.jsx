@@ -25,7 +25,8 @@ import {Avatar} from 'react-native-paper';
   import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageSlider from '../Components/imageSlider';
-import ImageContainer from '../Components/ImageContainer';
+import ImageContainer from '../Components/obras/imageContainer';
+import ImageContainerf from '../Components/obras/imageContainerf';
 
 function ObrasScreen(props) {
     const navigation = useNavigation();
@@ -94,7 +95,7 @@ function ObrasScreen(props) {
                 </TouchableOpacity>
               <View 
               style={{
-                backgroundColor:'#C6C6C6',
+                backgroundColor:'#EBEBEB',
                 width:270,
                 height:80,
                 marginTop:30,
@@ -159,7 +160,7 @@ function ObrasScreen(props) {
           }}>
               <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('ObrasPendientesScreen');
+                    navigation.navigate('SeeMoreoc');
                   }}
                   >
                     <Text style={{
@@ -203,7 +204,7 @@ function ObrasScreen(props) {
                 </TouchableOpacity>
             </View>
             <View>
-            <ImageContainer/>
+            <ImageContainerf/>
           </View>
           
       </ScrollView>

@@ -16,10 +16,12 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import styles from '../Screens/Login&Register/styleA';
 import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 const imgDir = FileSystem.documentDirectory + 'images/';
 
@@ -68,20 +70,41 @@ export default function AddReportScreen() {
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
+  const [selected, setSelected] = React.useState("");
+
+  const data = [
+    {key:'1', value:'CCH', disabled:true},
+    {key:'2', value:'ECT'},
+    {key:'3', value:'EPD'},
+    {key:'4', value:'EPN', disabled:true},
+    {key:'5', value:'FCFA'},
+    {key:'6', value:'FCE'},
+    {key:'7', value:'FECA'},
+    {key:'8', value:'FCQ'},
+    {key:'9', value:'FADERyCIPOL'},
+    {key:'10', value:'FTS'},
+    {key:'11', value:'ELe'},
+    {key:'12', value:'FCCFyD'},
+    {key:'13', value:'FAEO'},
+    {key:'14', value:'FAMEN'},
+    {key:'15', value:'FAOD'},
+    {key:'16', value:'FPyTCH'},
+    {key:'17', value:'EPEA'},
+    {key:'18', value:'ESM'},
+    {key:'19', value:'FMVZ'},
+    {key:'20', value:'FAZ'},
+    {key:'21', value:'FCB'},
+    {key:'22', value:'FCQ GP'},
+    {key:'23', value:'ELe GP'},
+    {key:'24', value:'FACSA'},
+    {key:'25', value:'FICA'},
+
+
+]
   
   // console.log(userToken)
   console.log(selectedDescription)
-  const navigateToOtherScreen = () => {
-    // Obtener la fecha actual
-    const currentDate = new Date().toISOString();
   
-    // Navegar a OtherScreen con los parámetros necesarios
-    navigation.navigate('Pdf', {
-      selectedDescription,
-      currentDate,
-      description: description // Si también quieres enviar la descripción actual
-    });
-  };
 
   useEffect(() => {
     // Función para obtener el token almacenado en AsyncStorage
@@ -181,6 +204,7 @@ export default function AddReportScreen() {
       setSelectedDescription('');
       setDescription('');
       setImages([]);
+      navigation.goBack()
       // Mostrar una alerta o realizar otras acciones después de subir el reporte
       Alert.alert('Reporte subido exitosamente');
     } catch (error) {
@@ -195,22 +219,35 @@ export default function AddReportScreen() {
     setImages(images.filter((i) => i !== uri));
   };
 
+  const deleteLastImage = async () => {
+    if (images.length > 0) {
+      const lastImageUri = images[images.length - 1].uri;
+      await FileSystem.deleteAsync(lastImageUri);
+      setImages(images.filter((i) => i.uri !== lastImageUri));
+    }
+  };
+  
+
   const renderItem = ({ item }) => {
     const filename = item.split('/').pop();
-  return (
-    <View style={{ position: 'relative' }}>
-      <Image style={{ width: 80, height: 80 }} source={{ uri: item }} />
-      <TouchableOpacity
-        style={{ position: 'absolute', bottom: 5, right: 5 }}
-        onPress={() => deleteImage(item)}
-      >
-        <Ionicons name="trash" size={24} color="red" />
-      </TouchableOpacity>
-    </View>
-
-// {/* <Ionicons.Button name="cloud-upload" onPress={() => uploadImage(item)} /> */}
+    return (
+      <View style={styles.saveImageV}>
+        <View style={{ position: 'relative' }}>
+        <Image style={styles.saveImage} source={{ uri: item }} />
+        <TouchableOpacity
+          style={styles.trashButton}
+          onPress={() => {
+            deleteImage(item); // Elimina la imagen seleccionada
+            deleteLastImage(); // Elimina la última imagen en el estado
+          }}
+        >
+          <Ionicons name="trash" size={24} color="red" />
+        </TouchableOpacity>
+      </View>
+      </View>
     );
   };
+  
 
   return (
     <SafeAreaView style={{ flex: 1, gap: 20 }}>
@@ -231,14 +268,27 @@ export default function AddReportScreen() {
             alignItems: 'center',
             marginTop: 50
           }}>
-            <Text style={styles.text_header}>Agregar reporte </Text>
+            <Text style={styles.text_header}>Generar reporte </Text>
+          </View>
+          <View style={[styles.logoContainer, {marginTop:20}]}>
+            <Text style ={[styles.text1, {marginBottom: 20}]}> ¿En qué facultad te encuentras?</Text>
+            
           </View>
 
+          <View style={{
+            paddingHorizontal:60,
+            marginTop:15
+            }}>
+          <SelectList
+              setSelected={(val) => setSelected(val)}
+              data={data}
+              save="value"
+              label="Plantel"
+              boxStyles={{
+                borderRadius:5,
 
-          <View style={[styles.logoContainer, {marginTop: 20}]}>
-            <Text style ={styles.text1}>
-              ¿En qué plantel te encuentras?
-            </Text>
+              }}
+            />
           </View>
 
 
@@ -308,16 +358,6 @@ export default function AddReportScreen() {
               </View>
             </TouchableOpacity>
             </View>
-            {/* <View style={[styles.bottomButton, {marginTop: 20}]}>
-            <TouchableOpacity 
-              style={styles.inBut}
-            onPress={navigateToOtherScreen}
-            >
-              <View>
-                <Feather name="file" size={50} color="white" />
-              </View>
-            </TouchableOpacity>
-            </View> */}
             <View style={styles.bottomButton}>
               <View
                 style={{
@@ -328,7 +368,10 @@ export default function AddReportScreen() {
             </View>
             <TouchableOpacity 
               style={styles.inButT}
-              onPress={uploadReport}
+              onPress={() => {
+                uploadReport();
+                deleteLastImage(); // Llama a deleteLastImage en lugar de deleteImage
+              }}
             >
               <View>
                 <Text style={styles.textSign}>Registrar reporte</Text>
@@ -341,315 +384,3 @@ export default function AddReportScreen() {
     </SafeAreaView>
   );
 }
-const styles = StyleSheet.create({
-    inButT: {
-        width: '70%',
-        backgroundColor: '#ce112d',
-        alignItems: 'center',
-        marginTop: 40,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 50,
-    },
-    textSign: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
-      },
-    editIcon: {
-        zIndex: 1,
-        color: 'white',
-        position: 'absolute',
-        right: 2,
-        margin: 15,
-    },
-    logoContainer: {
-        marginBottom: -12,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      logo: {
-        height: 260,
-        width: 260,
-        marginTop: 50,
-        marginBottom:40,
-        borderWidth: 1,
-        borderColor: '#ce112d',
-        borderRadius: 8,
-      },
-    backIcon: {
-        zIndex: 1,
-        color: 'white',
-        position: 'absolute',
-        left: 2,
-        margin: 15,
-    },
-    avatar: {
-        borderRadius: 100,
-        marginTop: -250,
-        // marginLeft: 105,
-        backgroundColor: 'white',
-        height: 200,
-        width: 200,
-        padding: 10,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        elevation: 4,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    // 420475
-    nameText: {
-        color: 'black',
-        fontSize: 28,
-
-        fontStyle: 'normal',
-        fontFamily: 'Open Sans',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    bookCountMain: {
-        borderColor: '#b0b0b0',
-        borderWidth: 1,
-        marginTop: 18,
-        marginHorizontal: 20,
-
-        borderRadius: 20,
-        flexDirection: 'row',
-        width: '88%',
-    },
-    bookCount: {
-        width: '50%',
-        borderColor: '#b0b0b0',
-        borderRightWidth: 1,
-        flexDirection: 'column',
-        paddingHorizontal: 10,
-        paddingVertical: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    bookCountNum: {
-        color: '#5D01AA',
-        fontSize: 34,
-        fontWeight: '800',
-    },
-    bookCountText: { color: '#b3b3b3', fontSize: 14, fontWeight: '500' },
-    infoMain: {
-        marginTop: 10,
-    },
-    infoCont: {
-        width: '100%',
-        flexDirection: 'row',
-    },
-    infoIconCont: {
-        justifyContent: 'center',
-        height: 40,
-        width: 40,
-        borderRadius: 20,
-
-        alignItems: 'center',
-        elevation: -5,
-        borderColor: 'black',
-        backgroundColor: 'black',
-    },
-
-    infoText: {
-        width: '80%',
-        flexDirection: 'column',
-        marginLeft: 25,
-        borderBottomWidth: 1,
-        paddingBottom: 10,
-        borderColor: '#e6e6e6',
-    },
-    infoSmall_Text: {
-        fontSize: 13,
-        color: '#b3b3b3',
-        fontWeight: '500',
-    },
-    infoLarge_Text: {
-        color: 'black',
-        fontSize: 18,
-        fontWeight: '600',
-    },
-    booksUploadedMain: {
-        paddingHorizontal: 10,
-        paddingBottom: 30,
-        marginTop: 20,
-    },
-    flatlistDiv: {
-        borderRadius: 15,
-        paddingHorizontal: 10,
-    },
-    booksUploadedText: {
-        fontSize: 26,
-        color: 'black',
-        fontWeight: '700',
-        paddingLeft: 20,
-        paddingBottom: 8,
-    },
-    booksUploadedCard: {
-        flexDirection: 'row',
-        width: '100%',
-        marginTop: 9,
-        marginBottom: 9,
-
-        backgroundColor: '#f2f2f2',
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 15,
-        elevation: 3,
-    },
-    booksUploadedImgDiv: {
-        width: '28%',
-    },
-    booksUploadedImg: {
-        width: '100%',
-        height: 120,
-        borderRadius: 15,
-    },
-    cardMidDiv: {
-        paddingHorizontal: 10,
-        width: '55%',
-        position: 'relative',
-    },
-    approvedText: {
-        fontSize: 12,
-        color: '#0d7313',
-        fontWeight: '600',
-        marginLeft: 5,
-    },
-    cardBookNameText: {
-        fontSize: 24,
-        color: 'black',
-        fontWeight: '700',
-        marginTop: 2,
-    },
-    cardBookAuthor: {
-        fontSize: 14,
-        color: 'black',
-        fontWeight: '600',
-        marginTop: 1,
-    },
-    cardRating: {
-        position: 'absolute',
-        bottom: 0,
-        paddingHorizontal: 10,
-        flexDirection: 'row',
-    },
-    cardRatingCount: {
-        fontSize: 14,
-        marginTop: -2,
-        paddingLeft: 4,
-        color: '#303030',
-    },
-    cardEditDiv: {
-        width: '17%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    cardEditBtn: {
-        height: 44,
-        width: 44,
-        backgroundColor: '#ce112d',
-        borderRadius: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    footer: {
-        padding: 10,
-        justifyContent: 'center',
-
-        flexDirection: 'row',
-    },
-    loadMoreBtn: {
-        padding: 10,
-        backgroundColor: '#ce112d',
-        borderRadius: 4,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'white',
-        paddingHorizontal: 20,
-    },
-    btnText: {
-        color: 'white',
-        fontSize: 15,
-        textAlign: 'center',
-        fontWeight: '600',
-    },
-    text_header: {
-        color: '#000000',
-        fontWeight: 'bold',
-        fontSize: 30,
-        margin: 15
-    },
-    button: {
-        alignItems: 'center',
-        marginTop: -20,
-        alignItems: 'center',
-        textAlign: 'center',
-        margin: 20,
-    },
-    inBut: {
-        width: '25%',
-        backgroundColor: '#ce112d',
-        alignItems: 'center',
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 10,
-    },
-    textSign: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    text_container: {
-        marginTop: 20,
-        marginLeft: 5,
-        flexDirection: 'row',
-        alignItems: 'center', // Alinea verticalmente los elementos en el centro
-    },
-    text1: {
-        fontSize: 17,
-        fontWeight: '700',
-        color:'#ce112d'
-    },
-    text2: {
-        fontSize: 14, // Ajusta el tamaño del segundo texto
-        color: 'blue', // Cambia el color a azul
-        marginLeft: 10, // Añade un espacio entre los textos
-    },
-    loginContainer: {
-        marginTop: 2,
-        // backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        paddingHorizontal: 50,
-        paddingVertical: 40,
-        margin: 15
-    },
-    textInput: {
-        flex: 4,
-        marginTop: -12,
-        color: '#000000',
-
-    },
-    action: {
-        flexDirection: 'row',
-        paddingTop: 14,
-        paddingBottom: 60,
-        marginTop: 30,
-
-        paddingHorizontal: 10,
-
-        borderWidth: 1,
-        borderColor: '#ce112d',
-        borderRadius: 8,
-    },
-    image: {
-        width: 220,
-        height: 150,
-        borderRadius: 8,
-        marginBottom: 8, // Espaciado entre la imagen y el título
-      },
-});
