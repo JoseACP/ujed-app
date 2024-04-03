@@ -25,6 +25,8 @@ import Mapa from './Screens/MapSelection';
 import MapSelection from './Screens/MapSelection';
 import StatusScreen from './Screens/StatusScreen';
 import PdfScreen from './Screens/PdfScreen';
+import TrabajosPendientes from './Screens/TrabajosPendientes'
+import TrabajosTerminados from './Screens/TrabajosTerminados';
 
 
 const StackNav = () => {
@@ -66,6 +68,8 @@ const StackNav = () => {
       <Stack.Screen name='Status' component={StatusScreen}/>
       <Stack.Screen name='Pdf' component={PdfScreen}/>
       <Stack.Screen name='SeeMoreoc' component={SeeMoreoc}/>
+      <Stack.Screen name='TrabajosPendientes' component={TrabajosPendientes}/>
+      <Stack.Screen name='TrabajosTerminados' component={TrabajosTerminados}/>
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen

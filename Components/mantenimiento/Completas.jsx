@@ -18,7 +18,7 @@ const Completas = () => {
         
         if (storedToken) {
           setToken(storedToken);
-          const response = await fetch(`https://ujed-api.onrender.com/api/reports/department/obras`, {
+          const response = await fetch(`https://ujed-api.onrender.com/api/reports/department/mantenimiento`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${storedToken}`,
