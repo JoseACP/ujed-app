@@ -40,10 +40,13 @@ const DrawerItems = props => {
 };
 function DrawerContent(props) {
   const navigation = useNavigation();
-function signOut(){
+  async function signOut(){
   AsyncStorage.setItem('isLoggedIn','');
   AsyncStorage.setItem('token','');
   navigation.navigate("LoginUser")
+  await AsyncStorage.removeItem('token');
+  await AsyncStorage.removeItem('userId');
+  await AsyncStorage.removeItem('userEmail');
 
 }
   return (
