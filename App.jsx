@@ -15,7 +15,7 @@ import RegisterPage from './Screens/Login&Register/Register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddReportScreen from './Screens/AddReportScreen';
 import SeeMoreScreen from './Screens/SeeMoreScreen';
-// import CameraScreen from './Screens/CameraScreen';
+import SeeMoreoc from './Screens/SeeMoreoc'
 import MantenimientoScreen from './Screens/MantenimientoScreen';
 import ObrasScreen from './Screens/ObrasScreen';
 import ObrasPendientes from './Screens/ObrasPendientes';
@@ -24,9 +24,11 @@ import Mapa from './Screens/MapSelection';
 import MapSelection from './Screens/MapSelection';
 import StatusScreen from './Screens/StatusScreen';
 import PdfScreen from './Screens/PdfScreen';
+import TrabajosPendientes from './Screens/TrabajosPendientes'
+import TrabajosTerminados from './Screens/TrabajosTerminados';
 
 
-const StackNav = ( userEmail ) => {
+const StackNav = () => {
   const Stack = createNativeStackNavigator();
   const navigation = useNavigation();
   return (
@@ -60,10 +62,13 @@ const StackNav = ( userEmail ) => {
       <Stack.Screen name='ObrasTerminadasScreen' component={ObrasTerminadas}/>
       <Stack.Screen name='ObrasPendientesScreen' component={ObrasPendientes}/>
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
-      
+    
       <Stack.Screen name='Mapa' component={MapSelection}/>
       <Stack.Screen name='Status' component={StatusScreen}/>
-    
+      <Stack.Screen name='Pdf' component={PdfScreen}/>
+      <Stack.Screen name='SeeMoreoc' component={SeeMoreoc}/>
+      <Stack.Screen name='TrabajosPendientes' component={TrabajosPendientes}/>
+      <Stack.Screen name='TrabajosTerminados' component={TrabajosTerminados}/>
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen
@@ -79,7 +84,7 @@ const StackNav = ( userEmail ) => {
   );
 };
 
-const DrawerNav = ({ initialRoute, userEmail}) => {
+const DrawerNav = () => {
   const Drawer = createDrawerNavigator();
   return (
     <Drawer.Navigator
@@ -87,13 +92,13 @@ const DrawerNav = ({ initialRoute, userEmail}) => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Drawer.Screen name="Home" component={StackNav} initialParams={{ initialRoute }}/>
+      <Drawer.Screen name="Home" component={StackNav} />
 
     </Drawer.Navigator>
   );
 };
 
-const LoginNav = ({ initialRoute, userEmail }) => {
+const LoginNav = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
@@ -102,34 +107,20 @@ const LoginNav = ({ initialRoute, userEmail }) => {
       }}>
       <Stack.Screen name="Login" component={LoginPage} />
       <Stack.Screen name="Register" component={RegisterPage} />
-      <Stack.Screen name="Home" component={DrawerNav} initialParams={{ initialRoute, userEmail }} />
+      <Stack.Screen name="Home" component={DrawerNav} />
     </Stack.Navigator>
   );
 };
 function App() {
-
-  const [initialRoute, setInitialRoute] = useState('Login'); // Default initial route
-   const [userEmail, setUserEmail] = useState(''); 
-  useEffect(() => {
-    async function checkUser() {
-      const userEmail = await AsyncStorage.getItem('userEmail');
-      if (userEmail) {
-        setUserEmail(userEmail);
-        if (userEmail.includes('mantenimiento')) {
-          setInitialRoute('MantenimientoScreen');
-        } else if (userEmail.includes('obras')) {
-          setInitialRoute('ObrasScreen');
-        } else {
-          setInitialRoute('HomeScreen');
-        }
-      }
-    }
-    checkUser();
-  }, []);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  async function getData() {
+    const data = await AsyncStorage.getItem('isLoggedIn');
+    console.log(data, 'at app.jsx');
+    setIsLoggedIn(data);
+  }
   return (
     <NavigationContainer>
-      <DrawerNav initialRoute={initialRoute} userEmail={userEmail} />
+      {isLoggedIn ? <DrawerNav /> : <LoginNav />}
     </NavigationContainer>
   );
 }

@@ -1,45 +1,60 @@
 import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
-import React from 'react'
-import {Avatar} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import Check from 'react-native-vector-icons/Feather';
-import Back from 'react-native-vector-icons/Ionicons';
-import Gender from 'react-native-vector-icons/Foundation';
-import Mobile from 'react-native-vector-icons/Entypo';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
-import Modal from "react-native-modal";
-import {DrawerActions, useNavigation} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageSlider from '../Components/imageSlider';
-import ImageContainer from '../Components/obras/imageContainer';
-import ImageContainerf from '../Components/obras/imageContainerf';
+    StyleSheet,
+    Text,
+    View,
+    Button,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+  } from 'react-native';
+  import {Avatar} from 'react-native-paper';
+  import Icon from 'react-native-vector-icons/FontAwesome5';
+  import Check from 'react-native-vector-icons/Feather';
+  import Back from 'react-native-vector-icons/Ionicons';
+  import Gender from 'react-native-vector-icons/Foundation';
+  import { AntDesign } from '@expo/vector-icons';
+  import Mobile from 'react-native-vector-icons/Entypo';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ObrasScreen(props) {
-  const navigation = useNavigation();
-  console.log(props);
-  const [userData, setUserData] = useState('');
-  function signOut(){
-    AsyncStorage.setItem('isLoggedIn','');
-    AsyncStorage.setItem('token','');
-    navigation.navigate("LoginUser")
-  
-  }
+  import Modal from "react-native-modal";
+  import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
+  import { FontAwesome6 } from '@expo/vector-icons';
+  import {useEffect, useState} from 'react';
+  import axios from 'axios';
+import ImageSlider from './imageSlider';
+import ImageContainer from './ImageContainer';
 
-  const [isModalVisible, setModalVisible] = useState(false);
+
+function Home(props) {
+
+
+    const navigation = useNavigation();
+    const route = useRoute();
+    const userToken = route.params?.token || ''
+    console.log(props);
+    const [userData, setUserData] = useState('');
+    function signOut(){
+      AsyncStorage.setItem('isLoggedIn','');
+      AsyncStorage.setItem('token','');
+      navigation.navigate("LoginUser")
+    
+    }
+
+    const handleLogout = async (navigation) => {
+      try {
+        // Eliminar los datos de sesión almacenados
+        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('userId');
+        // Regresar a la pantalla de inicio de sesión
+        navigation.navigate('Login');
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+      }
+    };
+
+    console.log(userToken)
+
+    const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -47,27 +62,34 @@ function ObrasScreen(props) {
     
   };
 
-  const handlePress = () => {
-    // Llamando a ambas funciones
-    toggleModal();
-    signOut();
-  };
+    async function getData() {
+      const token = await AsyncStorage.getItem('token');
+      console.log(token);
+     
+    }
 
+    const handlePress = () => {
+      // Llamando a ambas funciones
+      toggleModal();
+      signOut();
+      handleLogout();
+    };
+  
 
-  async function getData() {
-    const token = await AsyncStorage.getItem('token');
-    console.log(token);
-    
-  }
+    useEffect(() => {
+      getData();
+    }, []);
+  
+  return (
 
-
-  useEffect(() => {
-    getData();
-  }, []);
-return (
-  <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    style={{backgroundColor: 'white'}}
+    >
       <View>
-      <View style={{marginTop:50, marginRightRight:-80 }}>
+
+        {/* BUTTON MODAL  */}
+      <View style={{marginTop:6, marginRightRight:-80 }}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:20}]}
             onPress={toggleModal}
@@ -77,71 +99,80 @@ return (
   
         </View>
 
+
+        {/* MODAL */}
         <View style={{ flex: 1}}>
 
-        <Modal isVisible={isModalVisible}>
-          <View style={{ 
-            backgroundColor: '#FFFFFF',
-            width:350,
-            height:230,
-            borderRadius: 20,
-            alignItems:'center'
-          }}>
-            <TouchableOpacity
-                style={styles.backIcon}
-                onPress={toggleModal}
-                >
-                <AntDesign name="close" size={24} color="#B30000" />
-              </TouchableOpacity>
-            <View 
-            style={{
-              backgroundColor:'#EBEBEB',
-              width:270,
-              height:80,
-              marginTop:30,
-              borderRadius:20,
-              padding:15,
-              paddingTop:7,
-              
-              alignContent: 'space-between'
-            }}
+    <Modal isVisible={isModalVisible}>
+      <View style={{ 
+        backgroundColor: '#FFFFFF',
+        width:350,
+        height:230,
+        borderRadius: 20,
+        alignItems:'center'
+      }}>
+         <TouchableOpacity
+            style={styles.backIcon}
+            onPress={toggleModal}
             >
-              <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
-              <Text style={{marginTop:10, fontSize:15, fontWeight:'600', color:'black'}}>jose@ujed.mx</Text>
-              
-            </View>
+            <AntDesign name="close" size={24} color="#B30000" />
+          </TouchableOpacity>
+        <View 
+        style={{
+          backgroundColor:'#F0F0F0',
+          width:270,
+          height:80,
+          marginTop:30,
+          borderRadius:20,
+          padding:15,
+          paddingTop:7,
           
-            <View 
-            style={{
-              backgroundColor:'#058C19',
-              width:270,
-              height:50,
-              marginTop:10,
-              borderRadius:20,
-              alignItems:'center',
+          alignContent: 'space-between'
+        }}
+        >
+          <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
+          <Text style={{marginTop:10, fontSize:15, fontWeight:'600', color:'black'}}>jose@ujed.mx</Text>
+          
+        </View>
+       
+        <View 
+        style={{
+          backgroundColor:'#E0DFDF',
+          width:270,
+          height:50,
+          marginTop:10,
+          borderRadius:20,
+          alignItems:'center',
 
-            }}
-            >
-              <Text style={{fontSize:15, color:'#ffffff', marginTop:16, fontWeight:'700'}}>Agregar cita</Text>
-            </View>
-
-            
-
-            <Button title="Cerrar sesión" color='red' marginTop='10' onPress={handlePress} />
-          </View>
-        </Modal>
+        }}
+        >
+          <Text style={{fontSize:15, color:'#000000', marginTop:16, fontWeight:'500'}}>Agregar cita</Text>
         </View>
 
-        {/* END MODAL */}
+        
+
+        <Button title="Cerrar sesión" color='red' fontWeight='500' onPress={handlePress} />
+      </View>
+    </Modal>
+  </View>
+  {/* END MODAL */}
+
+
+
         <View style={{
           alignItems: 'center',
           marginTop: 50
           }}>
-        <Text style={styles.text_header}>Bienvenido 
-       {/* ` {userData.name} ` */}
-        </Text>
+        <Text style={styles.text_header}>Bienvenido
+         {/* {userData.name}  */}
+         </Text>
         </View>
 
+        <View style={{
+          marginTop: 2
+        }}> 
+          <ImageSlider></ImageSlider>
+        </View>
         <View style={{
           marginTop: 8,
           marginLeft: 15,
@@ -150,7 +181,7 @@ return (
             fontSize: 17,
             fontWeight: "700"
           }}> 
-            Obras pendientes
+            Mis reportes
             </Text>
         </View>
         <View style={{
@@ -160,7 +191,7 @@ return (
         }}>
             <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('SeeMoreoc');
+                  navigation.navigate('Seemore');
                 }}
                 >
                   <Text style={{
@@ -172,45 +203,30 @@ return (
           </View>
           </View>
         <View>
+
+
+
+{/* Contenedor de imagenes */}
           <ImageContainer/>
-        </View>
 
-        <View style={{
-          marginTop: 8,
-          marginLeft: 15,
-        }}>
-          <Text style={{
-            fontSize: 17,
-            fontWeight: "700"
-          }}> 
-            Obras terminadas
-            </Text>
-        </View>
-        <View style={{
-          marginStart: 330,
 
-          marginBottom: -10
-        }}>
-            <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('ObrasTerminadasScreen');
-                }}
-                >
-                  <Text style={{
-                     fontSize: 12,
-                     color: "#ce112d"
-                  }}>Ver mas</Text>
-                
-              </TouchableOpacity>
-          </View>
-          <View>
-          <ImageContainerf/>
         </View>
-        
+        <View style={styles.button}>
+          <TouchableOpacity 
+          style={styles.inBut} 
+          onPress={() => {
+            navigation.navigate('AddReportScreen', { token: userToken });
+          }}
+          >
+            <View>
+              <Text style={styles.textSign}>Agregar reporte</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      
     </ScrollView>
-)
+  );
 }
-
 const styles = StyleSheet.create({
   editIcon: {
     zIndex: 1,
@@ -425,6 +441,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     margin: 15
   },
+  text_header2: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 30,
+    margin: 15
+  },
     button: {
       alignItems: 'center',
       marginTop: -20,
@@ -462,4 +484,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ObrasScreen
+export default Home

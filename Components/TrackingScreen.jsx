@@ -6,11 +6,11 @@ const ProgressBar = ({ progress, status }) => {
     switch (status) {
       case 'en espera':
         return '#ce112d'; // Verde
-      case 'Revision':
+      case 'asignado':
         return '#ce112d'; // Amarillo
-      case 'Progreso':
-        return '#ce112d'; // Azul
-      case 'Finalizado':
+      case 'descartado':
+        return '#000000'; // Azul
+      case 'resuelto':
         return '#ce112d'; // Rojo (tu color original)
       default:
         return '#e0e0e0'; // Gris predeterminado
@@ -21,17 +21,16 @@ const ProgressBar = ({ progress, status }) => {
     switch (status) {
       case 'en espera':
         return '25%'; // 1/4
-      case 'Revision':
+      case 'asignado':
         return '50%'; // 1/2
-      case 'Progreso':
+      case 'descartado':
         return '75%'; // 3/4
-      case 'Finalizado':
+      case 'resuelto':
         return '100%'; // Completo
       default:
         return '0%'; // Ninguna sección
     }
   };
-
   return (
     <View style={styles.progressBar}>
       <View style={{ width: getSectionWidth(), backgroundColor: getStatusColor(), ...styles.progressIndicator }} />

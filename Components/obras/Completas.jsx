@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, Image, Text } from 'react-native';
-import GridComponent from './GridComponent';
+import Gridcompletas from './Gridcompletas';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ImageContainer = () => {
+const Completas = () => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState('');
-  const [userId, setUserId] = useState('');
+ 
 
   useEffect(() => {
     async function fetchData() {
       try {
         const storedToken = await AsyncStorage.getItem('token');
-        const storedUserId = await AsyncStorage.getItem('userId');
-        if (storedToken && storedUserId) {
+        
+        if (storedToken) {
           setToken(storedToken);
-          setUserId(storedUserId);
-          const response = await fetch(`https://ujed-api.onrender.com/api/reports/${storedUserId}/user?limit=10&offset=0&order=asc`, {
+          const response = await fetch(`https://ujed-api.onrender.com/api/reports/department/obras`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -32,8 +31,10 @@ const ImageContainer = () => {
           }
 
           const responseData = await response.json();
+          // Filtra los reportes que no estén resueltos
+          const filteredData = responseData.filter(item => item.status !== 'resuelto');
           // Mapea los datos recibidos para adaptarlos a tu estructura de datos requerida
-          const modifiedData = responseData.map(item => ({
+          const modifiedData = filteredData.map(item => ({
             id: item.id,
             title: item.title,
             imageUri: item.images.length > 0 ? item.images[0].url : 'https://imgs.search.brave.com/k_igGCUtM9UAFo2IejoBF2ctlbFUeolBzcU6dxVnKfc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMtMDAuaWNvbmR1/Y2suY29tL2Fzc2V0/cy4wMC9uby1pbWFn/ZS1pY29uLTUxMng1/MTItbGZvYW5sMHcu/cG5n',
@@ -91,14 +92,9 @@ const ImageContainer = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <GridComponent data={data} onItemClick={handleItemClick} />
+      <Gridcompletas data={data} onItemClick={handleItemClick} />
     </View>
   );
 };
 
-
-export default ImageContainer;
-
-
-
-
+export default Completas;

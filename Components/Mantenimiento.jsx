@@ -1,73 +1,87 @@
 import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
-import React from 'react'
-import {Avatar} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import Check from 'react-native-vector-icons/Feather';
-import Back from 'react-native-vector-icons/Ionicons';
-import Gender from 'react-native-vector-icons/Foundation';
-import Mobile from 'react-native-vector-icons/Entypo';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
-import Modal from "react-native-modal";
-import {DrawerActions, useNavigation} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageSlider from '../Components/imageSlider';
-import ImageContainer from '../Components/obras/imageContainer';
-import ImageContainerf from '../Components/obras/imageContainerf';
+    StyleSheet,
+    Text,
+    View,
+    Button,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    SafeAreaView,
+    Alert,
+  } from 'react-native';
+  import React from 'react'
+  import {Avatar} from 'react-native-paper';
+  import Icon from 'react-native-vector-icons/FontAwesome5';
+  import Check from 'react-native-vector-icons/Feather';
+  import Back from 'react-native-vector-icons/Ionicons';
+  import Gender from 'react-native-vector-icons/Foundation';
+  import Mobile from 'react-native-vector-icons/Entypo';
+  import { AntDesign } from '@expo/vector-icons';
+  import { FontAwesome6 } from '@expo/vector-icons';
+  import Modal from "react-native-modal";
+  import {DrawerActions, useNavigation} from '@react-navigation/native';
+  import {useEffect, useState} from 'react';
+  import axios from 'axios';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
+  import ImageSlider from '../Components/imageSlider';
+  import ImageContainer from '../Components/mantenimiento/imageContainer';
+  import ImageContainerf from '../Components/mantenimiento/imageContainerf';
 
-function ObrasScreen(props) {
-  const navigation = useNavigation();
-  console.log(props);
-  const [userData, setUserData] = useState('');
-  function signOut(){
-    AsyncStorage.setItem('isLoggedIn','');
-    AsyncStorage.setItem('token','');
-    navigation.navigate("LoginUser")
+  const handleLogout = async (navigation) => {
+    try {
+      // Eliminar los datos de sesión almacenados
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('userId');
+      await AsyncStorage.removeItem('userEmail');
+      
+      // Regresar a la pantalla de inicio de sesión
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+function Mantenimiento(props) {
+    const navigation = useNavigation();
+    console.log(props);
+    const [userData, setUserData] = useState('');
+    function signOut(){
+      AsyncStorage.setItem('isLoggedIn','');
+      AsyncStorage.setItem('token','');
+      navigation.navigate("LoginUser")
+    
+    }
   
-  }
-
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-
-    
-  };
-
-  const handlePress = () => {
-    // Llamando a ambas funciones
-    toggleModal();
-    signOut();
-  };
-
-
-  async function getData() {
-    const token = await AsyncStorage.getItem('token');
-    console.log(token);
-    
-  }
-
-
-  useEffect(() => {
-    getData();
-  }, []);
-return (
-  <ScrollView showsVerticalScrollIndicator={false}>
+    const [isModalVisible, setModalVisible] = useState(false);
+  
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+  
+      
+    };
+  
+    const handlePress = () => {
+      // Llamando a ambas funciones
+      toggleModal();
+      signOut();
+    };
+  
+  
+    async function getData() {
+      const token = await AsyncStorage.getItem('token');
+      console.log(token);
+      
+    }
+  
+  
+    useEffect(() => {
+      getData();
+    }, []);
+  return (
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View>
-      <View style={{marginTop:50, marginRightRight:-80 }}>
+      <View style={{marginTop:6, marginRightRight:-80 }}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:20}]}
             onPress={toggleModal}
@@ -150,7 +164,7 @@ return (
             fontSize: 17,
             fontWeight: "700"
           }}> 
-            Obras pendientes
+            Trabajos pendientes
             </Text>
         </View>
         <View style={{
@@ -160,7 +174,7 @@ return (
         }}>
             <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('SeeMoreoc');
+                  navigation.navigate('TrabajosPendientes');
                 }}
                 >
                   <Text style={{
@@ -183,7 +197,7 @@ return (
             fontSize: 17,
             fontWeight: "700"
           }}> 
-            Obras terminadas
+            Trabajos terminados
             </Text>
         </View>
         <View style={{
@@ -193,7 +207,7 @@ return (
         }}>
             <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('ObrasTerminadasScreen');
+                  navigation.navigate('TrabajosTerminados');
                 }}
                 >
                   <Text style={{
@@ -461,5 +475,4 @@ const styles = StyleSheet.create({
       marginLeft: 10, // Añade un espacio entre los textos
     },
 });
-
-export default ObrasScreen
+export default Mantenimiento
