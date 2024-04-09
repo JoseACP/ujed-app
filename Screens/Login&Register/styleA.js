@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
         marginLeft: 10, // Añade un espacio entre los textos
     },
     loginContainer: {
+        alignItems:'center',
         marginTop: 2,
         // backgroundColor: '#fff',
         borderTopLeftRadius: 30,
@@ -147,6 +148,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingTop: 14,
         paddingBottom: 60,
+        marginTop: 30,
+        paddingHorizontal: 10,
+        backgroundColor: '#E7E7E7',
+        borderWidth: 1,
+        borderColor: '#ce112d',
+        borderRadius: 8,
+    },
+    action2: {
+        flexDirection: 'row',
+        paddingTop: 14,
+        paddingBottom: 30,
         marginTop: 30,
         paddingHorizontal: 10,
         backgroundColor: '#E7E7E7',

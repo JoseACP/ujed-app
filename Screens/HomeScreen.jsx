@@ -36,6 +36,7 @@ import Mantenimiento from '../Components/Mantenimiento';
       try {
         const userEmail = await AsyncStorage.getItem('userEmail');
         setEmail(userEmail);
+        console.log(userEmail)
       } catch (error) {
         console.error('Error al obtener el email:', error);
       }

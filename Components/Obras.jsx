@@ -31,7 +31,23 @@ function Obras(props) {
 
   const navigation = useNavigation();
   console.log(props);
+  const [email, setEmail] = useState('');
   const [userData, setUserData] = useState('');
+
+  useEffect(() => {
+    getEmail();
+  }, []);
+
+  async function getEmail() {
+    try {
+      const userEmail = await AsyncStorage.getItem('userEmail');
+      setEmail(userEmail);
+      console.log(userEmail)
+    } catch (error) {
+      console.error('Error al obtener el email:', error);
+    }
+  }
+
   function signOut(){
     AsyncStorage.setItem('isLoggedIn','');
     AsyncStorage.setItem('token','');
@@ -60,6 +76,13 @@ function Obras(props) {
     
   }
 
+  const obtenerNombreUsuario = (email) => {
+    const partesEmail = email.split('@');
+    return partesEmail[0];
+  };
+
+  const nombreUsuario = obtenerNombreUsuario(email);
+
 
   useEffect(() => {
     getData();
@@ -67,23 +90,27 @@ function Obras(props) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-        <View style={{marginTop:50, marginRightRight:-80 }}>
-          <TouchableOpacity
-              style={[styles.backIcon, {marginTop:20}]}
-              onPress={toggleModal}
-              >
-               <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
-            </TouchableOpacity>
-    
-          </View>
+        <View style={{marginTop:50, paddingRight:-20}}>
+        <TouchableOpacity
+            style={[styles.backIcon, {marginTop:20, marginStart:370}]}
+            onPress={toggleModal}
+            >
+             <Image
+          source={{ uri: 'https://imgs.search.brave.com/cuFuXnr6J9ok7BFdN3oK62Pp_g_QoVjqUPzv1VBrjdw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL3RodW1icy81/ODVlNGJmM2NiMTFi/MjI3NDkxYzMzOWEu/cG5n' }}
+          style={{width:40,
+          height:40}}
+        />
+          </TouchableOpacity>
+  
+        </View>
 
           <View style={{ flex: 1}}>
 
           <Modal isVisible={isModalVisible}>
             <View style={{ 
-              backgroundColor: '#FFFFFF',
-              width:350,
-              height:230,
+              backgroundColor: '#E9E3E3',
+              width:380,
+              height:200,
               borderRadius: 20,
               alignItems:'center'
             }}>
@@ -95,38 +122,23 @@ function Obras(props) {
                 </TouchableOpacity>
               <View 
               style={{
-                backgroundColor:'#EBEBEB',
-                width:270,
-                height:80,
-                marginTop:30,
+                backgroundColor:'#FFFFFF',
+                alignItems:'flex-start',
+                width:360,
+                height:100,
+                marginTop:40,
                 borderRadius:20,
                 padding:15,
-                paddingTop:7,
+                paddingTop:15,
                 
                 alignContent: 'space-between'
               }}
               >
                 <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
-                <Text style={{marginTop:10, fontSize:15, fontWeight:'600', color:'black'}}>jose@ujed.mx</Text>
+                <Text style={{marginTop:10, fontSize:18, fontWeight:'500', color:'black'}}>{email}</Text>
                 
               </View>
-            
-              <View 
-              style={{
-                backgroundColor:'#058C19',
-                width:270,
-                height:50,
-                marginTop:10,
-                borderRadius:20,
-                alignItems:'center',
-
-              }}
-              >
-                <Text style={{fontSize:15, color:'#ffffff', marginTop:16, fontWeight:'700'}}>Agregar cita</Text>
-              </View>
-
-              
-
+   
               <Button title="Cerrar sesión" color='red' marginTop='10' onPress={handlePress} />
             </View>
           </Modal>
@@ -135,10 +147,10 @@ function Obras(props) {
           {/* END MODAL */}
           <View style={{
             alignItems: 'center',
-            marginTop: 50
+            marginTop: 40
             }}>
           <Text style={styles.text_header}>Bienvenido 
-         {/* ` {userData.name} ` */}
+          <Text  style={styles.nombreUsuario} > {nombreUsuario}</Text>
           </Text>
           </View>
 
@@ -212,6 +224,9 @@ function Obras(props) {
 }
 
 const styles = StyleSheet.create({
+  nombreUsuario: {
+    color: '#ce112d'
+  },
     editIcon: {
       zIndex: 1,
       color: 'white',

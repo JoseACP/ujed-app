@@ -26,6 +26,8 @@ function StatusScreen() {
     // const userToken = route.params?.token || '';
     const [token, setToken] = useState(null);
     const [formattedDate, setFormattedDate] = useState('');
+    const [parte1, setParte1] = useState('');
+    const [parte2, setParte2] = useState('');
 
 
     const handleDelete = async () => {
@@ -86,14 +88,23 @@ function StatusScreen() {
         console.log('Fecha sin formato:', fecha);
         setFormattedDate(formatDate(fecha));
         console.log('Fecha formateada:', formattedDate);
-    
+      
         console.log('ID:', itemId);
         console.log('URL de la imagen:', imageUrl);
         console.log('Estado:', estado);
         console.log('Descripcion:', description);
         console.log('Ubicación', ubicacion);
         console.log('Fecha', fecha);
+      
+        // Dividir la información de ubicación antes y después del guion "-"
+        const ubicacionParts = ubicacion.split(' - ');
+        const parte1 = ubicacionParts[0]; // La primera parte antes del guion
+        const parte2 = ubicacionParts[1]; // La segunda parte después del guion
+      
+        console.log('Primera parte de la ubicación:', parte1);
+        console.log('Segunda parte de la ubicación:', parte2);
       }, []);
+      
   return (
         <ScrollView showsVerticalScrollIndicator={false}>
           
@@ -113,6 +124,18 @@ function StatusScreen() {
                 }}>
                     <Text style={styles.text_header}>Informació del reporte </Text>
                 </View>
+            
+                <View
+            style={{
+                marginTop:13,
+                padding: 12
+                
+            }}
+            >
+                <Text style={styles.text1}>Titulo: </Text>
+                <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[0]}</Text>
+
+            </View>
             <View
             style={{
                 marginTop:13,
@@ -121,7 +144,7 @@ function StatusScreen() {
             }}
             >
                 <Text style={styles.text1}>Ubicación</Text>
-                <Text style={{marginTop: 3}}>{route.params.ubicacion}</Text>
+                <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[1]}</Text>
 
             </View>
             <View

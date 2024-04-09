@@ -17,6 +17,7 @@ const styles=StyleSheet.create({
       logoContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop:-4,
       },
       logo: {
         height: 260,

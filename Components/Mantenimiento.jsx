@@ -79,7 +79,9 @@ function Mantenimiento(props) {
       getData();
     }, []);
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+    contentContainerStyle={{flexGrow: 1}} 
+    showsVerticalScrollIndicator={false}>
       <View>
       <View style={{marginTop:50, marginRightRight:-80 }}>
         <TouchableOpacity
