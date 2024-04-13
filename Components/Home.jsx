@@ -117,9 +117,9 @@ function Home(props) {
     >
       <View>
 
-      <View style={{marginTop:'5%', paddingRight:-20}}>
+      <View style={{marginTop:'8%', paddingRight:-20}}>
         <TouchableOpacity
-            style={[styles.backIcon, {marginTop:20, marginStart:'86%'}]}
+            style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
             onPress={toggleModal}
             >
              <Image
@@ -135,9 +135,9 @@ function Home(props) {
 
           <Modal isVisible={isModalVisible}>
             <View style={{ 
-              backgroundColor: '#E9E3E3',
+              backgroundColor: '#BFBDBDDE',
               width:'100%',
-              height:200,
+              height:'25%',
               borderRadius: 20,
               alignItems:'center'
             }}>
@@ -152,7 +152,7 @@ function Home(props) {
                 backgroundColor:'#FFFFFF',
                 alignItems:'flex-start',
                 width:'96%',
-                height:100,
+                height:'50%',
                 marginTop:40,
                 borderRadius:20,
                 padding:15,
@@ -161,7 +161,12 @@ function Home(props) {
                 alignContent: 'space-between'
               }}
               >
-                <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
+                <Image
+                  source={{ uri: 'https://imgs.search.brave.com/cuFuXnr6J9ok7BFdN3oK62Pp_g_QoVjqUPzv1VBrjdw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL3RodW1icy81/ODVlNGJmM2NiMTFi/MjI3NDkxYzMzOWEu/cG5n' }}
+                  style={{
+                    width: 40,
+                    height: 40
+                  }} />
                 <Text style={{marginTop:10, fontSize:18, fontWeight:'500', color:'black'}}>{email}</Text>
                 
               </View>

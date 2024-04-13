@@ -46,12 +46,35 @@ function Mantenimiento(props) {
     const navigation = useNavigation();
     console.log(props);
     const [userData, setUserData] = useState('');
+    const [email, setEmail] = useState('');
     function signOut(){
       AsyncStorage.setItem('isLoggedIn','');
       AsyncStorage.setItem('token','');
       navigation.navigate("LoginUser")
     
     }
+
+    useEffect(() => {
+      getEmail();
+    }, []);
+
+    async function getEmail() {
+      try {
+        const userEmail = await AsyncStorage.getItem('userEmail');
+        setEmail(userEmail);
+        console.log(userEmail)
+      } catch (error) {
+        console.error('Error al obtener el email:', error);
+      }
+    }
+
+    const obtenerNombreUsuario = (email) => {
+      const partesEmail = email.split('@');
+      return partesEmail[0];
+    };
+  
+    const nombreUsuario = obtenerNombreUsuario(email);
+  
   
     const [isModalVisible, setModalVisible] = useState(false);
   
@@ -82,23 +105,28 @@ function Mantenimiento(props) {
     <ScrollView
     contentContainerStyle={{flexGrow: 1}} 
     showsVerticalScrollIndicator={false}>
+
+
       <View>
-      <View style={{marginTop:50, marginRightRight:-80 }}>
+       <View style={{marginTop:'5%', paddingRight:-20}}>
         <TouchableOpacity
-            style={[styles.backIcon, {marginTop:20}]}
+            style={[styles.backIcon, {marginTop:20, marginStart:'86%'}]}
             onPress={toggleModal}
             >
-             <FontAwesome6 name="user-circle" size={38} color="#CE0404" /> 
+             <Image
+          source={{ uri: 'https://imgs.search.brave.com/cuFuXnr6J9ok7BFdN3oK62Pp_g_QoVjqUPzv1VBrjdw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL3RodW1icy81/ODVlNGJmM2NiMTFi/MjI3NDkxYzMzOWEu/cG5n' }}
+          style={{width:40,
+          height:40}}
+        />
           </TouchableOpacity>
   
         </View>
-
         <View style={{ flex: 1}}>
 
         <Modal isVisible={isModalVisible}>
           <View style={{ 
             backgroundColor: '#FFFFFF',
-            width:350,
+            width:'100%',
             height:230,
             borderRadius: 20,
             alignItems:'center'
@@ -112,7 +140,7 @@ function Mantenimiento(props) {
             <View 
             style={{
               backgroundColor:'#EBEBEB',
-              width:270,
+              width:'96%',
               height:80,
               marginTop:30,
               borderRadius:20,
@@ -151,10 +179,10 @@ function Mantenimiento(props) {
         {/* END MODAL */}
         <View style={{
           alignItems: 'center',
-          marginTop: 50
+          marginTop: 40
           }}>
-        <Text style={styles.text_header}>Bienvenido 
-       {/* ` {userData.name} ` */}
+       <Text style={styles.text_header}>Bienvenido 
+          <Text  style={styles.nombreUsuario} > {nombreUsuario}</Text>
         </Text>
         </View>
 
@@ -228,6 +256,9 @@ function Mantenimiento(props) {
 }
 
 const styles = StyleSheet.create({
+  nombreUsuario: {
+    color: '#ce112d'
+  },
   editIcon: {
     zIndex: 1,
     color: 'white',

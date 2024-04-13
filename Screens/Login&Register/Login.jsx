@@ -74,7 +74,7 @@ function LoginPage() {
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Ocurrió un error durante el inicio de sesión. Por favor, inténtalo de nuevo más tarde.');
+      Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas. Inténtalo de nuevo.');
     }
   }
 

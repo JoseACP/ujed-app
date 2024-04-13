@@ -92,7 +92,7 @@ function Obras(props) {
         <View>
         <View style={{marginTop:50, paddingRight:-20}}>
         <TouchableOpacity
-            style={[styles.backIcon, {marginTop:20, marginStart:370}]}
+            style={[styles.backIcon, {marginTop:20, marginStart:'86%'}]}
             onPress={toggleModal}
             >
              <Image
@@ -109,7 +109,7 @@ function Obras(props) {
           <Modal isVisible={isModalVisible}>
             <View style={{ 
               backgroundColor: '#E9E3E3',
-              width:380,
+              width:'100%',
               height:200,
               borderRadius: 20,
               alignItems:'center'
@@ -124,7 +124,7 @@ function Obras(props) {
               style={{
                 backgroundColor:'#FFFFFF',
                 alignItems:'flex-start',
-                width:360,
+                width:'96%',
                 height:100,
                 marginTop:40,
                 borderRadius:20,
