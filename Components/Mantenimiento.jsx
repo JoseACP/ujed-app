@@ -104,13 +104,25 @@ function Mantenimiento(props) {
   return (
     <ScrollView
     contentContainerStyle={{flexGrow: 1}} 
-    showsVerticalScrollIndicator={false}>
+    showsVerticalScrollIndicator={false}
+    style={{backgroundColor: 'white'}}
+    >
 
 
       <View>
-       <View style={{marginTop:'5%', paddingRight:-20}}>
+      <View style={{position: 'relative', marginTop:'12%', marginBottom:'-3%'}}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => {
+                navigation.dispatch(DrawerActions.openDrawer());
+              }}>
+              <Mobile name="menu" size={30} color="#ce112d" />
+            </TouchableOpacity>
+    
+          </View>
+       <View style={{marginTop:'3%', paddingRight:-20}}>
         <TouchableOpacity
-            style={[styles.backIcon, {marginTop:20, marginStart:'86%'}]}
+            style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
             onPress={toggleModal}
             >
              <Image

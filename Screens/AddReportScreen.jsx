@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import Carousel from 'react-native-snap-carousel';
 import * as FileSystem from 'expo-file-system';
 import styles from '../Screens/Login&Register/styleA';
 import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
@@ -32,34 +33,6 @@ const ensureDirExists = async () => {
   }
 };
 
-const WelcomeScreen = () => {
-  const [location, setLocation] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
-
-  if (location) {
-    console.log(`Latitud: ${location.coords.latitude}, Longitud: ${location.coords.longitude}`);
-  } else {
-    console.log('Obteniendo ubicación...');
-  }
-
-  // Resto de tu lógica aquí
-
-  return null; // No renderiza nada en la vista
-};
-
-
 export default function AddReportScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -74,8 +47,10 @@ export default function AddReportScreen() {
   const [selected, setSelected] = React.useState("");
   const [selectedValue, setSelectedValue] = React.useState("");
   const [selectedB, setSelectedB] = React.useState("");
+  const [showView1, setShowView1] = useState(false);
+  const [showView2, setShowView2] = useState(false);
 
-  const formattedLocation = `${selectedB.toString()}/${selectedValue.toString()}/${selectedDescription.toString()}`;
+  const formattedLocation = `${selectedB.toString()}/${selectedDescription.toString()}`;
 
 
   const data = [
@@ -108,13 +83,24 @@ export default function AddReportScreen() {
 
   ];
 
-  const datac = [
-    { key: '1', value: 'Planta alta' },
-    { key: '2', value: 'Planta baja' },
-  ];
+
 
   // console.log(userToken)
   console.log(selectedDescription)
+
+  useEffect(() => {
+    // Aquí puedes agregar lógica para mostrar u ocultar las vistas según el valor seleccionado
+    if (selectedValue === 'Planta alta') {
+      setShowView1(true);
+      setShowView2(false);
+    } else if (selectedValue === 'Planta baja') {
+      setShowView1(false);
+      setShowView2(true);
+    } else {
+      setShowView1(false);
+      setShowView2(false);
+    }
+  }, [selectedValue]);
 
 
   useEffect(() => {
@@ -341,24 +327,14 @@ export default function AddReportScreen() {
             />
           </View>
 
-          <View style={{
-            paddingHorizontal: 60,
-            marginTop: 15
-          }}>
-            <Text style={[styles.text1, { marginBottom: 20 }]}> ¿En qué parte te encuentras?</Text>
-            <SelectList
-              setSelected={(val) => setSelectedValue(val)}
-              data={datac}
-              save="value"
-              label="Plantel"
-              boxStyles={{
-                borderRadius: 5,
+          <View style={[styles.logoContainer, {marginTop:'10%'}]}>
+           <Text style={styles.text1}>{selectedDescription}</Text>
+            
+          </View> 
 
-              }}
-            />
-          </View>
+          {/* CARRUSEL */}
 
-
+          <View>
           <View style={styles.logoContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -373,10 +349,27 @@ export default function AddReportScreen() {
                 source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
               />
             </TouchableOpacity>
-            <Text style={styles.text1}>{selectedDescription}</Text>
           </View>
 
+          <View style={styles.logoContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Mapa2', {
+                  selectedDescription,
+                  updateSelectedDescription: setSelectedDescription,
+                });
+              }}
+            >
+              <Image
+                style={styles.logo}
+                source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA BAJA-1.png')}
+              />
+            </TouchableOpacity>
+          </View>
 
+          </View>
+
+              {/* CARRUSEL */}
 
           <View style={styles.loginContainer}>
             <Text style={[styles.text1, { marginBottom: 20 }]}>Describe lo que ocurrió</Text>

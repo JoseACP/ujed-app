@@ -90,7 +90,17 @@ function Obras(props) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-        <View style={{marginTop:50, paddingRight:-20}}>
+        <View style={{position: 'relative', marginTop:'12%', marginBottom:'-3%'}}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => {
+                navigation.dispatch(DrawerActions.openDrawer());
+              }}>
+              <Mobile name="menu" size={30} color="#ce112d" />
+            </TouchableOpacity>
+    
+          </View>
+        <View style={{marginTop:'3%', paddingRight:-20}}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:20, marginStart:'86%'}]}
             onPress={toggleModal}

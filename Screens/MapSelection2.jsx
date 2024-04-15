@@ -11,32 +11,25 @@ const MapSelection2 = () => {
   useEffect(() => {
     // Coordenadas proporcionales a la imagen, ajusta según tus necesidades
     const initialPuntos = [
-      //Edificio E
-      { x: 0.15, y: 0.432, description: 'Aula 1' },
-      { x: 0.15, y: 0.472, description: 'Aula 2' },
-      { x: 0.15, y: 0.51, description: 'Aula 3' },
-      { x: 0.15, y: 0.55, description: 'Aula 4' },
-      { x: 0.15, y: 0.59, description: 'Aula 5' },
-      { x: 0.15, y: 0.627, description: 'Aula 6' },
-      //Edificio D
-      { x: 0.37, y: 0.41, description: 'Aula 7'},
-      { x: 0.37, y: 0.442, description: 'Aula 8' },
-      { x: 0.37, y: 0.523, description: 'Aula 9' },
-      { x: 0.37, y: 0.556, description: 'Aula 10' },
-      { x: 0.37, y: 0.59, description: 'Aula 11' },
-      { x: 0.37, y: 0.627, description: 'Aula 12' },
-      //Edifio C
-      { x: 0.46, y: 0.3, description: 'Aula 13' },
-      { x: 0.587, y: 0.3, description: 'Aula 14' },
-      { x: 0.632, y: 0.3, description: 'Aula 15' },
-      //Edificio G
-      { x: 0.83, y: 0.305, description: 'Aula 16'},
-      // { x: 0.801, y: 0.37999},
-      { x: 0.83, y: 0.416, description: 'Aula 17'},
-      { x: 0.83, y: 0.464, description: 'Aula 18'},
-      { x: 0.83, y: 0.507, description: 'Aula 19'},
-      //Edificio A
-      { x: 0.78, y: 0.62, description: 'Aula 20'},
+      { x: 0.19, y: 0.47, description: 'Baños' },
+      { x: 0.10, y: 0.47, description: 'Bodega' },
+      { x: 0.19, y: 0.56, description: 'Aulas de humanidades' },
+      { x: 0.19, y: 0.640, description: 'Aula 6' },
+      { x: 0.445, y: 0.368, description: 'Archivo Historico Judicial'},
+      { x: 0.38, y: 0.456, description: 'Sala de consejo posgrado' },
+      { x: 0.38, y: 0.536, description: 'Aula' },
+      { x: 0.38, y: 0.564, description: 'Aula' },
+      { x: 0.38, y: 0.59, description: 'Oficinas de posgrado Famen' },
+      { x: 0.587, y: 0.356, description: 'Baños' },
+      { x: 0.586, y: 0.376, description: 'Archivero ' },
+      { x: 0.757, y: 0.338, description: 'Comedor'},
+      { x: 0.757, y: 0.358, description: 'Restauración de archivos'},
+      { x: 0.757, y: 0.38, description: 'Archivo historico'},
+      { x: 0.757, y: 0.446, description: 'Aulas de filosofía'},
+      { x: 0.757, y: 0.49, description: 'Comisíon electoral universitaria'},
+      { x: 0.757, y: 0.523, description: 'Cafeteria'},
+      { x: 0.72, y: 0.61, description: 'Oficinas administrativas'},
+      { x: 0.6, y: 0.61, description: 'Vestibulo'},
     ];
 
     const calculatedPuntos = initialPuntos.map(punto => ({
@@ -68,7 +61,7 @@ const MapSelection2 = () => {
     // Si se seleccionó un punto, actualiza el estado
     if (puntoSeleccionado) {
       setSelectedPoint(puntoSeleccionado);
-      setSelectedDescription(puntoSeleccionado.description);
+      setSelectedDescription(`Planta baja/${puntoSeleccionado.description}`);
     } else {
       // Si no se seleccionó un punto, maneja la lógica adicional o ignora
       console.log('Coordenadas seleccionadas:', { x, y });
@@ -116,7 +109,7 @@ const MapSelection2 = () => {
     <View style={styles.container}>
       <Text style={styles.texto}>{selectedDescription}</Text>
       <Image
-        source={require('../assets/images/mapa.png')}
+        source={require('../assets/images/mapa2.png')}
         style={styles.image}
         resizeMode="contain"
       />

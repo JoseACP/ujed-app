@@ -116,8 +116,18 @@ function Home(props) {
     style={{backgroundColor: 'white'}}
     >
       <View>
+      <View style={{position: 'relative', marginTop:'12%', marginBottom:'-3%'}}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => {
+                navigation.dispatch(DrawerActions.openDrawer());
+              }}>
+              <Mobile name="menu" size={30} color="#ce112d" />
+            </TouchableOpacity>
+    
+          </View>
 
-      <View style={{marginTop:'8%', paddingRight:-20}}>
+      <View style={{marginTop:'3%', paddingRight:-20}}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
             onPress={toggleModal}
