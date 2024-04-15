@@ -16,14 +16,14 @@ import {useNavigation} from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import ImageContainer from '../Components/ImageContainer';
 import CartItems from '../Components/CartItems';
-import SeeMoreImageContainer from '../Components/SeeMoreImageContainer';
+import Resueltas from '../Components/obras/Resueltas';
 
 function ObrasTerminadas() {
     const navigation = useNavigation();
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-                <View style={{ position: 'relative' }}>
+                <View style={{ position: 'relative', marginTop: 40}}>
                     <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
@@ -38,7 +38,7 @@ function ObrasTerminadas() {
                 }}>
                     <Text style={styles.text_header}>Obras terminadas</Text>
                 </View>
-                <SeeMoreImageContainer/>
+                <Resueltas/>
             </View>
     </ScrollView>
   )

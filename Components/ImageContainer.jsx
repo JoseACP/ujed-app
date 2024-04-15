@@ -99,6 +99,3 @@ const ImageContainer = () => {
 
 export default ImageContainer;
 
-
-
-

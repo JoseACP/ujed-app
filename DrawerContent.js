@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {Avatar, Title} from 'react-native-paper';
@@ -40,12 +40,38 @@ const DrawerItems = props => {
 };
 function DrawerContent(props) {
   const navigation = useNavigation();
-function signOut(){
+  const [email, setEmail] = useState('');
+
+  async function signOut(){
   AsyncStorage.setItem('isLoggedIn','');
   AsyncStorage.setItem('token','');
   navigation.navigate("LoginUser")
+  await AsyncStorage.removeItem('token');
+  await AsyncStorage.removeItem('userId');
+  await AsyncStorage.removeItem('userEmail');
 
 }
+useEffect(() => {
+  getEmail();
+}, []);
+
+async function getEmail() {
+  try {
+    const userEmail = await AsyncStorage.getItem('userEmail');
+    setEmail(userEmail);
+    console.log(userEmail)
+  } catch (error) {
+    console.error('Error al obtener el email:', error);
+  }
+}
+const obtenerNombreUsuario = (email) => {
+  const partesEmail = email.split('@');
+  return partesEmail[0];
+};
+
+const nombreUsuario = obtenerNombreUsuario(email);
+
+
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -61,9 +87,9 @@ function signOut(){
                   style={{marginTop: 5}}
                 />
                 <View style={{marginLeft: 10, flexDirection: 'column'}}>
-                  <Title style={styles.title}>Adarsh</Title>
+                  <Title style={styles.title}> {nombreUsuario}</Title>
                   <Text style={styles.caption} numberOfLines={1}>
-                    adarshthakur210@gmail.com
+                    {email}
                   </Text>
                 </View>
               </View>
@@ -96,14 +122,16 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   title: {
-    fontSize: 16,
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;',
+    fontSize: 19,
     marginTop: 3,
     fontWeight: 'bold',
   },
   caption: {
     fontSize: 13,
     lineHeight: 14,
-    // color: '#6e6e6e',
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;',
+
     width: '100%',
   },
   row: {

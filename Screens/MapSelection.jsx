@@ -68,7 +68,7 @@ const MapSelection = () => {
     // Si se seleccionó un punto, actualiza el estado
     if (puntoSeleccionado) {
       setSelectedPoint(puntoSeleccionado);
-      setSelectedDescription(puntoSeleccionado.description);
+      setSelectedDescription(`Planta alta/${puntoSeleccionado.description}`);
     } else {
       // Si no se seleccionó un punto, maneja la lógica adicional o ignora
       console.log('Coordenadas seleccionadas:', { x, y });

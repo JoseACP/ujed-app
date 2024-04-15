@@ -15,7 +15,7 @@ import RegisterPage from './Screens/Login&Register/Register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddReportScreen from './Screens/AddReportScreen';
 import SeeMoreScreen from './Screens/SeeMoreScreen';
-import CameraScreen from './Screens/CameraScreen';
+import SeeMoreoc from './Screens/SeeMoreoc'
 import MantenimientoScreen from './Screens/MantenimientoScreen';
 import ObrasScreen from './Screens/ObrasScreen';
 import ObrasPendientes from './Screens/ObrasPendientes';
@@ -24,6 +24,9 @@ import Mapa from './Screens/MapSelection';
 import MapSelection from './Screens/MapSelection';
 import StatusScreen from './Screens/StatusScreen';
 import PdfScreen from './Screens/PdfScreen';
+import TrabajosPendientes from './Screens/TrabajosPendientes'
+import TrabajosTerminados from './Screens/TrabajosTerminados';
+import MapSelection2 from './Screens/MapSelection2';
 
 
 const StackNav = () => {
@@ -32,8 +35,8 @@ const StackNav = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        statusBarHidden: true,
-        // statusBarColor: '#FFFFFF',
+        statusBarHidden: false,
+        statusBarColor: '#000000',
         headerShown: false,
         headerStyle: {
           backgroundColor: '#FFFFFF',
@@ -60,10 +63,13 @@ const StackNav = () => {
       <Stack.Screen name='ObrasTerminadasScreen' component={ObrasTerminadas}/>
       <Stack.Screen name='ObrasPendientesScreen' component={ObrasPendientes}/>
       <Stack.Screen name="AddReportScreen" component={AddReportScreen} />
-      <Stack.Screen name="CameraScreen" component={CameraScreen}/>
       <Stack.Screen name='Mapa' component={MapSelection}/>
       <Stack.Screen name='Status' component={StatusScreen}/>
       <Stack.Screen name='Pdf' component={PdfScreen}/>
+      <Stack.Screen name='SeeMoreoc' component={SeeMoreoc}/>
+      <Stack.Screen name='TrabajosPendientes' component={TrabajosPendientes}/>
+      <Stack.Screen name='TrabajosTerminados' component={TrabajosTerminados}/>
+      <Stack.Screen name='Mapa2' component={MapSelection2}/>
       {/* <Stack.Screen name="SeeMoreScreen" component={SeeMoreScreen} /> */}
 
       <Stack.Screen

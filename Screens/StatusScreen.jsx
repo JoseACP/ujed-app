@@ -25,6 +25,10 @@ function StatusScreen() {
     const navigation = useNavigation();
     // const userToken = route.params?.token || '';
     const [token, setToken] = useState(null);
+    const [formattedDate, setFormattedDate] = useState('');
+    const [parte1, setParte1] = useState('');
+    const [parte2, setParte2] = useState('');
+
 
     const handleDelete = async () => {
         try {
@@ -50,7 +54,13 @@ function StatusScreen() {
             Alert.alert('Error', 'Ocurrió un error al intentar eliminar el elemento.');
         }
     };
-
+    
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', options);
+      }
+    
 
     useEffect(() => {
         // Función para obtener el token almacenado en AsyncStorage
@@ -73,23 +83,32 @@ function StatusScreen() {
       }, []);
     
 
-    useEffect(() => {
-        console.log('Información recibida en Status:', route.params);
-    
-        // Puedes acceder a los datos específicos de esta manera
-        const { itemId, imageUrl, estado,  description, ubicacion, fecha} = route.params;
-    
+      useEffect(() => {
+        const { itemId, imageUrl, estado, description, ubicacion, fecha } = route.params;
+        console.log('Fecha sin formato:', fecha);
+        setFormattedDate(formatDate(fecha));
+        console.log('Fecha formateada:', formattedDate);
+      
         console.log('ID:', itemId);
         console.log('URL de la imagen:', imageUrl);
         console.log('Estado:', estado);
         console.log('Descripcion:', description);
         console.log('Ubicación', ubicacion);
         console.log('Fecha', fecha);
-      }, []); 
+      
+        // Dividir la información de ubicación antes y después del guion "-"
+        const ubicacionParts = ubicacion.split(' - ');
+        const parte1 = ubicacionParts[0]; // La primera parte antes del guion
+        const parte2 = ubicacionParts[1]; // La segunda parte después del guion
+      
+        console.log('Primera parte de la ubicación:', parte1);
+        console.log('Segunda parte de la ubicación:', parte2);
+      }, []);
+      
   return (
         <ScrollView showsVerticalScrollIndicator={false}>
           
-            <View style={{position: 'relative'}}>
+            <View style={{position: 'relative' , marginTop:50}}>
             <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
@@ -105,6 +124,18 @@ function StatusScreen() {
                 }}>
                     <Text style={styles.text_header}>Informació del reporte </Text>
                 </View>
+            
+                <View
+            style={{
+                marginTop:13,
+                padding: 12
+                
+            }}
+            >
+                <Text style={styles.text1}>Titulo: </Text>
+                <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[0]}</Text>
+
+            </View>
             <View
             style={{
                 marginTop:13,
@@ -113,7 +144,7 @@ function StatusScreen() {
             }}
             >
                 <Text style={styles.text1}>Ubicación</Text>
-                <Text style={{marginTop: 3}}>{route.params.ubicacion}</Text>
+                <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[1]}</Text>
 
             </View>
             <View
@@ -132,7 +163,7 @@ function StatusScreen() {
             }}
             >
                 <Text style={styles.text1}>Fecha: </Text>
-                <Text style={{marginTop: 3}}>{route.params.fecha}</Text>
+                <Text style={{marginTop: 3}}>{formattedDate}</Text>
             </View>
             
             <View>

@@ -48,7 +48,8 @@ const styles=StyleSheet.create({
         
       },
       loginContainer: {
-       marginTop: 14,
+       alignItems:'center',
+       marginTop: -14,
         // backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -64,7 +65,7 @@ const styles=StyleSheet.create({
         color: '#000000',
         fontWeight: 'bold',
         fontSize: 30,
-        margin: 15
+        margin: 2
       },
       button: {
         alignItems: 'center',

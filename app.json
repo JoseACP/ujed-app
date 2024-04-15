@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "app-ui",
+    "name": "Ujed-obras",
     "slug": "app-ui",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,8 +18,9 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ce112d"
+      "backgroundColor": "#FFFFFF"
     },
+    "platforms": ["android", "ios"],
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -28,9 +29,10 @@
     },
     "android": {
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -43,7 +45,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c4592df9-7e1a-4c1c-b127-681674cd4d47"
+        "projectId": "461faf6d-b8e2-474a-8f16-ab9fef7bbb85"
       }
     }
   }

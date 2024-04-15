@@ -15,11 +15,14 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import Carousel from 'react-native-snap-carousel';
 import * as FileSystem from 'expo-file-system';
+import styles from '../Screens/Login&Register/styleA';
 import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 const imgDir = FileSystem.documentDirectory + 'images/';
 
@@ -30,34 +33,6 @@ const ensureDirExists = async () => {
   }
 };
 
-const WelcomeScreen = () => {
-  const [location, setLocation] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
-
-  if (location) {
-    console.log(`Latitud: ${location.coords.latitude}, Longitud: ${location.coords.longitude}`);
-  } else {
-    console.log('Obteniendo ubicación...');
-  }
-
-  // Resto de tu lógica aquí
-
-  return null; // No renderiza nada en la vista
-};
-
-
 export default function AddReportScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -66,22 +41,67 @@ export default function AddReportScreen() {
 
   const [selectedDescription, setSelectedDescription] = useState('');
   const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('');
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
-  
+  const [selected, setSelected] = React.useState("");
+  const [selectedValue, setSelectedValue] = React.useState("");
+  const [selectedB, setSelectedB] = React.useState("");
+  const [showView1, setShowView1] = useState(false);
+  const [showView2, setShowView2] = useState(false);
+
+  const formattedLocation = `${selectedB.toString()}/${selectedDescription.toString()}`;
+
+
+  const data = [
+    { key: '1', value: 'CCH', disabled: true },
+    { key: '2', value: 'ECT', disabled: true  },
+    { key: '3', value: 'EPD', disabled: true  },
+    { key: '4', value: 'EPN', disabled: true },
+    { key: '5', value: 'FCFA', disabled: true  },
+    { key: '6', value: 'FCE', disabled: true  },
+    { key: '7', value: 'FECA', disabled: true  },
+    { key: '8', value: 'FCQ', disabled: true  },
+    { key: '9', value: 'FADERyCIPOL', disabled: true  },
+    { key: '10', value: 'FTS', disabled: true  },
+    { key: '11', value: 'ELe', disabled: true  },
+    { key: '12', value: 'FCCFyD', disabled: true  },
+    { key: '13', value: 'FAEO' },
+    { key: '14', value: 'FAMEN', disabled: true  },
+    { key: '15', value: 'FAOD', disabled: true  },
+    { key: '16', value: 'FPyTCH', disabled: true  },
+    { key: '17', value: 'EPEA', disabled: true  },
+    { key: '18', value: 'ESM', disabled: true  },
+    { key: '19', value: 'FMVZ', disabled: true  },
+    { key: '20', value: 'FAZ', disabled: true  },
+    { key: '21', value: 'FCB', disabled: true  },
+    { key: '22', value: 'FCQ GP', disabled: true  },
+    { key: '23', value: 'ELe GP', disabled: true  },
+    { key: '24', value: 'FACSA', disabled: true  },
+    { key: '25', value: 'FICA', disabled: true  },
+
+
+  ];
+
+
+
   // console.log(userToken)
   console.log(selectedDescription)
-  const navigateToOtherScreen = () => {
-    // Obtener la fecha actual
-    const currentDate = new Date().toISOString();
-  
-    // Navegar a OtherScreen con los parámetros necesarios
-    navigation.navigate('Pdf', {
-      selectedDescription,
-      currentDate,
-      description: description // Si también quieres enviar la descripción actual
-    });
-  };
+
+  useEffect(() => {
+    // Aquí puedes agregar lógica para mostrar u ocultar las vistas según el valor seleccionado
+    if (selectedValue === 'Planta alta') {
+      setShowView1(true);
+      setShowView2(false);
+    } else if (selectedValue === 'Planta baja') {
+      setShowView1(false);
+      setShowView2(true);
+    } else {
+      setShowView1(false);
+      setShowView2(false);
+    }
+  }, [selectedValue]);
+
 
   useEffect(() => {
     // Función para obtener el token almacenado en AsyncStorage
@@ -91,7 +111,7 @@ export default function AddReportScreen() {
         if (storedToken !== null) {
           setToken(storedToken);
           console.log('Token almacenado en AsyncStorage:', storedToken);
-        }else{
+        } else {
           console.log('No se encontró ningún token en AsyncStorage.');
         }
       } catch (error) {
@@ -103,7 +123,7 @@ export default function AddReportScreen() {
     getTokenFromStorage();
   }, []);
 
-  
+
   useEffect(() => {
     loadImages();
   }, []);
@@ -152,11 +172,24 @@ export default function AddReportScreen() {
     setImages([...images, dest]);
   };
 
+  const handleSave = () => {
+
+    console.log("Valor seleccionado:", selectedValue);
+    console.log("Valor seleccionad}o:", selectedB);
+
+  };
+
+  
+  const formattedLocationString = formattedLocation.toString();
+
+  const combinedString = `${title} - ${formattedLocationString}`;
+
+
   const uploadReport = async () => {
     // Construir el objeto de datos a enviar
     const data = new FormData();
-    data.append('title', selectedDescription); // Usamos el valor de selectedDescription para el campo title
-    data.append('location', 'faculty/building/classroom')
+    data.append('title', combinedString); // Usamos el valor de selectedDescription para el campo title
+    data.append('location', 'faculty/building/classroom');
     data.append('description', description); // Usamos el valor del campo de descripción (description)
     images.forEach(image => {
       // Agregamos cada imagen al campo 'files' utilizando su URL local
@@ -166,7 +199,7 @@ export default function AddReportScreen() {
         name: image.split('/').pop() // Nombre de archivo basado en la URL local
       });
     });
-  
+
     // Realizar la solicitud a la API
     try {
       const response = await axios.post('https://ujed-api.onrender.com/api/reports', data, {
@@ -181,6 +214,7 @@ export default function AddReportScreen() {
       setSelectedDescription('');
       setDescription('');
       setImages([]);
+     
       // Mostrar una alerta o realizar otras acciones después de subir el reporte
       Alert.alert('Reporte subido exitosamente');
     } catch (error) {
@@ -195,28 +229,52 @@ export default function AddReportScreen() {
     setImages(images.filter((i) => i !== uri));
   };
 
+  const deleteAllImages = async () => {
+    for (const image of images) {
+      await FileSystem.deleteAsync(image);
+      navigation.goBack()
+    }
+    setImages([]); // Limpiar el estado para eliminar todas las imágenes
+  };
+  
+  const handlePress = () => {
+    // Llamando a uploadReport y esperando a que se complete
+    uploadReport().then(() => {
+      // Después de que uploadReport se haya completado, llamar a deleteAllImages
+      deleteAllImages();
+    }).catch(error => {
+      // Manejar cualquier error que pueda ocurrir durante uploadReport
+      console.error('Error al subir el reporte:', error);
+      // Mostrar una alerta u otras acciones en caso de error
+      Alert.alert('Error al subir el reporte. Por favor, inténtalo de nuevo más tarde.');
+    });
+  };
+  
   const renderItem = ({ item }) => {
     const filename = item.split('/').pop();
-  return (
-    <View style={{ position: 'relative' }}>
-      <Image style={{ width: 80, height: 80 }} source={{ uri: item }} />
-      <TouchableOpacity
-        style={{ position: 'absolute', bottom: 5, right: 5 }}
-        onPress={() => deleteImage(item)}
-      >
-        <Ionicons name="trash" size={24} color="red" />
-      </TouchableOpacity>
-    </View>
-
-// {/* <Ionicons.Button name="cloud-upload" onPress={() => uploadImage(item)} /> */}
+    return (
+      <View style={styles.saveImageV}>
+        <View style={{ position: 'relative' }}>
+          <Image style={styles.saveImage} source={{ uri: item }} />
+          <TouchableOpacity
+            style={styles.trashButton}
+            onPress={() => {
+              deleteImage(item); // Elimina la imagen seleccionada
+            }}
+          >
+            <Ionicons name="trash" size={24} color="red" />
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
+
   return (
     <SafeAreaView style={{ flex: 1, gap: 20 }}>
-      <ScrollView 
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: 'white'}}
+        style={{ backgroundColor: 'white' }}
       >
         <View>
           <View style={{ position: 'relative' }}>
@@ -229,10 +287,54 @@ export default function AddReportScreen() {
           </View>
           <View style={{
             alignItems: 'center',
-            marginTop: 50
+            marginTop: 50,
+            marginBottom: -30
           }}>
-            <Text style={styles.text_header}>Agregar reporte </Text>
+            <Text style={styles.text_header}>Generar reporte </Text>
           </View>
+
+          <View style={[styles.loginContainer, { marginBottom: -4 }]}>
+            <Text style={[styles.text1, { marginBottom: 5 }]}>¿Qué paso? (De manera breve)</Text>
+            <View style={styles.action2}>
+              <TextInput
+                placeholder="Titulo"
+                style={styles.textInput}
+                value={title} // Valor del TextInput se obtiene del estado
+                onChangeText={setTitle} // Función para actualizar el estado cuando cambia el texto
+              />
+            </View>
+
+          </View>
+
+          <View style={[styles.logoContainer, { marginTop: 20 }]}>
+            <Text style={[styles.text1, { marginBottom: 20 }]}> ¿En qué facultad te encuentras?</Text>
+
+          </View>
+
+          <View style={{
+            paddingHorizontal: 60,
+            marginTop: 15
+          }}>
+            <SelectList
+              setSelected={(val) => setSelectedB(val)}
+              data={data}
+              save="value"
+              label="Plantel"
+              boxStyles={{
+                borderRadius: 5,
+
+              }}
+            />
+          </View>
+
+          <View style={[styles.logoContainer, {marginTop:'10%'}]}>
+           <Text style={styles.text1}>{selectedDescription}</Text>
+            
+          </View> 
+
+          {/* CARRUSEL */}
+
+          <View>
           <View style={styles.logoContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -247,9 +349,30 @@ export default function AddReportScreen() {
                 source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA ALTA-1.png')}
               />
             </TouchableOpacity>
-            <Text style ={styles.text1}>{selectedDescription}</Text>
           </View>
+
+          <View style={styles.logoContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Mapa2', {
+                  selectedDescription,
+                  updateSelectedDescription: setSelectedDescription,
+                });
+              }}
+            >
+              <Image
+                style={styles.logo}
+                source={require('../assets/images/ANTIGUA FAC DE ENFERMERIA PLANTA BAJA-1.png')}
+              />
+            </TouchableOpacity>
+          </View>
+
+          </View>
+
+              {/* CARRUSEL */}
+
           <View style={styles.loginContainer}>
+            <Text style={[styles.text1, { marginBottom: 20 }]}>Describe lo que ocurrió</Text>
             <View style={styles.action}>
               <TextInput
                 placeholder="Descripción"
@@ -259,7 +382,7 @@ export default function AddReportScreen() {
               />
             </View>
           </View>
-          <View style={{ marginBottom: 40}}>
+          <View style={{ marginBottom: 40 }}>
             {/* <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: '500' }}>My Images</Text> */}
             <FlatList data={images} renderItem={renderItem} />
             {uploading && (
@@ -278,37 +401,27 @@ export default function AddReportScreen() {
             )}
           </View>
           <View style={styles.button}>
-            <View style={{ 
-                flexDirection: 'row',
-                 }}
-                 >
-            <TouchableOpacity 
-              style={[styles.inBut, { marginRight: 40 }]} 
-              onPress={() => selectImage(true)}
+            <View style={{
+              flexDirection: 'row',
+            }}
             >
-              <View>
-                <Feather name="folder" size={50} color="white" />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.inBut}
-              onPress={() => selectImage(false)}
-            >
-              <View>
-                <Feather name="camera" size={50} color="white" />
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.inBut, { marginRight: 40 }]}
+                onPress={() => selectImage(true)}
+              >
+                <View>
+                  <Feather name="folder" size={50} color="white" />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.inBut}
+                onPress={() => selectImage(false)}
+              >
+                <View>
+                  <Feather name="camera" size={50} color="white" />
+                </View>
+              </TouchableOpacity>
             </View>
-            {/* <View style={[styles.bottomButton, {marginTop: 20}]}>
-            <TouchableOpacity 
-              style={styles.inBut}
-            onPress={navigateToOtherScreen}
-            >
-              <View>
-                <Feather name="file" size={50} color="white" />
-              </View>
-            </TouchableOpacity>
-            </View> */}
             <View style={styles.bottomButton}>
               <View
                 style={{
@@ -317,330 +430,20 @@ export default function AddReportScreen() {
                 }}>
               </View>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.inButT}
-              onPress={uploadReport}
+
+              onPress={handlePress}
+          
             >
               <View>
                 <Text style={styles.textSign}>Registrar reporte</Text>
               </View>
             </TouchableOpacity>
           </View>
-          
+
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-const styles = StyleSheet.create({
-    inButT: {
-        width: '70%',
-        backgroundColor: '#ce112d',
-        alignItems: 'center',
-        marginTop: 40,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 50,
-    },
-    textSign: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
-      },
-    editIcon: {
-        zIndex: 1,
-        color: 'white',
-        position: 'absolute',
-        right: 2,
-        margin: 15,
-    },
-    logoContainer: {
-        marginBottom: -12,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      logo: {
-        height: 260,
-        width: 260,
-        marginTop: 50,
-        marginBottom:40,
-        borderWidth: 1,
-        borderColor: '#ce112d',
-        borderRadius: 8,
-      },
-    backIcon: {
-        zIndex: 1,
-        color: 'white',
-        position: 'absolute',
-        left: 2,
-        margin: 15,
-    },
-    avatar: {
-        borderRadius: 100,
-        marginTop: -250,
-        // marginLeft: 105,
-        backgroundColor: 'white',
-        height: 200,
-        width: 200,
-        padding: 10,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        elevation: 4,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    // 420475
-    nameText: {
-        color: 'black',
-        fontSize: 28,
-
-        fontStyle: 'normal',
-        fontFamily: 'Open Sans',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    bookCountMain: {
-        borderColor: '#b0b0b0',
-        borderWidth: 1,
-        marginTop: 18,
-        marginHorizontal: 20,
-
-        borderRadius: 20,
-        flexDirection: 'row',
-        width: '88%',
-    },
-    bookCount: {
-        width: '50%',
-        borderColor: '#b0b0b0',
-        borderRightWidth: 1,
-        flexDirection: 'column',
-        paddingHorizontal: 10,
-        paddingVertical: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    bookCountNum: {
-        color: '#5D01AA',
-        fontSize: 34,
-        fontWeight: '800',
-    },
-    bookCountText: { color: '#b3b3b3', fontSize: 14, fontWeight: '500' },
-    infoMain: {
-        marginTop: 10,
-    },
-    infoCont: {
-        width: '100%',
-        flexDirection: 'row',
-    },
-    infoIconCont: {
-        justifyContent: 'center',
-        height: 40,
-        width: 40,
-        borderRadius: 20,
-
-        alignItems: 'center',
-        elevation: -5,
-        borderColor: 'black',
-        backgroundColor: 'black',
-    },
-
-    infoText: {
-        width: '80%',
-        flexDirection: 'column',
-        marginLeft: 25,
-        borderBottomWidth: 1,
-        paddingBottom: 10,
-        borderColor: '#e6e6e6',
-    },
-    infoSmall_Text: {
-        fontSize: 13,
-        color: '#b3b3b3',
-        fontWeight: '500',
-    },
-    infoLarge_Text: {
-        color: 'black',
-        fontSize: 18,
-        fontWeight: '600',
-    },
-    booksUploadedMain: {
-        paddingHorizontal: 10,
-        paddingBottom: 30,
-        marginTop: 20,
-    },
-    flatlistDiv: {
-        borderRadius: 15,
-        paddingHorizontal: 10,
-    },
-    booksUploadedText: {
-        fontSize: 26,
-        color: 'black',
-        fontWeight: '700',
-        paddingLeft: 20,
-        paddingBottom: 8,
-    },
-    booksUploadedCard: {
-        flexDirection: 'row',
-        width: '100%',
-        marginTop: 9,
-        marginBottom: 9,
-
-        backgroundColor: '#f2f2f2',
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 15,
-        elevation: 3,
-    },
-    booksUploadedImgDiv: {
-        width: '28%',
-    },
-    booksUploadedImg: {
-        width: '100%',
-        height: 120,
-        borderRadius: 15,
-    },
-    cardMidDiv: {
-        paddingHorizontal: 10,
-        width: '55%',
-        position: 'relative',
-    },
-    approvedText: {
-        fontSize: 12,
-        color: '#0d7313',
-        fontWeight: '600',
-        marginLeft: 5,
-    },
-    cardBookNameText: {
-        fontSize: 24,
-        color: 'black',
-        fontWeight: '700',
-        marginTop: 2,
-    },
-    cardBookAuthor: {
-        fontSize: 14,
-        color: 'black',
-        fontWeight: '600',
-        marginTop: 1,
-    },
-    cardRating: {
-        position: 'absolute',
-        bottom: 0,
-        paddingHorizontal: 10,
-        flexDirection: 'row',
-    },
-    cardRatingCount: {
-        fontSize: 14,
-        marginTop: -2,
-        paddingLeft: 4,
-        color: '#303030',
-    },
-    cardEditDiv: {
-        width: '17%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    cardEditBtn: {
-        height: 44,
-        width: 44,
-        backgroundColor: '#ce112d',
-        borderRadius: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    footer: {
-        padding: 10,
-        justifyContent: 'center',
-
-        flexDirection: 'row',
-    },
-    loadMoreBtn: {
-        padding: 10,
-        backgroundColor: '#ce112d',
-        borderRadius: 4,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'white',
-        paddingHorizontal: 20,
-    },
-    btnText: {
-        color: 'white',
-        fontSize: 15,
-        textAlign: 'center',
-        fontWeight: '600',
-    },
-    text_header: {
-        color: '#000000',
-        fontWeight: 'bold',
-        fontSize: 30,
-        margin: 15
-    },
-    button: {
-        alignItems: 'center',
-        marginTop: -20,
-        alignItems: 'center',
-        textAlign: 'center',
-        margin: 20,
-    },
-    inBut: {
-        width: '25%',
-        backgroundColor: '#ce112d',
-        alignItems: 'center',
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 10,
-    },
-    textSign: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    text_container: {
-        marginTop: 20,
-        marginLeft: 5,
-        flexDirection: 'row',
-        alignItems: 'center', // Alinea verticalmente los elementos en el centro
-    },
-    text1: {
-        fontSize: 17,
-        fontWeight: '700',
-        color:'#ce112d'
-    },
-    text2: {
-        fontSize: 14, // Ajusta el tamaño del segundo texto
-        color: 'blue', // Cambia el color a azul
-        marginLeft: 10, // Añade un espacio entre los textos
-    },
-    loginContainer: {
-        marginTop: 2,
-        // backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        paddingHorizontal: 50,
-        paddingVertical: 40,
-        margin: 15
-    },
-    textInput: {
-        flex: 4,
-        marginTop: -12,
-        color: '#000000',
-
-    },
-    action: {
-        flexDirection: 'row',
-        paddingTop: 14,
-        paddingBottom: 60,
-        marginTop: 30,
-
-        paddingHorizontal: 10,
-
-        borderWidth: 1,
-        borderColor: '#ce112d',
-        borderRadius: 8,
-    },
-    image: {
-        width: 220,
-        height: 150,
-        borderRadius: 8,
-        marginBottom: 8, // Espaciado entre la imagen y el título
-      },
-});

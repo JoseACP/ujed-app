@@ -30,7 +30,7 @@ function SeeMoreScreen() {
      style={{backgroundColor: 'white'}}
     >
         <View>
-                <View style={{ position: 'relative' }}>
+                <View style={{ position: 'relative', marginTop:'6%' }}>
                     <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
@@ -41,7 +41,7 @@ function SeeMoreScreen() {
                 </View>
                 <View style={{
                     alignItems: 'center',
-                    marginTop: 50
+                    marginTop: '4%'
                 }}>
                     <Text style={styles.text_header}>Mis reportes </Text>
                 </View>
