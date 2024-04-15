@@ -186,6 +186,12 @@ export default function AddReportScreen() {
 
 
   const uploadReport = async () => {
+    // Verificar que todos los campos estén completos
+    if (!title || !selectedDescription || !description || images.length === 0) {
+      Alert.alert('Error', 'Por favor completa todos los campos y añade al menos una imagen.');
+      return;
+    }
+  
     // Construir el objeto de datos a enviar
     const data = new FormData();
     data.append('title', combinedString); // Usamos el valor de selectedDescription para el campo title
@@ -199,7 +205,7 @@ export default function AddReportScreen() {
         name: image.split('/').pop() // Nombre de archivo basado en la URL local
       });
     });
-
+  
     // Realizar la solicitud a la API
     try {
       const response = await axios.post('https://ujed-api.onrender.com/api/reports', data, {

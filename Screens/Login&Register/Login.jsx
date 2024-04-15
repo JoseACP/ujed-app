@@ -128,9 +128,6 @@ function LoginPage() {
             />
           </View>
 
-
-
-
           {/* Password */}
           <View style={styles.action}>
             <FontAwesome name="lock" color="#ce112d" style={styles.smallIcon} />
@@ -138,28 +135,17 @@ function LoginPage() {
               placeholder="Password"
               style={styles.textInput}
               onChange={e => setPassword(e.nativeEvent.text)}
-              secureTextEntry={showPassword}
+              secureTextEntry={!showPassword} // Hide password if showPassword is false
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              {password.length < 1 ? null : !showPassword ? (
-                <Feather
-                  name="eye-off"
-                  style={{marginRight: -10}}
-                  color={passwordVerify ? 'green' : 'red'}
-                  size={23}
-                />
-              ) : (
-                <Feather
-                  name="eye"
-                  style={{marginRight: -10}}
-                  color={passwordVerify ? 'green' : 'red'}
-                  size={23}
-                />
-              )}
+              <Feather
+                name={showPassword ? 'eye' : 'eye-off'} // Toggle between eye and eye-off icons
+                style={{ marginRight: -10 }}
+                color="#ce112d"
+                size={23}
+              />
             </TouchableOpacity>
           </View>
-
-
 
 
         </View>
@@ -187,8 +173,7 @@ function LoginPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              
-              
+
             </View>
            
           </View>
