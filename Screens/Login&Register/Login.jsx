@@ -58,25 +58,33 @@ function LoginPage() {
   async function handleSubmit() {
     console.log(email, password);
     const userData = { email, password };
-
+  
     try {
       const response = await axios.post('https://ujed-api.onrender.com/api/users/login', userData);
       console.log(response.data);
       const { token, id } = response.data;
       if (token && id) {
-        Alert.alert('Logged In Successfully');
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('userId', id);
         await AsyncStorage.setItem('userEmail', email);
         navigateWithToken('Home', token, id);
+        Alert.alert('Bienvenido')
+      } else {
+        Alert.alert('Error', 'Token or ID missing in response');
+      }
+    } catch (error) {
+      console.error(error.response); // Log the entire error response for debugging
+      if (error.response && error.response.data && error.response.data.message) {
+        const errorMessages = error.response.data.message;
+        errorMessages.forEach(errorMessage => {
+          Alert.alert('Error de inicio de sesión', errorMessage);
+        });
       } else {
         Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas. Inténtalo de nuevo.');
       }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error de inicio de sesión', 'Credenciales incorrectas. Inténtalo de nuevo.');
     }
   }
+  
 
   async function handleLogout() {
     try {

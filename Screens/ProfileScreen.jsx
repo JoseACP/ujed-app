@@ -1,19 +1,8 @@
-import {
-    StyleSheet,
-    Text,
-    View,
-    Button,
-    ScrollView,
-    TouchableOpacity,
-    Image,
-  } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
+} from 'react-native';
   import {Avatar} from 'react-native-paper';
   import Icon from 'react-native-vector-icons/FontAwesome5';
-//   import Check from 'react-native-vector-icons/Feather';
-//   import Back from 'react-native-vector-icons/Ionicons';
-  import Gender from 'react-native-vector-icons/Foundation';
   import Mobile from 'react-native-vector-icons/Entypo';
-//   import Error from 'react-native-vector-icons/MaterialIcons';
   import Email from 'react-native-vector-icons/MaterialCommunityIcons';
   import Profession from 'react-native-vector-icons/AntDesign';
   import {DrawerActions, useNavigation} from '@react-navigation/native';
@@ -23,48 +12,58 @@ import {
   function ProfileScreen(props) {
     const navigation = useNavigation();
     console.log(props);
-    const [userData, setUserData] = useState('');
-  
-    async function getData() {
-      const token = await AsyncStorage.getItem('token');
-      console.log(token);
-      axios
-        .post('https://back-ujed-app-test.onrender.com/userdata', {token: token})
-        .then(res => {
-          console.log(res.data);
-          setUserData(res.data.data);
-        });
-    }
-  
+    const [email, setEmail] = useState('');
+
     useEffect(() => {
-      getData();
+      getEmail();
     }, []);
   
+    async function getEmail() {
+      try {
+        const userEmail = await AsyncStorage.getItem('userEmail');
+        setEmail(userEmail);
+        console.log(userEmail)
+      } catch (error) {
+        console.error('Error al obtener el email:', error);
+      }
+    }
+
+    const obtenerNombreUsuario = (email) => {
+      const partesEmail = email.split('@');
+      return partesEmail[0];
+    };
+  
+    const nombreUsuario = obtenerNombreUsuario(email);
+  
+  
+
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <View style={{position: 'relative'}}>
             <TouchableOpacity
-              style={styles.backIcon}
+              style={[styles.backIcon, {marginTop: '11%'}]}
               onPress={() => {
                 navigation.dispatch(DrawerActions.openDrawer());
               }}>
               <Mobile name="menu" size={30} color="#ce112d" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.editIcon}>
+            <TouchableOpacity style={[styles.editIcon, {marginTop:'11%'}]}>
               <Icon name="user-edit" size={24} color={'white'} />
             </TouchableOpacity>
             <Image
               width={100}
-              height={40}
+              height={80}
               resizeMode="contain"
               style={{
-                marginTop: -1,
+                width:'100%',
+                height:300,
+                marginTop: '-8%',
               }}
               source={require('../assets/images/fondo perfil.png')}
             />
           </View>
-          <View style={{alignItems: 'center'}}>
+          <View style={{alignItems: 'center', marginTop:'2%'}}>
             <Avatar.Image
               size={130}
               style={styles.avatar}
@@ -74,8 +73,8 @@ import {
             />
           </View>
   
-          <View style={{marginTop: -50}}>
-            <Text style={styles.nameText}>{userData.name}</Text>
+          <View style={{marginTop: '-13%', backgroundColor:'#ce112d', height:'8%'}}>
+            <Text style={styles.nameText}>{nombreUsuario}</Text>
           </View>
   
           <View style={{marginTop: 20, marginHorizontal: 25}}>
@@ -87,25 +86,8 @@ import {
                 <View style={styles.infoText}>
                   <Text style={styles.infoSmall_Text}>Email</Text>
                   <Text style={styles.infoLarge_Text} numberOfLines={1}>
-                    {userData.email}
+                  {email}
                   </Text>
-                </View>
-              </View>
-            </View>
-  
-            <View style={styles.infoMain}>
-              <View style={styles.infoCont}>
-                <View style={[styles.infoIconCont, {backgroundColor: '#ce112d'}]}>
-                  <Gender
-                    name="torsos-male-female"
-                    size={28}
-                    color="blue"
-                    style={{color: 'white'}}
-                  />
-                </View>
-                <View style={styles.infoText}>
-                  <Text style={styles.infoSmall_Text}>Gender</Text>
-                  <Text style={styles.infoLarge_Text}>Male</Text>
                 </View>
               </View>
             </View>
@@ -116,8 +98,8 @@ import {
                   <Profession name="profile" size={24} style={{color: 'white'}} />
                 </View>
                 <View style={styles.infoText}>
-                  <Text style={styles.infoSmall_Text}>Profession</Text>
-                  <Text style={styles.infoLarge_Text}>Engineer</Text>
+                  <Text style={styles.infoSmall_Text}>Rol de usuario</Text>
+                  <Text style={styles.infoLarge_Text}>Usuario</Text>
                 </View>
               </View>
             </View>
@@ -129,7 +111,7 @@ import {
                 </View>
                 <View style={styles.infoText}>
                   <Text style={styles.infoSmall_Text}>Mobile</Text>
-                  <Text style={styles.infoLarge_Text}>{userData.mobile}</Text>
+                  <Text style={styles.infoLarge_Text}>Last name</Text>
                 </View>
               </View>
             </View>
