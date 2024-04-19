@@ -42,15 +42,34 @@ function DrawerContent(props) {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
 
-  async function signOut(){
-  AsyncStorage.setItem('isLoggedIn','');
-  AsyncStorage.setItem('token','');
-  navigation.navigate("LoginUser")
-  await AsyncStorage.removeItem('token');
-  await AsyncStorage.removeItem('userId');
-  await AsyncStorage.removeItem('userEmail');
+  function signOut(){
+    AsyncStorage.setItem('isLoggedIn','');
+    AsyncStorage.setItem('token','');
+    navigation.navigate("LoginUser")
+  
+  }
 
-}
+  const handleLogout = async (navigation) => {
+    try {
+      // Eliminar los datos de sesión almacenados
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('userId');
+      // Regresar a la pantalla de inicio de sesión
+      // navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  const handlePress = () => {
+    // Llamando a ambas funciones
+    signOut();
+    handleLogout();
+  };
+
+
+
+
 useEffect(() => {
   getEmail();
 }, []);
@@ -102,11 +121,11 @@ const nombreUsuario = obtenerNombreUsuario(email);
       </DrawerContentScrollView>
       <View style={styles.bottomDrawerSection}>
         <DrawerItem
-         onPress={()=>signOut()}
+         onPress={handlePress}
           icon={({color, size}) => (
             <Icon name="exit-to-app" color={color} size={size} />
           )}
-          label="Sign Out"
+          label="Cerrar sesión"
         />
       </View>
     </View>

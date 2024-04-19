@@ -36,22 +36,14 @@ const ensureDirExists = async () => {
 export default function AddReportScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  // const userToken = route.params?.token || '';
   const [token, setToken] = useState(null);
-
   const [selectedDescription, setSelectedDescription] = useState('');
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [uploading, setUploading] = useState(false);
   const [images, setImages] = useState([]);
   const [selected, setSelected] = React.useState("");
-  const [selectedValue, setSelectedValue] = React.useState("");
   const [selectedB, setSelectedB] = React.useState("");
-  const [showView1, setShowView1] = useState(false);
-  const [showView2, setShowView2] = useState(false);
-
-  const formattedLocation = `${selectedB.toString()}/${selectedDescription.toString()}`;
-
 
   const data = [
     { key: '1', value: 'CCH', disabled: true },
@@ -85,26 +77,9 @@ export default function AddReportScreen() {
 
 
 
-  // console.log(userToken)
   console.log(selectedDescription)
 
   useEffect(() => {
-    // Aquí puedes agregar lógica para mostrar u ocultar las vistas según el valor seleccionado
-    if (selectedValue === 'Planta alta') {
-      setShowView1(true);
-      setShowView2(false);
-    } else if (selectedValue === 'Planta baja') {
-      setShowView1(false);
-      setShowView2(true);
-    } else {
-      setShowView1(false);
-      setShowView2(false);
-    }
-  }, [selectedValue]);
-
-
-  useEffect(() => {
-    // Función para obtener el token almacenado en AsyncStorage
     async function getTokenFromStorage() {
       try {
         const storedToken = await AsyncStorage.getItem('token');
@@ -164,72 +139,35 @@ export default function AddReportScreen() {
     }
   };
 
-  const saveImage = async (uri) => {
-    await ensureDirExists();
-    const filename = new Date().getTime() + '.jpeg';
-    const dest = imgDir + filename;
-    await FileSystem.copyAsync({ from: uri, to: dest });
-    setImages([...images, dest]);
+// Funcion para el texto del reporte
+  const reportData = {
+    title: title,
+    description: description,
+    location: {
+      faculty: selectedB,
+      building: "ciu",
+      classroom: selectedDescription,
+    },
   };
-
-  const handleSave = () => {
-
-    console.log("Valor seleccionado:", selectedValue);
-    console.log("Valor seleccionad}o:", selectedB);
-
-  };
-
   
-  const formattedLocationString = formattedLocation.toString();
-
-  const combinedString = `${title} - ${formattedLocationString}`;
-
-
   const uploadReport = async () => {
-    // Verificar que todos los campos estén completos
-    if (!title || !selectedDescription || !description || images.length === 0) {
-      Alert.alert('Error', 'Por favor completa todos los campos y añade al menos una imagen.');
-      return;
-    }
-  
-    // Construir el objeto de datos a enviar
-    const data = new FormData();
-    data.append('title', combinedString); // Usamos el valor de selectedDescription para el campo title
-    data.append('location', 'faculty/building/classroom');
-    data.append('description', description); // Usamos el valor del campo de descripción (description)
-    images.forEach(image => {
-      // Agregamos cada imagen al campo 'files' utilizando su URL local
-      data.append('files', {
-        uri: image,
-        type: 'image/jpeg', // Suponiendo que las imágenes son JPEG
-        name: image.split('/').pop() // Nombre de archivo basado en la URL local
-      });
-    });
-  
-    // Realizar la solicitud a la API
     try {
-      const response = await axios.post('https://ujed-api.onrender.com/api/reports', data, {
+      const response = await axios.post('https://ujed-api.onrender.com/api/reports', reportData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}` // Incluir el token de autenticación en el encabezado
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
       });
-      // Manejar la respuesta de la API según sea necesario
       console.log('Respuesta de la API:', response.data);
-      // Limpiar el estado después de enviar el reporte
-      setSelectedDescription('');
-      setDescription('');
-      setImages([]);
-     
-      // Mostrar una alerta o realizar otras acciones después de subir el reporte
-      Alert.alert('Reporte subido exitosamente');
+      // Resto del código para manejar la respuesta
     } catch (error) {
-      // Manejar errores en la solicitud a la API
       console.error('Error al subir el reporte:', error);
-      // Mostrar una alerta u otras acciones en caso de error
-      Alert.alert('Error al subir el reporte. Por favor, inténtalo de nuevo más tarde.');
+      // Resto del código para manejar el error
     }
   };
+  // Final de la función 
+
+
   const deleteImage = async (uri) => {
     await FileSystem.deleteAsync(uri);
     setImages(images.filter((i) => i !== uri));

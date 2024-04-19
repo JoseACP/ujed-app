@@ -108,7 +108,7 @@ function StatusScreen() {
   return (
         <ScrollView showsVerticalScrollIndicator={false}>
           
-            <View style={{position: 'relative' , marginTop:50}}>
+            <View style={{position: 'relative' , marginTop:'4%'}}>
             <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
@@ -122,7 +122,7 @@ function StatusScreen() {
                     alignItems: 'center',
                     marginTop: 50
                 }}>
-                    <Text style={styles.text_header}>Informació del reporte </Text>
+                    <Text style={styles.text_header}>Información del reporte </Text>
                 </View>
             
                 <View
@@ -132,7 +132,7 @@ function StatusScreen() {
                 
             }}
             >
-                <Text style={styles.text1}>Titulo: </Text>
+                <Text style={styles.text1}>Título: </Text>
                 <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[0]}</Text>
 
             </View>
