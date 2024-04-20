@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, Image, Text } from 'react-native';
 import GridComponent from './GridComponent';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native'; // Importa useIsFocused desde react-navigation
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ImageContainer = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused(); // Utiliza useIsFocused para detectar si la pantalla está enfocada
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState('');
@@ -32,7 +33,6 @@ const ImageContainer = () => {
           }
 
           const responseData = await response.json();
-          // Mapea los datos recibidos para adaptarlos a tu estructura de datos requerida
           const modifiedData = responseData.map(item => ({
             id: item.id,
             title: item.title,
@@ -49,8 +49,10 @@ const ImageContainer = () => {
       }
     }
 
-    fetchData();
-  }, []);
+    if (isFocused) { // Verifica si la pantalla está enfocada antes de cargar los datos
+      fetchData();
+    }
+  }, [isFocused]); // Dependencia añadida al efecto para que se ejecute cada vez que isFocused cambie
 
   const handleItemClick = (item) => {
     navigation.navigate('Status', {
@@ -96,6 +98,4 @@ const ImageContainer = () => {
   );
 };
 
-
 export default ImageContainer;
-
