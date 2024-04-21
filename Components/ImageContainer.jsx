@@ -36,6 +36,7 @@ const ImageContainer = () => {
           const modifiedData = responseData.map(item => ({
             id: item.id,
             title: item.title,
+            location: item.location,
             imageUri: item.images.length > 0 ? item.images[0].url : 'https://imgs.search.brave.com/k_igGCUtM9UAFo2IejoBF2ctlbFUeolBzcU6dxVnKfc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMtMDAuaWNvbmR1/Y2suY29tL2Fzc2V0/cy4wMC9uby1pbWFn/ZS1pY29uLTUxMng1/MTItbGZvYW5sMHcu/cG5n',
             description: item.description,
             fecha: item.created_at,
@@ -60,7 +61,8 @@ const ImageContainer = () => {
       imageUrl: item.imageUri,
       estado: item.estado,
       description: item.description,
-      ubicacion: item.title,
+      title: item.title,
+      ubicacion: item.location,
       fecha: item.fecha,
     });
   };

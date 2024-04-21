@@ -138,36 +138,95 @@ export default function AddReportScreen() {
       saveImage(result.assets[0].uri);
     }
   };
+  const saveImage = async (uri) => {
+    await ensureDirExists();
+    const filename = new Date().getTime() + '.jpeg';
+    const dest = imgDir + filename;
+    await FileSystem.copyAsync({ from: uri, to: dest });
+    setImages([...images, dest]);
+  };
+
 
 // Funcion para el texto del reporte
-  const reportData = {
-    title: title,
-    description: description,
-    location: {
-      faculty: selectedB,
-      building: "ciu",
-      classroom: selectedDescription,
-    },
+  // const reportData = {
+  //   title: title,
+  //   description: description,
+  //   location: {
+  //     faculty: selectedB,
+  //     building: "ciu",
+  //     classroom: selectedDescription,
+  //   },
+  // };
+  
+  // const uploadReport = async () => {
+  //   try {
+  //     const response = await axios.post('https://ujed-api.onrender.com/api/reports', reportData, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       }
+  //     });
+  //     console.log('Respuesta de la API:', response.data);
+  //     // Resto del código para manejar la respuesta
+  //   } catch (error) {
+  //     console.error('Error al subir el reporte:', error);
+  //     // Resto del código para manejar el error
+  //   }
+  // };
+  // Final de la función 
+  const descriptionString = typeof description === 'string' ? description : description.toString();
+
+  const locations = {
+    faculty: selectedDescription,
+    building: 'test',
+    classroom: 'test'
   };
   
   const uploadReport = async () => {
+    // Construir el objeto de datos a enviar
+    const data = new FormData();
+    data.append('title', title); // Usamos el valor de selectedDescription para el campo title
+    data.append('description', descriptionString);
+  
+    // Agregar el objeto 'locations' directamente a FormData
+    Object.keys(locations).forEach(key => {
+      data.append(`location[${key}]`, locations[key]);
+    });
+  
+    images.forEach(image => {
+      // Agregamos cada imagen al campo 'files' utilizando su URL local
+      data.append('files', {
+        uri: image,
+        type: 'image/jpeg', // Suponiendo que las imágenes son JPEG
+        name: image.split('/').pop() // Nombre de archivo basado en la URL local
+      });
+    });
+  
+    // Realizar la solicitud a la API
     try {
-      const response = await axios.post('https://ujed-api.onrender.com/api/reports', reportData, {
+      const response = await axios.post('https://ujed-api.onrender.com/api/reports', data, {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Incluir el token de autenticación en el encabezado
         }
       });
+      // Manejar la respuesta de la API según sea necesario
       console.log('Respuesta de la API:', response.data);
-      // Resto del código para manejar la respuesta
+      // Limpiar el estado después de enviar el reporte
+      setSelectedDescription('');
+      setDescription('');
+      setImages([]);
+  
+      // Mostrar una alerta o realizar otras acciones después de subir el reporte
+      Alert.alert('Reporte subido exitosamente');
     } catch (error) {
-      console.error('Error al subir el reporte:', error);
-      // Resto del código para manejar el error
+      // Manejar errores en la solicitud a la API
+      console.error('Error al subir el reporte:', error.response.data.message); // Accede al mensaje de error en 'message'
+      // Mostrar una alerta con el mensaje de error proporcionado por la API
+      Alert.alert('Error al subir el reporte', error.response.data.message || 'Inténtalo de nuevo más tarde.');
     }
   };
-  // Final de la función 
-
-
+  
   const deleteImage = async (uri) => {
     await FileSystem.deleteAsync(uri);
     setImages(images.filter((i) => i !== uri));

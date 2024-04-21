@@ -84,12 +84,13 @@ function StatusScreen() {
     
 
       useEffect(() => {
-        const { itemId, imageUrl, estado, description, ubicacion, fecha } = route.params;
+        const { itemId, imageUrl, estado, description, ubicacion, title, fecha } = route.params;
         console.log('Fecha sin formato:', fecha);
         setFormattedDate(formatDate(fecha));
         console.log('Fecha formateada:', formattedDate);
       
         console.log('ID:', itemId);
+        console.log('Titulo', title)
         console.log('URL de la imagen:', imageUrl);
         console.log('Estado:', estado);
         console.log('Descripcion:', description);
@@ -97,9 +98,9 @@ function StatusScreen() {
         console.log('Fecha', fecha);
       
         // Dividir la información de ubicación antes y después del guion "-"
-        const ubicacionParts = ubicacion.split(' - ');
-        const parte1 = ubicacionParts[0]; // La primera parte antes del guion
-        const parte2 = ubicacionParts[1]; // La segunda parte después del guion
+        // const ubicacionParts = ubicacion.split(' - ');
+        // const parte1 = ubicacionParts[0]; // La primera parte antes del guion
+        // const parte2 = ubicacionParts[1]; // La segunda parte después del guion
       
         console.log('Primera parte de la ubicación:', parte1);
         console.log('Segunda parte de la ubicación:', parte2);
@@ -133,7 +134,7 @@ function StatusScreen() {
             }}
             >
                 <Text style={styles.text1}>Título: </Text>
-                <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[0]}</Text>
+                <Text style={{marginTop: 3}}>{route.params.title}</Text>
 
             </View>
             <View
@@ -144,7 +145,9 @@ function StatusScreen() {
             }}
             >
                 <Text style={styles.text1}>Ubicación</Text>
-                <Text style={{marginTop: 3}}>{route.params.ubicacion.split(' - ')[1]}</Text>
+                <Text style={{marginTop: 3}}>Facultad: {route.params.ubicacion.faculty} </Text>
+                <Text style={{marginTop: 3}}>Edicificio {route.params.ubicacion.building} </Text>
+                
 
             </View>
             <View
