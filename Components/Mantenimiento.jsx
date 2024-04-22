@@ -120,10 +120,12 @@ function Mantenimiento(props) {
             </TouchableOpacity>
     
           </View>
-       <View style={{marginTop:'3%', paddingRight:-20}}>
+          <View style={{marginTop:'3%', paddingRight:-20}}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
-            onPress={toggleModal}
+            onPress={() => {
+              navigation.navigate('Profile');
+            }}
             >
              <Image
           source={{ uri: 'https://imgs.search.brave.com/cuFuXnr6J9ok7BFdN3oK62Pp_g_QoVjqUPzv1VBrjdw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL3RodW1icy81/ODVlNGJmM2NiMTFi/MjI3NDkxYzMzOWEu/cG5n' }}

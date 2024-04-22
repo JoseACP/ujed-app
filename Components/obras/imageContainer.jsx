@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, Image, Text } from 'react-native';
 import GridComponent from './GridComponent';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native'; // Importa useIsFocused desde react-navigation
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ImageContainer = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused(); // Utiliza useIsFocused para detectar si la pantalla está enfocada
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState('');
- 
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
         const storedToken = await AsyncStorage.getItem('token');
-        
-        if (storedToken) {
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (storedToken && storedUserId) {
           setToken(storedToken);
+          setUserId(storedUserId);
           const response = await fetch(`https://ujed-api.onrender.com/api/reports/department/obras`, {
             method: 'GET',
             headers: {
@@ -30,13 +32,13 @@ const ImageContainer = () => {
             throw new Error('Error al obtener los datos');
           }
 
+          
+
           const responseData = await response.json();
-          // Filtra los reportes que no estén resueltos
-          const filteredData = responseData.filter(item => item.status !== 'resuelto');
-          // Mapea los datos recibidos para adaptarlos a tu estructura de datos requerida
-          const modifiedData = filteredData.map(item => ({
+          const modifiedData = responseData.map(item => ({
             id: item.id,
             title: item.title,
+            location: item.location,
             imageUri: item.images.length > 0 ? item.images[0].url : 'https://imgs.search.brave.com/k_igGCUtM9UAFo2IejoBF2ctlbFUeolBzcU6dxVnKfc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMtMDAuaWNvbmR1/Y2suY29tL2Fzc2V0/cy4wMC9uby1pbWFn/ZS1pY29uLTUxMng1/MTItbGZvYW5sMHcu/cG5n',
             description: item.description,
             fecha: item.created_at,
@@ -50,8 +52,10 @@ const ImageContainer = () => {
       }
     }
 
-    fetchData();
-  }, []);
+    if (isFocused) { // Verifica si la pantalla está enfocada antes de cargar los datos
+      fetchData();
+    }
+  }, [isFocused]); // Dependencia añadida al efecto para que se ejecute cada vez que isFocused cambie
 
   const handleItemClick = (item) => {
     navigation.navigate('Status', {
@@ -59,7 +63,8 @@ const ImageContainer = () => {
       imageUrl: item.imageUri,
       estado: item.estado,
       description: item.description,
-      ubicacion: item.title,
+      title: item.title,
+      ubicacion: item.location,
       fecha: item.fecha,
     });
   };

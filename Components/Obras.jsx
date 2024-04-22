@@ -100,10 +100,12 @@ function Obras(props) {
             </TouchableOpacity>
     
           </View>
-        <View style={{marginTop:'3%', paddingRight:-20}}>
+          <View style={{marginTop:'3%', paddingRight:-20}}>
         <TouchableOpacity
-            style={[styles.backIcon, {marginTop:20, marginStart:'86%'}]}
-            onPress={toggleModal}
+            style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
+            onPress={() => {
+              navigation.navigate('ProfileScreen');
+            }}
             >
              <Image
           source={{ uri: 'https://imgs.search.brave.com/cuFuXnr6J9ok7BFdN3oK62Pp_g_QoVjqUPzv1VBrjdw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL3RodW1icy81/ODVlNGJmM2NiMTFi/MjI3NDkxYzMzOWEu/cG5n' }}
@@ -113,7 +115,6 @@ function Obras(props) {
           </TouchableOpacity>
   
         </View>
-
         <View style={{ flex: 1 }}>
 
           <Modal isVisible={isModalVisible}>
@@ -183,7 +184,7 @@ function Obras(props) {
               Obras pendientes
               </Text>
           </View>
-          <View style={{
+           <View style={{
             marginStart: 330,
 
             marginBottom: -10
@@ -203,38 +204,6 @@ function Obras(props) {
             </View>
           <View>
             <ImageContainer/>
-          </View>
-
-          <View style={{
-            marginTop: 8,
-            marginLeft: 15,
-          }}>
-            <Text style={{
-              fontSize: 17,
-              fontWeight: "700"
-            }}> 
-              Obras terminadas
-              </Text>
-          </View>
-          <View style={{
-            marginStart: 330,
-
-            marginBottom: -10
-          }}>
-              <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('ObrasTerminadasScreen');
-                  }}
-                  >
-                    <Text style={{
-                       fontSize: 12,
-                       color: "#ce112d"
-                    }}>Ver mas</Text>
-                  
-                </TouchableOpacity>
-            </View>
-            <View>
-            <ImageContainerf/>
           </View>
           
       </ScrollView>

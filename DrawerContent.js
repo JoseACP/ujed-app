@@ -43,8 +43,7 @@ function DrawerContent(props) {
   const [email, setEmail] = useState('');
 
   function signOut(){
-    AsyncStorage.setItem('isLoggedIn','');
-    AsyncStorage.setItem('token','');
+ 
     navigation.navigate("LoginUser")
   
   }
@@ -54,8 +53,10 @@ function DrawerContent(props) {
       // Eliminar los datos de sesión almacenados
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('userId');
-      // Regresar a la pantalla de inicio de sesión
-      // navigation.navigate('Login');
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('userId');
+      // await AsyncStorage.removeItem('userEmail');
+      await AsyncStorage.removeItem('isLoggedIn');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }

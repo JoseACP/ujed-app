@@ -67,8 +67,10 @@ function LoginPage() {
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('userId', id);
         await AsyncStorage.setItem('userEmail', email);
+        await AsyncStorage.setItem('isLoggedIn', 'true'); // Establece isLoggedIn como true al iniciar sesión correctamente
+        
         navigateWithToken('Home', token, id);
-        Alert.alert('Bienvenido')
+        Alert.alert('Bienvenido');
       } else {
         Alert.alert('Error', 'Token or ID missing in response');
       }

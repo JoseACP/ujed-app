@@ -121,7 +121,7 @@ function StatusScreen() {
             
             <View style={{
                     alignItems: 'center',
-                    marginTop: 50
+                    marginTop: '8%'
                 }}>
                     <Text style={styles.text_header}>Información del reporte </Text>
                 </View>
