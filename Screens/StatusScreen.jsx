@@ -14,20 +14,24 @@ import {
 import React, { useState, useEffect }  from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import TrackingScreen from '../Components/TrackingScreen';
-import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Feather, FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageSlider from '../Components/imageSlider';
+import Modal from "react-native-modal";
 import axios from 'axios';
 
 function StatusScreen() {
     
     const route = useRoute();
     const navigation = useNavigation();
-    // const userToken = route.params?.token || '';
     const [token, setToken] = useState(null);
     const [formattedDate, setFormattedDate] = useState('');
-    const [parte1, setParte1] = useState('');
-    const [parte2, setParte2] = useState('');
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
 
     const handleDelete = async () => {
@@ -99,11 +103,8 @@ function StatusScreen() {
       
         // Dividir la información de ubicación antes y después del guion "-"
         // const ubicacionParts = ubicacion.split(' - ');
-        // const parte1 = ubicacionParts[0]; // La primera parte antes del guion
-        // const parte2 = ubicacionParts[1]; // La segunda parte después del guion
-      
-        console.log('Primera parte de la ubicación:', parte1);
-        console.log('Segunda parte de la ubicación:', parte2);
+       
+       
       }, []);
       
   return (
@@ -118,6 +119,30 @@ function StatusScreen() {
                     </TouchableOpacity>
              
             </View>
+          <View style={{ flex: 1 }}>
+             
+
+              <Modal isVisible={isModalVisible}>
+                  <View style={{ flex: 1 }}>
+                      <View style={styles.delete}>
+                          <Text style={{ color: 'white', fontSize: 31, fontWeight: 'bold' }}>¿Estas seguro de borrar este reporte?</Text>
+                          <View style={{ flexDirection: 'row', marginTop: '10%'}}>
+                              <TouchableOpacity style={{ marginRight: '40%' }} onPress={handleDelete}>
+                              <Feather name="check" size={40} color="white" />
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                              onPress={toggleModal}
+                              >
+                              <Feather name="x" size={40} color="white" />
+                              </TouchableOpacity>
+                          </View>
+                          {/* <Button title="Hide modal" onPress={toggleModal} /> */}
+                      </View>
+
+
+                  </View>
+              </Modal>
+          </View>
             
             <View style={{
                     alignItems: 'center',
@@ -181,23 +206,37 @@ function StatusScreen() {
             >
                 <Image source={{ uri: route.params.imageUrl}} style={styles.image} />
             </View>
-            <View style={[styles.button, {marginTop: 20}]}>
-            <TouchableOpacity 
-              style={[styles.inBut, { marginRight: 40 }]} 
-              onPress={handleDelete}
-            >
-              <View>
-                <Feather name="trash" size={50} color="white" />
-              </View>
-            </TouchableOpacity>
-            </View>
-    
-        {/* //      */}
-        </ScrollView>
-      );
+
+          {/* Botones */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: '10%',paddingHorizontal: 44 }}>
+              <TouchableOpacity style={[styles.button, styles.inBut]} onPress={toggleModal}>
+                  <Feather name="trash" size={50} color="white" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.button, styles.inBut, { marginLeft: -20 }]} onPress={toggleModal}>
+              <Feather name="upload" size={50} color="white" />
+              </TouchableOpacity>
+          </View>
+
+          {/* end Botones */}
+
+          {/* //      */}
+      </ScrollView>
+  );
     }
 
     const styles = StyleSheet.create({
+        delete:{
+            backgroundColor:'#920A0A', 
+            marginTop:'70%', 
+            height:'30%', 
+            borderRadius:20, 
+            width:'98%',
+            padding: 30,
+            alignItems: 'center'
+
+            
+        },
         editIcon: {
             zIndex: 1,
             color: 'white',

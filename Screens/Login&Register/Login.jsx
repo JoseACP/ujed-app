@@ -14,6 +14,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useEffect, useState} from 'react';
 import {log} from 'react-native-reanimated';
 import axios from 'axios';
+import NetInfo from '@react-native-community/netinfo';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginPage() {
@@ -23,7 +25,7 @@ function LoginPage() {
   const [passwordVerify, setPasswordVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-
+  
   useEffect(() => {
     getUserId();
   }, []);
@@ -58,6 +60,12 @@ function LoginPage() {
     const userData = { email, password };
   
     try {
+      const isConnected = await NetInfo.fetch().then(state => state.isConnected);
+      if (!isConnected) {
+        Alert.alert('Error de conexión', 'No hay conexión a Internet');
+        return; // Salir de la función si no hay conexión
+      }
+  
       const response = await axios.post('https://ujed-api.onrender.com/api/users/login', userData);
       console.log(response.data);
       const { token, id, roles } = response.data; // Extraer roles de la respuesta

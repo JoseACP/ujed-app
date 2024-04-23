@@ -35,11 +35,11 @@ const StackNav = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        statusBarHidden: true,
+        statusBarHidden: false,
         statusBarColor: '#000000',
         headerShown: false,
         headerStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#000000',
         },
         headerTintColor: '#fff',
         headerTitleAlign: 'center',
