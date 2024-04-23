@@ -8,7 +8,7 @@ const GridComponent = ({ data, onItemClick }) => {
         <Image source={{ uri: item.imageUri }} style={styles.image} />
         <View style={styles.textContainer}>
           <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.description}>{item.description.length > 50 ? `${item.description.substring(0, 50)}...` : item.description}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     marginBottom: 5, // Espaciado entre los títulos y la descripción
   },
   description: {
+    paddingLeft:-9,
     fontSize: 14,
     color: 'gray', // Color opcional para la descripción
   },

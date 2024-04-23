@@ -100,7 +100,7 @@ return (
   style={{backgroundColor: 'white'}}
   >
     <View>
-    <View style={{position: 'relative', marginTop:'4%', marginBottom:'-3%'}}>
+    {/* <View style={{position: 'relative', marginTop:'4%', marginBottom:'-3%'}}>
           <TouchableOpacity
             style={styles.backIcon}
             onPress={() => {
@@ -109,9 +109,9 @@ return (
             <Mobile name="menu" size={30} color="#ce112d" />
           </TouchableOpacity>
   
-        </View>
+        </View> */}
 
-        <View style={{marginTop:'3%', paddingRight:-20}}>
+        <View style={{marginTop:'-1%', paddingRight:-20}}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
             onPress={() => {

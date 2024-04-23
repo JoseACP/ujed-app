@@ -109,7 +109,7 @@ function StatusScreen() {
   return (
         <ScrollView showsVerticalScrollIndicator={false}>
           
-            <View style={{position: 'relative' , marginTop:'4%'}}>
+            <View style={{position: 'relative' , marginTop:'1%'}}>
             <TouchableOpacity
                         style={styles.backIcon}
                         onPress={()=> navigation.goBack()}
@@ -146,7 +146,8 @@ function StatusScreen() {
             >
                 <Text style={styles.text1}>Ubicación</Text>
                 <Text style={{marginTop: 3}}>Facultad: {route.params.ubicacion.faculty} </Text>
-                <Text style={{marginTop: 3}}>Edicificio {route.params.ubicacion.building} </Text>
+                <Text style={{marginTop: 3}}>Edicificio: {route.params.ubicacion.building} </Text>
+                <Text style={{marginTop: 3}}>Salon: {route.params.ubicacion.classroom} </Text>
                 
 
             </View>

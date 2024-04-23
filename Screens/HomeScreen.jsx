@@ -27,25 +27,48 @@ import Mantenimiento from '../Components/Mantenimiento';
     const route = useRoute();
     const userToken = route.params?.token || ''
     const [email, setEmail] = useState('');
-    console.log(props);
+    const [rol, setRol] = useState('');
+    const [userRoles, setUserRoles] = useState([]);
+
     useEffect(() => {
-      getEmail();
+      // Función para obtener los roles del usuario desde AsyncStorage
+      const getUserRolesFromStorage = async () => {
+        try {
+          const rolesString = await AsyncStorage.getItem('userRoles');
+          if (rolesString) {
+            const roles = JSON.parse(rolesString);
+            setUserRoles(roles);
+            console.log('User Roles:', roles); // Agregar console.log para ver los roles en la consola
+          }
+        } catch (error) {
+          console.error('Error al obtener roles desde AsyncStorage:', error);
+        }
+      };
+  
+      // Llamar a la función para obtener los roles del usuario al cargar la pantalla
+      getUserRolesFromStorage();
+    }, []); // El segundo argumento del useEffect es un array vacío para que se ejecute solo una vez al cargar la pantalla
+  
+    console.log(props);
+  
+    useEffect(() => {
+      getRol();
     }, []);
   
-    async function getEmail() {
+    async function getRol() {
       try {
-        const userEmail = await AsyncStorage.getItem('userEmail');
-        setEmail(userEmail);
-        console.log(userEmail)
+        const userRoles = await AsyncStorage.getItem('userRoles');
+        setEmail(userRoles);
+        console.log(userRoles)
       } catch (error) {
         console.error('Error al obtener el email:', error);
       }
     }
 
-    function renderComponentByRole() {
-      if (email.includes('mantenimiento')) {
+    function renderComponentByRole(roles) {
+      if (roles.includes('mantenimiento')) {
         return <Mantenimiento />;
-      } else if (email.includes('obras')) {
+      } else if (roles.includes('obras')) {
         return <Obras />;
       } else {
         return <Home />;
@@ -57,7 +80,7 @@ import Mantenimiento from '../Components/Mantenimiento';
       
       <>
         
-        {renderComponentByRole()}
+        {renderComponentByRole(userRoles)}
       </>
     );
   }

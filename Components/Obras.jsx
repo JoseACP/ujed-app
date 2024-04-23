@@ -90,21 +90,12 @@ function Obras(props) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-        <View style={{position: 'relative', marginTop:'5%', marginBottom:'-3%'}}>
-            <TouchableOpacity
-              style={styles.backIcon}
-              onPress={() => {
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}>
-              <Mobile name="menu" size={30} color="#ce112d" />
-            </TouchableOpacity>
-    
-          </View>
+
           <View style={{marginTop:'3%', paddingRight:-20}}>
         <TouchableOpacity
             style={[styles.backIcon, {marginTop:'6%', marginStart:'82%'}]}
             onPress={() => {
-              navigation.navigate('ProfileScreen');
+              navigation.navigate('Profile');
             }}
             >
              <Image
@@ -115,53 +106,7 @@ function Obras(props) {
           </TouchableOpacity>
   
         </View>
-        <View style={{ flex: 1 }}>
-
-          <Modal isVisible={isModalVisible}>
-            <View style={{
-              backgroundColor: '#BFBDBDDE',
-              width: '100%',
-              height: '25%',
-              borderRadius: 20,
-              alignItems: 'center'
-            }}>
-              <TouchableOpacity
-                style={styles.backIcon}
-                onPress={toggleModal}
-              >
-                <AntDesign name="close" size={24} color="#B30000" />
-              </TouchableOpacity>
-              <View
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  alignItems: 'flex-start',
-                  width: '96%',
-                  height: '50%',
-                  marginTop: 40,
-                  borderRadius: 20,
-                  padding: 15,
-                  paddingTop: 15,
-
-                  alignContent: 'space-between'
-                }}
-              >
-                <Image
-                  source={{ uri: 'https://imgs.search.brave.com/cuFuXnr6J9ok7BFdN3oK62Pp_g_QoVjqUPzv1VBrjdw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL3RodW1icy81/ODVlNGJmM2NiMTFi/MjI3NDkxYzMzOWEu/cG5n' }}
-                  style={{
-                    width: 40,
-                    height: 40
-                  }} />
-                <Text style={{ marginTop: 10, fontSize: 18, fontWeight: '500', color: 'black' }}>{email}</Text>
-
-              </View>
-              <TouchableOpacity style={{ marginTop: 8 }} onPress={handlePress}>
-                <Text style={{ color: '#AF0000', fontSize: 17 }}>Cerrar sesión</Text>
-              </TouchableOpacity>
-
-
-            </View>
-          </Modal>
-        </View>
+       
 
           {/* END MODAL */}
           <View style={{
@@ -176,30 +121,20 @@ function Obras(props) {
           <View style={{
             marginTop: 8,
             marginLeft: 15,
+            marginBottom:3
           }}>
             <Text style={{
-              fontSize: 17,
-              fontWeight: "700"
+              fontSize: 20,
+              fontWeight: "500"
             }}> 
-              Obras pendientes
+              Reportes de obras
               </Text>
           </View>
            <View style={{
             marginStart: 330,
 
-            marginBottom: -10
+            marginBottom: -3
           }}>
-              <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('SeeMoreoc');
-                  }}
-                  >
-                    <Text style={{
-                       fontSize: 12,
-                       color: "#ce112d"
-                    }}>Ver mas</Text>
-                  
-                </TouchableOpacity>
             </View>
             </View>
           <View>

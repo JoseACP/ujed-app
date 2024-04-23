@@ -147,39 +147,12 @@ export default function AddReportScreen() {
   };
 
 
-// Funcion para el texto del reporte
-  // const reportData = {
-  //   title: title,
-  //   description: description,
-  //   location: {
-  //     faculty: selectedB,
-  //     building: "ciu",
-  //     classroom: selectedDescription,
-  //   },
-  // };
-  
-  // const uploadReport = async () => {
-  //   try {
-  //     const response = await axios.post('https://ujed-api.onrender.com/api/reports', reportData, {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `Bearer ${token}`
-  //       }
-  //     });
-  //     console.log('Respuesta de la API:', response.data);
-  //     // Resto del código para manejar la respuesta
-  //   } catch (error) {
-  //     console.error('Error al subir el reporte:', error);
-  //     // Resto del código para manejar el error
-  //   }
-  // };
-  // Final de la función 
   const descriptionString = typeof description === 'string' ? description : description.toString();
 
   const locations = {
-    faculty: selectedDescription,
-    building: 'test',
-    classroom: 'test'
+    faculty: selectedB,
+    building: selectedDescription,
+    classroom: 'a'
   };
   
   const uploadReport = async () => {

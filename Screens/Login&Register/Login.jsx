@@ -28,7 +28,6 @@ function LoginPage() {
     getUserId();
   }, []);
 
-
   async function getToken() {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -50,7 +49,6 @@ function LoginPage() {
     }
   }
 
-  // Función para navegar a la pantalla deseada con el token
   async function navigateWithToken(screenName, token, id) {
     navigation.navigate(screenName, { token, userId: id, email });
   }
@@ -62,13 +60,16 @@ function LoginPage() {
     try {
       const response = await axios.post('https://ujed-api.onrender.com/api/users/login', userData);
       console.log(response.data);
-      const { token, id } = response.data;
+      const { token, id, roles } = response.data; // Extraer roles de la respuesta
       if (token && id) {
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('userId', id);
         await AsyncStorage.setItem('userEmail', email);
         await AsyncStorage.setItem('isLoggedIn', 'true'); // Establece isLoggedIn como true al iniciar sesión correctamente
-        
+        if (roles && roles.length > 0) {
+          await AsyncStorage.setItem('userRoles', JSON.stringify(roles)); // Guardar roles en AsyncStorage si están disponibles
+        }
+  
         navigateWithToken('Home', token, id);
         Alert.alert('Bienvenido');
       } else {
@@ -86,17 +87,7 @@ function LoginPage() {
       }
     }
   }
-  async function handleLogout() {
-    try {
-      // Eliminar los datos de sesión almacenados
-      await AsyncStorage.removeItem('token');
-      await AsyncStorage.removeItem('userId');
-      // Regresar a la pantalla de inicio de sesión
-      navigation.navigate('Login');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  }
+ 
   async function getData() {
     const data = await AsyncStorage.getItem('isLoggedIn');
     

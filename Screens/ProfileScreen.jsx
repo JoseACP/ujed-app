@@ -6,6 +6,7 @@ import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
   import Email from 'react-native-vector-icons/MaterialCommunityIcons';
   import Profession from 'react-native-vector-icons/AntDesign';
   import {DrawerActions, useNavigation} from '@react-navigation/native';
+  import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
   import {useEffect, useState} from 'react';
   import axios from 'axios';
   import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,6 +29,25 @@ import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
       }
     }
 
+    function signOut(){
+      AsyncStorage.setItem('isLoggedIn','');
+      AsyncStorage.setItem('token','');
+      navigation.navigate("LoginUser")
+    
+    }
+
+    const handleLogout = async (navigation) => {
+      try {
+        // Eliminar los datos de sesión almacenados
+        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('userId');
+        // Regresar a la pantalla de inicio de sesión
+        navigation.navigate('Login');
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+      }
+    };
+
     const obtenerNombreUsuario = (email) => {
       const partesEmail = email.split('@');
       return partesEmail[0];
@@ -35,19 +55,28 @@ import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
   
     const nombreUsuario = obtenerNombreUsuario(email);
   
+    const handlePress = () => {
+      // Llamando a ambas funciones
+      signOut();
+      handleLogout();
+    };
+  
   
 
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
+
+       
+         
           <View style={{position: 'relative'}}>
-            <TouchableOpacity
-              style={[styles.backIcon, {marginTop: '4%'}]}
-              onPress={() => {
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}>
-              <Mobile name="menu" size={30} color="#ce112d" />
+          <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => navigation.goBack()}
+            >
+              <AntDesign name="arrowleft" size={30} color="#ce112d" />
             </TouchableOpacity>
+       
             <TouchableOpacity style={[styles.editIcon, {marginTop:'4%'}]}>
               <Icon name="user-edit" size={24} color={'white'} />
             </TouchableOpacity>
@@ -104,8 +133,14 @@ import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
               </View>
             </View>
   
-            <View style={styles.infoMain}>
-              <View style={styles.infoCont}>
+            <View style={[styles.infoMain, {marginTop: 14}]}>
+              <TouchableOpacity
+              onPress={handlePress}
+              >
+                <Text style={{color:'red'}}>Cerrar sesión</Text>
+
+              </TouchableOpacity>
+              {/* <View style={styles.infoCont}>
                 <View style={[styles.infoIconCont, {backgroundColor: '#ce112d'}]}>
                   <Mobile name="mobile" size={24} style={{color: 'white'}} />
                 </View>
@@ -113,7 +148,7 @@ import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
                   <Text style={styles.infoSmall_Text}>Mobile</Text>
                   <Text style={styles.infoLarge_Text}>Last name</Text>
                 </View>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
@@ -186,6 +221,7 @@ import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, Image,
     },
     bookCountText: {color: '#b3b3b3', fontSize: 14, fontWeight: '500'},
     infoMain: {
+      alignItems:'center',
       marginTop: 10,
     },
     infoCont: {
